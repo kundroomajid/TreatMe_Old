@@ -1,0 +1,100 @@
+backup as on 29/6/2018 time : 12:11 PM
+
+user registrasion complete with two registration page
+created 
+and 
+echo username in header if user is logged
+
+
+++++++++++++++++++++++++++++++++++++++++++
+
+date : 2/7/18 time 4:20
+
+working prototype of appointment booking
+
+
+++++++++++++++++++++++++++++++++++++++++++
+
+date : 6/7/18 time 7:50
+
+doctor registration page complete done.
+
+
+++++++++++++++++++++++++++++++++++++++++++
+
+date : 7/7/18 time 11:34
+
+Search doctor page complete
+
+
+++++++++++++++++++++++++++++++++++++++++++
+
+date : 7/7/18 time 03:05
+
+
+user and doctor registration page complete with photo upload.
+
+
+++++++++++++++++++++++++++++++++++++++++++
+
+date : 11/7/18 time 09:48 Pm
+
+
+apointment booking complete with css
+
+
+
+++++++++++++++++++++++++++++++++++++++++++
+
+date : 12/7/18 time 09:48 Pm
+
+
+fixed some bugs in appointment module
+
+++++++++++++++++++++++++++++++++++++++++++
+
+date : 28/12/18 time 05:30 Pm
+
+
+comment box and display of comments done
+
+
+++++++++++++++++++++++++++++++++++++++++++
+
+date : 29/12/18 time 10:48 Pm
+
+
+user profile/ welcome page created and linked with database
+
+++++++++++++++++++++++++++++++++++++++++++
+
+
+
+date : 01/01/18 time 1:48 Pm
+
+
+in wecome page edit proile tab, upload photo and display my appointments
+done
+
+++++++++++++++++++++++++++++++++++++++++++
+
+date : 01/01/18 time 10:48 Pm
+
+
+Dynamic recomended doctor section in index page 
+created and linked with db
+
+++++++++++++++++++++++++++++++++++++++++++
+
+++++++++++++++++++++++++++++++++++++++++++
+
+date : 02/01/18 time 04:01 Pm
+
+
+1. fixed appointment booking without login issue.
+2. post comment and book appontment buttons modified
+3. issue of duplicate comments solved
+4. display picture of reviewer issue solved
+5. comment box made responsive
+
+++++++++++++++++++++++++++++++++++++++++++
