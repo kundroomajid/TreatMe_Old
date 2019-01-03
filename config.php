@@ -1,6 +1,8 @@
 <?php
 /* Database credentials. Assuming you are running MySQL
 server with default setting (user 'root' with no password) */
+
+	ini_set('error_reporting', E_ALL & ~E_NOTICE);
     $host = "localhost";
     $dbUsername = "root";
     $dbPassword = "";

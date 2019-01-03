@@ -319,9 +319,9 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
                  <!-- End Commnet box -->
                                 
          <?php
-                                $query="SELECT * FROM comments  WHERE doc_id= $doc_id";
-                                $result=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
-                                $count = mysqli_num_rows($result);
+				$query="SELECT * FROM comments  WHERE doc_id= $doc_id ORDER BY date DESC";
+				$result=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
+				$count = mysqli_num_rows($result);
         ?>
                                 
                                 <div class="col-md-6">
