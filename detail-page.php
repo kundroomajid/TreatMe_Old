@@ -37,7 +37,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     echo '</script>';
     echo "ERROR: Could not able to execute $sql. ". mysqli_error($conn);
         }
- 
+
 }
 
 
@@ -277,53 +277,53 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 
 								<hr />
                 <!-- commnet box -->
-						
-					<form action ="" method="post">		
+
+					<form action ="" method="post">
 					<div class="form-group">
   					<label for="comment"><h6>Post Your Comment :</h6></label>
-  					<textarea class="form-control" rows="5" name="comment" id="comment" placeholder='Enter Your Comment Here' required></textarea>				
+  					<textarea class="form-control" rows="5" name="comment" id="comment" placeholder='Enter Your Comment Here' required></textarea>
 					<br /> <br />
            			<div class="rev-text">
 						<div>
                       <p align="right">
-						  
+
 <!--						  will disabble comment button if user not logged in-->
                         <?php
 						  if(isset($_SESSION['login_user']))
-                        {  
-							  
+                        {
+
                           echo "<input type='submit' id='postcommnet' class='btn_1' value='Post Comment'><br>";
-                         
-							  
+
+
 						  }
 						  else
 						  {
 							   echo "<input type='submit' id='postcommnet' class='btn_1' disabled = 'true'  title='Login to Post Comment' value='Post Comment'><br>";
 						  }
-                        
-                        
-						  
-						  ?> 
-							  
-							  
+
+
+
+						  ?>
+
+
                       </p>
 						</div>
                     </div>
                   </div>
                 </form>
-							
-							
+
+
 <!--                </div>-->
 
-                
+
                  <!-- End Commnet box -->
-                                
+
          <?php
 				$query="SELECT * FROM comments  WHERE doc_id= $doc_id ORDER BY date DESC";
 				$result=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
 				$count = mysqli_num_rows($result);
         ?>
-                                
+
                                 <div class="col-md-6">
 						<?php
 						if($count >=10)
@@ -334,14 +334,14 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 							$disp = $count;
 						}
 						?>
-                           
+
 					<br />
 						<h6 align = "center"><strong>Showing <?= "$disp";?></strong> of <?= "$count";?> comments <br /></h6>
 					</div>
 								<br />
-                                
+
 <!--								Display reviews starts -->
-								
+
                                      <?php
 							     if($count == "0"){
 								$output = '<h2>No Comments Yet!</h2>';
@@ -351,7 +351,7 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 							 }
 							else
 							{
-                                while ($cdrow=mysqli_fetch_array($result)) 
+                                while ($cdrow=mysqli_fetch_array($result))
 								{
 //                                    select the unique id of eaach patient
                                 $id = $cdrow["pat_id"];
@@ -359,17 +359,17 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
                                      $query2="SELECT * FROM vw_patient  WHERE user_id= $id";
                                 $resultuser=mysqli_query($conn,$query2) or die ("Inner query failed: ".mysqli_error());
                                     $cdrow2 = mysqli_fetch_array($resultuser);
-                                    
+
                                 $user_name=$cdrow2["user_name"];
                                 $comments = $cdrow["comment"];
                                 $date = $cdrow["date"];
 								$pic = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow2["photo"])."' width = '60px' height ='60px'/>";
-									
-								?>	
+
+								?>
 									<div class="review-box clearfix">
 
                                   <?php   echo"<div class ='rev-thumb'>$pic</div>";?>
-							
+
 									<div class="rev-content">
 										<div class="rating">
 											<i class="icon-star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>
@@ -389,10 +389,10 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
                                        }
                             }
                                     ?>
-                                    
-								
 
-								
+
+
+
 							</div>
 							<!-- End review-container -->
 						</div>
@@ -411,7 +411,7 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 							<div class="row">
 								<div class="col-6">
 									<div class="form-group">
-										
+
                                         <input class="form-control" type="date" name="date" required>
 <!--										<input class="form-control" type="date" id="date" data-lang="en" data-min-year="2019" name="date"/>-->
 									</div>
@@ -435,21 +435,21 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 <!--						disable book now button if user is not logged in-->
 						 <?php
 						  if(isset($_SESSION['login_user']))
-                        {  
+                        {
                           echo "<input type='submit' style = 'width:100%' class='btn_1 full-width' value='Book now'><br>";
-                         
-							  
+
+
 						  }
 						  else
 						  {
 							   echo "<input type='submit' style = 'width:100%' class='btn_1 full-width' disabled = 'true' title='Login to Book' value='Book now'><br>";
 						  }
-                        
-                        
-						  
-						  ?> 
-						
-                   
+
+
+
+						  ?>
+
+
 
 						</form>
 					</div>

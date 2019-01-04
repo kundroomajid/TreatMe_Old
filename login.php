@@ -68,7 +68,7 @@ include("header.php");
 								</div>
 								<div class="form-group">
 									<input type="password" name="password" class="form-control" placeholder="Your password" />
-									<a href="#0" class="forgot"><small>Forgot password?</small></a>
+									<a href="forgot.php" class="forgot"><small>Forgot password?</small></a>
 								</div>
 								<div class="form-group">
 									<input class="btn_1" name ="submit" type="submit" value="Login" />

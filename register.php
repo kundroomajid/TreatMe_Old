@@ -13,7 +13,7 @@ if ( !empty($user_password) || !empty($user_email) )
 {    //create connection
     if (mysqli_connect_error()) {
      die('Connect Error('. mysqli_connect_errno().')'. mysqli_connect_error());
-    } else 
+    } else
     {
 
      $hash = md5( rand(0,1000) );
@@ -43,8 +43,8 @@ if ( !empty($user_password) || !empty($user_email) )
          window.location = "index.php";
          </script> ';
 
-     } 
-        else 
+     }
+        else
      {
           echo '<script type="text/javascript">
          alert("Someone already register using this email")
@@ -56,7 +56,7 @@ if ( !empty($user_password) || !empty($user_email) )
      $conn->close();
     }
 
-    $to      = $user_email; // Send email to our user
+$to      = $user_email; // Send email to our user
 $subject = 'Shifa | Signup | Verification'; // Give the email a subject
 $message = '
 

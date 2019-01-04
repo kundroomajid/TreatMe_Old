@@ -14,7 +14,7 @@
 				<div id="login-2">
 					<h1>Welcome to Healthcare</h1>
           <?php
-            if(isset($_REQUEST['email_id'])){
+            if(isset($_REQUEST['token'])){
               $email = $_REQUEST['email_id'];
               $sql = "SELECT user_id FROM tb_user WHERE user_email = '$email' and active='1'";
                $result = mysqli_query($conn,$sql);
@@ -54,26 +54,22 @@
 
   //TODO: change to acutal address from localhost
   function send_email($user_email){
-    global $conn;
     $to      = $user_email; // Send email to our user
     $subject = 'Password Reset'; // Give the email a subject
     $hash = md5( rand(0,1000) );
-    $update = "UPDATE tb_user SET hash='$hash' WHERE user_email='$user_email'";
-    $x = $conn->prepare($update);
-    $x->execute();
-
+    echo "hash : $hash";
+    $update = "UPDATE tb_user SET hash='$hash'";
+    mysqli_stmt_execute(mysqli_prepare($conn,$update));
 
     $message = '
 
     You are receiving this email because you had signed up on shifa.com and requested to recover your password.
     Please click the following link or paste it in your browser to reset yoru passowrd.
 
-    localhost/reset.php?token='.$hash.'&email='.$user_email; // Our message above including the link
+    localhost/reset.php?token='.$hash; // Our message above including the link
 
     $headers = 'From:noreply@shifaddnn.000webhostapp.com/' . "\r\n"; // Set from headers
-
-    echo $message;
-//    mail($to, $subject, $message, $headers);
+    mail($to, $subject, $message, $headers);
 
   }
  ?>
