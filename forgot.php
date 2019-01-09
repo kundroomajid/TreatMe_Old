@@ -70,10 +70,10 @@
 
     localhost/reset.php?token='.$hash.'&email='.$user_email; // Our message above including the link
 
-    $headers = 'From:noreply@shifaddnn.000webhostapp.com/' . "\r\n"; // Set from headers
+    $headers = 'From:noreply@locah.com/' . "\r\n"; // Set from headers
 
     echo $message;
-//    mail($to, $subject, $message, $headers);
+    mail($to, $subject, $message, $headers);
 
   }
  ?>
