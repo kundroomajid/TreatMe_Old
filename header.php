@@ -29,7 +29,7 @@
 			<link rel="stylesheet" type="text/css" href="./css/custom.css">
 
 	-->
-			
+
 			<!-- COMMON SCRIPTS -->
 			<script src="./cdn-cgi/scripts/84a23a00/cloudflare-static/email-decode.min.js"></script><script src="./js/jquery-2.2.4.min.js"></script>
 			<script src="./js/common_scripts.min.js"></script>
@@ -61,7 +61,7 @@
 								<li id="user">
 										<?php
 								if(isset($_SESSION['login_user']))
-								{   
+								{
 									echo "<a href='welcome.php'><figure>$imagepic<img src='' alt='' /></figure>$user</a>";
 									$username = ($_SESSION['login_user']);
 									echo "<li class='show-submenu'><a href='logout.php' tabindex='0'  class='show-submenu'>&nbsp;<span class='glyphicon glyphicon-user'></span> &nbsp;&nbsp; Logout</a></li>";
@@ -113,6 +113,6 @@
 			<div id="toTop"></div>
 			<!-- Back to top button -->
 
-			
+
 			</body>
 		</html>
