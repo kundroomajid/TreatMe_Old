@@ -131,22 +131,25 @@ if((isset($_POST['name']))&isset($_POST['phone_no'])&isset($_POST['gender'])){
   $height = $_POST['height'];
   $weight = $_POST['weight'];
 
-  $sql = "UPDATE tb_user SET user_name= '$name',user_phone = '$phone_no',gender = '$gender',user_type = 'p',dob = '$dob',address = '$address',district ='$district',pincode = '$pincode',blood_group = '$bloodgroup',height = '$height',weight = '$weight' WHERE user_email='$user_email'";
-  if(mysqli_query($conn, $sql)){
+  $idquery = "SELECT user_id from tb_user WHERE user_email='$user_email'";
+  $user_id = mysqli_query($conn,$idquery)->fetch_object()->user_id;
+
+
+  $sql = "UPDATE tb_user SET user_name= '$name',user_phone = '$phone_no',gender = '$gender',user_type = 'p',dob = '$dob',address = '$address',district ='$district',pincode = '$pincode' WHERE user_email='$user_email'";
+  $sql2 = "INSERT INTO tb_patient VALUES ($user_id, '$bloodgroup',$height,$weight)";
+  if(mysqli_query($conn, $sql) && mysqli_query($conn, $sql2)){
     echo '<script type="text/javascript">
     alert("Details Saved Sucessfully")
     window.location = "./upload_photo.php?email='.$user_email.'";
     </script> ';
   } else {
     echo '<script language="javascript">';
-    //echo 'alert("Error")';
+    echo 'alert("Error")';
     echo '</script>';
-    echo "ERROR: Could not able to execute $sql. "
+    echo "ERROR: Unable to to execute <br/>$sql. <br/>"
     . mysqli_error($conn);
   }
   mysqli_close($conn);
-
-
 
 }
 

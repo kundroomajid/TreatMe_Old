@@ -3,7 +3,7 @@ $id = isset($_SESSION['id'])?$_SESSION['id']:null;
 
 if($id!=null)
     {
-            $query ="select user_name,user_email,user_phone,dob,photo,height,weight,blood_group,gender,district,pincode from tb_user where user_id = $id";
+            $query ="select * from vw_patient where pat_id = $id";
             $result1=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
             $cdrow1=mysqli_fetch_array($result1);
             //getting result from database
