@@ -1,4 +1,6 @@
-<?php include("header.php");
+<?php
+
+include("header.php");
 $id = isset($_SESSION['id'])?$_SESSION['id']:null;
 
 if($id!=null){

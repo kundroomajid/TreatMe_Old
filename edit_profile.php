@@ -14,7 +14,7 @@ if($id!=null && $_SERVER["REQUEST_METHOD"] == "POST")
 
   $sql = "UPDATE tb_user SET user_name= '$name',user_phone = '$phone_no',gender = '$gender',dob = '$dob',district ='$district',pincode = '$pincode', address='$address' WHERE user_id='$id'";
 
-  $sql2 = "";
+
 
   if($user_type=='d'){
     $specialization = $_POST['specialization'];
@@ -27,6 +27,12 @@ if($id!=null && $_SERVER["REQUEST_METHOD"] == "POST")
     $evening_end_time = $_POST['evening_end_time'];
 
     $sql2 = "UPDATE tb_doctor SET specialization='$specialization', registration_no='$registration_no', registration_year='$registration_year', registration_council='$registration_council', morning_start_time='$morning_start_time', morning_end_time='$morning_end_time', evening_start_time='$evening_start_time', evening_end_time='$evening_end_time' WHERE doc_id=$id";
+  } else {
+    $sql2 = "";
+    $height = $_POST['height'];
+    $weight = $_POST['weight'];
+    $blood_group = $_POST['blood_group'];
+    $sql2 = "UPDATE tb_patient SET height=$height, weight=$weight, blood_group='$blood_group' WHERE pat_id=$id";
   }
 
   if(mysqli_query($conn, $sql) && mysqli_query($conn,$sql2)) {
@@ -35,7 +41,7 @@ if($id!=null && $_SERVER["REQUEST_METHOD"] == "POST")
     window.location = "./welcome.php";
     </script> ';
   } else {
-    echo ' Error <script type="text/javascript">
+    echo ' <script type="text/javascript">
     alert("Sorry Some error occured")
     window.location = "./welcome.php";
     </script> ';
