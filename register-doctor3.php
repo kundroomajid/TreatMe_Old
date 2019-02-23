@@ -5,6 +5,9 @@ include("session.php");
 ?>
 
 	<main>
+		<link rel="stylesheet" href="./css/tagsinput.css">
+	  <script type="text/javascript" src="./js/tagsinput.js"></script>
+
 		<div id="hero_register">
 			<div class="container margin_120_95">
 				<div class="row">
@@ -39,8 +42,11 @@ include("session.php");
 							<form  method="POST" action="">
 								<div class="box_form">
 										<div class="form-group">
-												<label>Specialization</label>
-												<input type="specialization" name ="specialization"class="form-control" placeholder="What is Your specialization" />
+												<label>Specializations</label>
+												<input type="text" id="specialization" name ="specialization"class="form-control" placeholder="What is Your specialization" />
+												<script type="text/javascript">
+													$('#specialization').tagsInput();
+												</script>
 										</div>
 										<div class="form-group">
 														<label>Degree</label>
