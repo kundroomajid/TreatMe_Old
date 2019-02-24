@@ -36,6 +36,9 @@ if($id!=null){
   $resultappt = $conn->query($apptquery);
   $count = mysqli_num_rows($resultappt);
 
+  //get education data
+  $eduquery = "SELECT * FROM tb_doceducation where doc_id=$id";
+  $resultedu = $conn->query("SELECT * FROM tb_doceducation where doc_id=$id");
 }else{
   echo '<script type="text/javascript">
   alert("Please Login To Continue ")
@@ -130,6 +133,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
             </div>
           </div>
         </div>
+
         <div class="tab-pane" id="myappointments">
           <?php   if($resultappt ->num_rows > 0)
           {
@@ -172,6 +176,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           ?>
 
         </div>
+
         <div class="tab-pane" id="edit">
           <form role="form" method="post" action="edit_profile.php">
             <div class="form-group row">
@@ -282,51 +287,72 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
             </form>
           </div>
 
-          <div class="tab-pane active" id="addinfo">
-            <form class="" action="update_edu.php" method="post">
+        <div class="tab-pane active" id="addinfo">
+          <form class="" action="update_edu.php" method="post">
 
-              <table id="edutable" class="table">
-                <thead> <tr>
-                  <th>Degree</th> <th>Year</th> <th>Institute</th>
-                 <th>&nbsp;</th>
-                </tr> </thead>
+            <table id="edutable" class="table">
+              <thead> <tr>
+                <th>Degree</th> <th>Year</th> <th>Institute</th>
+               <th>&nbsp;</th>
+              </tr> </thead>
 
-                <tbody id = "educontrols">
+              <tbody id = "educontrols">
+                <?php
+                $rowcount = mysqli_num_rows($resultedu);
+                if($rowcount>0){
+                  while(($r = mysqli_fetch_array($resultedu))!=null){
+                      $degree = $r['degree'];
+                      $year = $r['year'];
+                      $institute = $r['institute'];
+                ?>
+                  <tr>
+                    <td><input class='input-sm' name='degree[]' value="<?= $degree ?>"/></td>
+                    <td><input class='input-sm' name='year[]' value="<?= $year ?>"/></td>
+                    <td><input class='input-sm' name='institute[]'value="<?= $institute ?>" /></td>
+                    <td><input class='btn btn-danger btn-sm'onclick="delete_me(this)" type="button" Value = 'X'/></td>
+                  </tr>
+                  <?php
+                  }
+                }else{
+                  ?>
                   <tr>
                     <td><input class='input-sm' name='degree[]'/></td>
                     <td><input class='input-sm' name='year[]'/></td>
                     <td><input class='input-sm' name='institute[]'/></td>
                     <td><input class='btn btn-danger btn-sm'onclick="delete_me(this)" type="button" Value = 'X'/></td>
                   </tr>
-                  <tr>
-                    <td colspan="3">&nbsp;</td>
-                    <td><input class='btn btn-primary btn-sm' type="button" id="add" Value="Add New" /></td>
-                  </tr>
-                </tbody>
-              </table>
-              <input class = 'btn btn-success' type='submit' value="Update"/>
-
-            </form>
-
-            <script type="text/javascript">
-              var add_button = $("#add");
-
-              function delete_me(v) {
-                v = $(v).parent().parent();
-
-                if(!v.is(":first-child")){
-                  v.remove();
+                  <?php
                 }
-              }
+                  ?>
+                <tr>
+                  <td colspan="3">&nbsp;</td>
+                  <td><input class='btn btn-primary btn-sm' type="button" id="add" Value="Add New" /></td>
+                </tr>
+              </tbody>
+            </table>
+            <input class = 'btn btn-success' type='submit' value="Update"/>
 
-              // handle click and add class
-              add_button.on("click", function() {
-              edu = $('#educontrols');
-              control = $("#educontrols").children().first();
-              edu.prepend(control[0].outerHTML);
-              });
-            </script>
-          </div>
+          </form>
+
+          <script type="text/javascript">
+            var add_button = $("#add");
+
+            function delete_me(v) {
+              v = $(v).parent().parent();
+
+              if(!v.is(":first-child")){
+                v.remove();
+              }
+            }
+
+            // handle click and add class
+            add_button.on("click", function() {
+            edu = $('#educontrols');
+            control = $("#educontrols").children().first();
+            edu.prepend(control[0].outerHTML);
+            });
+          </script>
+        </div>
 
         </div>
       </div>
