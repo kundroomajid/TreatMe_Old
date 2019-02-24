@@ -1,8 +1,19 @@
 <html>
-<body>
-   <p style="color:red;">
-                               hello
-                            </p>
-    </body>
-                           
+
+<div class="input-group" id="divDOB">
+    <input type='text' class="form-control" data-date-format="YYYY/MM/DD"/>                                                                
+                  <span class="input-group-addon">
+                      <span class="glyphicon-calendar glyphicon"></span>
+                  </span>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#divDOB").datetimepicker({
+            pickTime: false,
+            orientation: "left",
+        });
+    });
+</script>
+
+
 </html>

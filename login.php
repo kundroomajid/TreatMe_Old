@@ -35,7 +35,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['id'] = $id;
     $_SESSION['user_type'] = $user_type;
     echo "<script language='javascript'> alert('$user_type') </script>";
-    header("location:   welcome.php");
+    $user_type = $_SESSION['user_type'];
+    if($user_type=='d')
+    {
+      header("location:   welcomed.php");
+    }
+    else
+    {
+      header("location:   welcomep.php");
+    }
+//    header("location:   welcome.php");
   }
   else
   {

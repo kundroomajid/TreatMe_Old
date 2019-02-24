@@ -1,5 +1,5 @@
 <html>
-
+  
 <?php include("header.php");
 include("config.php");
 $curr_date = date("Y-m-d"); // variable gets current date
@@ -21,7 +21,8 @@ if($doc_id!=null){
                 $morning_end_time = (new DateTime($cdrow["morning_end_time"]))->format("h:i A");
                 $evening_start_time = (new DateTime($cdrow["evening_start_time"]))->format("h:i A");
                 $evening_end_time = (new DateTime($cdrow["evening_end_time"]))->format("h:i A");
-                $image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow1["photo"])."' />";
+                $image = "<img src = 'data:image/jpeg;base64,".base64_encode( $cdrow1["photo"])."' width='250' height='200' /><br/>";
+
 
                 }
             }
@@ -71,9 +72,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 							<div class="row">
 								<div class="col-6">
 									<div class="form-group">
-                                        <input class="form" type="date" name="date" required min= "<?= $curr_date ?>">
-<!--										<input class="form-control" type="date" id="date" data-lang="en" data-min-year="2019" name="date"/>-->
-									</div>
+                                      
+                                      
+                                        <input class="input-group-addon" type="date" name="date" required min= "<?= $curr_date ?>" >
+<!--										<input class="input-group date" type="date" id="date" data-lang="en" data-min-year="2019" name="date"/>-->
+									
+                                  </div>
 								</div>
 								<div>                            
                                         <label> <h5>Select Shift</h5></label> <br>

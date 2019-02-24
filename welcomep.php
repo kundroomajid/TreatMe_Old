@@ -1,5 +1,16 @@
 <?php
 include("header.php");
+    
+function fn_resize($image_resource_id,$width,$height) 
+{
+
+$target_width =300;
+$target_height =300;
+$target_layer=imagecreatetruecolor($target_width,$target_height);
+imagecopyresampled($target_layer,$image_resource_id,0,0,0,0,$target_width,$target_height, $width,$height);
+return $target_layer;
+}
+
 $id = isset($_SESSION['id'])?$_SESSION['id']:null;
 if($id!=null) {
   $query ="select * from vw_patient where pat_id = $id";
@@ -28,16 +39,52 @@ if($id!=null) {
   window.location = "./login.php";
   </script> ';
 }
-if($_SERVER["REQUEST_METHOD"] == "POST") {
+if($_SERVER["REQUEST_METHOD"] == "POST") 
+{
   $file = addslashes(file_get_contents($_FILES['image']['tmp_name']));
   $file_size = $_FILES['image']['size'];
-  if (($file_size > 65500)){
-    $message = 'File too large. File must be less than 64 kb.';
+  if (($file_size > 655000))
+  {
+    $message = 'File too large. File must be less than 640 kb.';
     echo '<script type="text/javascript">alert("'.$message.'");</script>';
-  } if($file!=null && $file!=""){
-    //  unset($imagepic);
-    $q = "UPDATE tb_user SET photo= '$file' where user_id = '$id'";
-    $conn->query($q);
+  } if($file!=null && $file!="")
+  {
+    $file = $_FILES['image']['tmp_name'];
+$source_properties = getimagesize($file);
+$image_type = $source_properties[2]; 
+  
+if( $image_type == IMAGETYPE_JPEG ) 
+{   
+$image_resource_id = imagecreatefromjpeg($file);  
+$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
+imagejpeg($target_layer,'temp.jpg');
+$blob = addslashes(file_get_contents('./temp.jpg', true));
+$q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
+  $conn->query($q);
+}
+elseif( $image_type == IMAGETYPE_GIF )  
+{  
+$image_resource_id = imagecreatefromgif($file);
+$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
+imagejpeg($target_layer,'temp.jpg');
+$blob = addslashes(file_get_contents('./temp.jpg', true));
+$q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
+  $conn->query($q);
+  
+}
+elseif( $image_type == IMAGETYPE_PNG ) 
+{
+$image_resource_id = imagecreatefrompng($file); 
+$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
+imagejpeg($target_layer,'temp.jpg');
+$blob = addslashes(file_get_contents('./temp.jpg', true));
+$q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
+  $conn->query($q);
+  
+}
+  
+    
+    
   }
 }
 $str = "select photo from tb_user where user_id = '$id'";
@@ -71,7 +118,7 @@ this.value = "";
           <?= $imagepic ?>
           <h6 class="mt-2">Upload a different photo</h6>
           <label class="custom-file">
-            <input type="file" class="custom-file-input" id="uploadImage" name="image" id="image" accept=".jpg, .jpeg, .png" />
+            <input type="file" class="custom-file-input" id="uploadImage" name="image" id="image" accept=".jpg, .jpeg, .png" required />
             <span class="custom-file-control">Choose file</span>
             <br><br> <br>
           </label>
