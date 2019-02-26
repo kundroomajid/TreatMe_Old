@@ -32,7 +32,7 @@ if($id!=null){
 
 
   //get data from appointment table
-  $apptquery = "Select * from tb_appointment where pat_id = $id";
+  $apptquery = "Select * from tb_appointment where doc_id = $id";
   $resultappt = $conn->query($apptquery);
   $count = mysqli_num_rows($resultappt);
 
@@ -90,7 +90,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
         </label>
         <input type="submit" class = "btn_1" value = "Upload"/>
       </div>
-    </form>
+  </form>
 
     <!---------------------TABS--------------------->
     <div class="col-lg-8 order-lg-2">
@@ -99,13 +99,13 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           <a href="" data-target="#profile" data-toggle="tab" class="nav-link">Profile</a>
         </li>
         <li class="nav-item">
-          <a href="" data-target="#myappointments" data-toggle="tab" class="nav-link">My Appointments</a>
+          <a href="" data-target="#myappointments" data-toggle="tab" class="nav-link active">Appointments</a>
         </li>
         <li class="nav-item">
           <a href="" data-target="#edit" data-toggle="tab" class="nav-link">Edit Profile</a>
         </li>
         <li class="nav-item">
-          <a href="" data-target="#addinfo" data-toggle="tab" class="nav-link active">Additional Info</a>
+          <a href="" data-target="#addinfo" data-toggle="tab" class="nav-link">Additional Info</a>
         </li>
       </ul>
 
@@ -134,46 +134,41 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           </div>
         </div>
 
-        <div class="tab-pane" id="myappointments">
-          <?php   if($resultappt ->num_rows > 0)
-          {
-
-            if($count == "0")
-            {
-              $apptmessage = "No Appointments Booked yet";
-              //                die ("Query to get data from first table failed: ".mysqli_error());)
-
-            }
-            else
-            {
-              $apptmessage = "Appointments Booked";
-              echo($apptmessage);
-              echo("<div class='table-responsive'> <table class='table'><thead><tr><th>Appt Id</th><th>Date</th><th>Doc Name</th><th>Shift</th><th>Queue No</th></tr></thead></table></div>");
-              while ($cdrow2=mysqli_fetch_array($resultappt))
-              {
-
+        <div class="tab-pane active" id="myappointments">
+          <table class='table table-responsive'>
+            <thead>
+              <tr><th>Appt Id</th><th>Date</th><th>Patient Name</th><th>Shift</th><th>Queue No</th><th>&nbsp;</th></tr>
+            </thead>
+            <tbody>
+          <?php
+          // if($count == "0") {
+          //   echo "No Appointments Booked yet";
+          // } else {
+          // if($resultappt->num_rows > 0)          {
+          if($count > 0)          {
+            while ($cdrow2=mysqli_fetch_array($resultappt)) {
                 //getting result from database
                 $appt_id = $cdrow2["apptt_id"];
-                $doc_id = $cdrow2["doc_id"];
+                $pat_id = $cdrow2["pat_id"];
                 $appt_date = $cdrow2["appt_date"];
                 $shift = $cdrow2["shift"];
+                $shift_type = ($shift==0)?'Morning':'Evening';
                 $queue_no = $cdrow2["queue_no"];
                 //query to get doc name from view doctor
-                $docquery = $conn->query("select user_name from vw_doctor where doc_id = $doc_id");
+                $docquery = $conn->query("select user_name from vw_patient where pat_id = $pat_id");
                 $cdrow3=mysqli_fetch_array($docquery);
-                $doc_name = $cdrow3["user_name"];
-                echo"<div class='table-responsive'><table class='table'> <tbody><tr><td>&nbsp;&nbsp;$appt_id </td><td> $appt_date</td><td>  $doc_name</td><td>  $shift</td><td>  $queue_no</td></tr></tbody></table></div>" ;
-              }
+                $pat_name = $cdrow3["user_name"];
+                echo "<tr><td>$appt_id <span class='pe-7s-remove-user'></span> </td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>$queue_no</td>
+                <td><a class='btn btn-sm btn-danger' href='delete_appointment.php?appt_id=$appt_id'>X</a>
+                <a href='#' class='btn btn-sm btn-success'>T</a></td>
+                </tr>" ;
             }
-
-          }
-
-          else
-          {
-            echo("<h5>No Appointments booked Yet</h5>");
-
+          }else {
+            echo("<tr><td colspan='6'><h5>No Appointments booked Yet</td></tr>");
           }
           ?>
+          <tbody>
+          </table>
 
         </div>
 
@@ -285,15 +280,15 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 </div>
               </div>
             </form>
-          </div>
+        </div>
 
-        <div class="tab-pane active" id="addinfo">
+        <div class="tab-pane" id="addinfo">
           <form class="" action="update_edu.php" method="post">
 
             <table id="edutable" class="table">
               <thead> <tr>
                 <th>Degree</th> <th>Year</th> <th>Institute</th>
-               <th>&nbsp;</th>
+                <th>&nbsp;</th>
               </tr> </thead>
 
               <tbody id = "educontrols">
@@ -301,17 +296,17 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 $rowcount = mysqli_num_rows($resultedu);
                 if($rowcount>0){
                   while(($r = mysqli_fetch_array($resultedu))!=null){
-                      $degree = $r['degree'];
-                      $year = $r['year'];
-                      $institute = $r['institute'];
-                ?>
-                  <tr>
-                    <td><input class='input-sm' name='degree[]' value="<?= $degree ?>"/></td>
-                    <td><input class='input-sm' name='year[]' value="<?= $year ?>"/></td>
-                    <td><input class='input-sm' name='institute[]'value="<?= $institute ?>" /></td>
-                    <td><input class='btn btn-danger btn-sm'onclick="delete_me(this)" type="button" Value = 'X'/></td>
-                  </tr>
-                  <?php
+                    $degree = $r['degree'];
+                    $year = $r['year'];
+                    $institute = $r['institute'];
+                    ?>
+                    <tr>
+                      <td><input class='input-sm' name='degree[]' value="<?= $degree ?>"/></td>
+                      <td><input class='input-sm' name='year[]' value="<?= $year ?>"/></td>
+                      <td><input class='input-sm' name='institute[]'value="<?= $institute ?>" /></td>
+                      <td><input class='btn btn-danger btn-sm'onclick="delete_me(this)" type="button" Value = 'X'/></td>
+                    </tr>
+                    <?php
                   }
                 }else{
                   ?>
@@ -323,7 +318,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                   </tr>
                   <?php
                 }
-                  ?>
+                ?>
                 <tr>
                   <td colspan="3">&nbsp;</td>
                   <td><input class='btn btn-primary btn-sm' type="button" id="add" Value="Add New" /></td>
@@ -335,22 +330,22 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           </form>
 
           <script type="text/javascript">
-            var add_button = $("#add");
+          var add_button = $("#add");
 
-            function delete_me(v) {
-              v = $(v).parent().parent();
+          function delete_me(v) {
+            v = $(v).parent().parent();
 
-              if(!v.is(":first-child")){
-                v.remove();
-              }
+            if(!v.is(":first-child")){
+              v.remove();
             }
+          }
 
-            // handle click and add class
-            add_button.on("click", function() {
+          // handle click and add class
+          add_button.on("click", function() {
             edu = $('#educontrols');
             control = $("#educontrols").children().first();
             edu.prepend(control[0].outerHTML);
-            });
+          });
           </script>
         </div>
 

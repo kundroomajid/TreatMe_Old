@@ -23,11 +23,12 @@ if($id!=null) {
   $resultappt = $conn->query($apptquery);
   $count = mysqli_num_rows($resultappt);
 } else {
-  echo '<script type="text/javascript">
-  alert("Please Login To Continue ")
-  window.location = "./login.php";
-  </script> ';
+echo '<script type="text/javascript">
+alert("Please Login To Continue ")
+window.location = "./login.php";
+</script> ';
 }
+
 if($_SERVER["REQUEST_METHOD"] == "POST") {
   $file = addslashes(file_get_contents($_FILES['image']['tmp_name']));
   $file_size = $_FILES['image']['size'];
@@ -134,7 +135,7 @@ this.value = "";
                 $cdrow3=mysqli_fetch_array($docquery);
                 $doc_name = $cdrow3["user_name"];
                 echo "<tr><td>$appt_id</td><td>$appt_date</td><td>$doc_name</td><td>$shift_type</td><td>$queue_no</td>
-                <td><a href='delete_appointment.php?appt_id=$appt_id'>Delete</td></td></tr>" ;
+                <td><a class='btn btn-sm btn-danger' href='delete_appointment.php?appt_id=$appt_id'>X</td></td></tr>" ;
             }
             // }
           }else {
