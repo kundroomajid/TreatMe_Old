@@ -3,17 +3,20 @@ include("header.php");
 $id = isset($_SESSION['id'])?$_SESSION['id']:null;
 
 
-function fn_resize($image_resource_id,$width,$height) 
-{
+function fn_resize($image_resource_id,$width,$height){
 
-$target_width =300;
-$target_height =300;
-$target_layer=imagecreatetruecolor($target_width,$target_height);
-imagecopyresampled($target_layer,$image_resource_id,0,0,0,0,$target_width,$target_height, $width,$height);
-return $target_layer;
+  $target_width =300;
+  $target_height =300;
+  $target_layer=imagecreatetruecolor($target_width,$target_height);
+  imagecopyresampled($target_layer,$image_resource_id,0,0,0,0,$target_width,$target_height, $width,$height);
+  return $target_layer;
 }
 
 if($id!=null){
+  $user_type = isset($_SESSION['user_type'])?$_SESSION['user_type']:null;
+  if($user_type==null || $user_type!='d'){
+    echo '<script>window.location = "welcome.php";</script>';
+  }
   $query ="select * from vw_doctor where user_id = $id";
   $result1=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
   $cdrow1=mysqli_fetch_array($result1);
@@ -42,12 +45,13 @@ if($id!=null){
 
 
   //get data from appointment table
-  $apptquery = "Select * from tb_appointment where pat_id = $id";
-  $resultappt = $conn->query($apptquery);
+  $resultappt = $conn->query("Select * from tb_appointment where doc_id = $id");
   $count = mysqli_num_rows($resultappt);
 
+  //get data from temp appointment tablet
+  $resulttmpappt = $conn->query("SELECT * FROM tmp_appointment WHERE doc_id = $id") ;
+  $counttmpappt = mysqli_num_rows($resulttmpappt);
   //get education data
-  $eduquery = "SELECT * FROM tb_doceducation where doc_id=$id";
   $resultedu = $conn->query("SELECT * FROM tb_doceducation where doc_id=$id");
 }else{
   echo '<script type="text/javascript">
@@ -56,8 +60,7 @@ if($id!=null){
   </script> ';
 }
 
-if($_SERVER["REQUEST_METHOD"] == "POST" )
-{
+if($_SERVER["REQUEST_METHOD"] == "POST" ){
   $file = addslashes(file_get_contents($_FILES['image']['tmp_name']));
   $file_size = $_FILES['image']['size'];
 
@@ -70,39 +73,35 @@ if($_SERVER["REQUEST_METHOD"] == "POST" )
   {
     //  unset($imagepic);
    $file = $_FILES['image']['tmp_name'];
-$source_properties = getimagesize($file);
-$image_type = $source_properties[2]; 
-  
-if( $image_type == IMAGETYPE_JPEG ) 
-{   
-$image_resource_id = imagecreatefromjpeg($file);  
-$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-imagejpeg($target_layer,'temp.jpg');
-$blob = addslashes(file_get_contents('./temp.jpg', true));
-$q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-  $conn->query($q);
-}
-elseif( $image_type == IMAGETYPE_GIF )  
-{  
-$image_resource_id = imagecreatefromgif($file);
-$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-imagejpeg($target_layer,'temp.jpg');
-$blob = addslashes(file_get_contents('./temp.jpg', true));
-$q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-  $conn->query($q);
-  
-}
-elseif( $image_type == IMAGETYPE_PNG ) 
-{
-$image_resource_id = imagecreatefrompng($file); 
-$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-imagejpeg($target_layer,'temp.jpg');
-$blob = addslashes(file_get_contents('./temp.jpg', true));
-$q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-  $conn->query($q);
-  
-}  
+   $source_properties = getimagesize($file);
+   $image_type = $source_properties[2];
+
+  if( $image_type == IMAGETYPE_JPEG ){
+    $image_resource_id = imagecreatefromjpeg($file);
+    $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
+    imagejpeg($target_layer,'temp.jpg');
+    $blob = addslashes(file_get_contents('./temp.jpg', true));
+    $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
+      $conn->query($q);
   }
+  elseif( $image_type == IMAGETYPE_GIF ) {
+    $image_resource_id = imagecreatefromgif($file);
+    $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
+    imagejpeg($target_layer,'temp.jpg');
+    $blob = addslashes(file_get_contents('./temp.jpg', true));
+    $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
+      $conn->query($q);
+
+  }
+  elseif( $image_type == IMAGETYPE_PNG ){
+    $image_resource_id = imagecreatefrompng($file);
+    $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
+    imagejpeg($target_layer,'temp.jpg');
+    $blob = addslashes(file_get_contents('./temp.jpg', true));
+    $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
+      $conn->query($q);
+  }
+    }
 }
 
 $str = "select photo from tb_user where user_id = '$id'";
@@ -133,7 +132,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
         </label>
         <input type="submit" class = "btn_1" value = "Upload"/>
       </div>
-    </form>
+  </form>
 
     <!---------------------TABS--------------------->
     <div class="col-lg-8 order-lg-2">
@@ -142,13 +141,13 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           <a href="" data-target="#profile" data-toggle="tab" class="nav-link">Profile</a>
         </li>
         <li class="nav-item">
-          <a href="" data-target="#myappointments" data-toggle="tab" class="nav-link">My Appointments</a>
+          <a href="" data-target="#myappointments" data-toggle="tab" class="nav-link active">Appointments</a>
         </li>
         <li class="nav-item">
           <a href="" data-target="#edit" data-toggle="tab" class="nav-link">Edit Profile</a>
         </li>
         <li class="nav-item">
-          <a href="" data-target="#addinfo" data-toggle="tab" class="nav-link active">Additional Info</a>
+          <a href="" data-target="#addinfo" data-toggle="tab" class="nav-link">Additional Info</a>
         </li>
       </ul>
 
@@ -177,46 +176,73 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           </div>
         </div>
 
-        <div class="tab-pane" id="myappointments">
-          <?php   if($resultappt ->num_rows > 0)
-          {
+        <div class="tab-pane active" id="myappointments">
+          <table class='table table-responsive'>
+            <thead>
+              <tr><th>Appt Id</th><th>Date</th><th>Patient Name</th><th>Shift</th><th>Queue No</th><th>&nbsp;</th></tr>
+            </thead>
+            <tbody>
+          <?php
+          // if($count == "0") {
+          //   echo "No Appointments Booked yet";
+          // } else {
+          // if($resultappt->num_rows > 0)          {
 
-            if($count == "0")
-            {
-              $apptmessage = "No Appointments Booked yet";
-              //                die ("Query to get data from first table failed: ".mysqli_error());)
 
-            }
-            else
-            {
-              $apptmessage = "Appointments Booked";
-              echo($apptmessage);
-              echo("<div class='table-responsive'> <table class='table'><thead><tr><th>Appt Id</th><th>Date</th><th>Doc Name</th><th>Shift</th><th>Queue No</th></tr></thead></table></div>");
-              while ($cdrow2=mysqli_fetch_array($resultappt))
-              {
+        if($count > 0 || $counttmpappt > 0) {
 
+          if($count > 0) {
+            while ($cdrow2=mysqli_fetch_array($resultappt)) {
                 //getting result from database
                 $appt_id = $cdrow2["apptt_id"];
-                $doc_id = $cdrow2["doc_id"];
+                $pat_id = $cdrow2["pat_id"];
                 $appt_date = $cdrow2["appt_date"];
                 $shift = $cdrow2["shift"];
+                $shift_type = ($shift==0)?'Morning':'Evening';
                 $queue_no = $cdrow2["queue_no"];
                 //query to get doc name from view doctor
-                $docquery = $conn->query("select user_name from vw_doctor where doc_id = $doc_id");
+                $docquery = $conn->query("select user_name from vw_patient where pat_id = $pat_id");
                 $cdrow3=mysqli_fetch_array($docquery);
-                $doc_name = $cdrow3["user_name"];
-                echo"<div class='table-responsive'><table class='table'> <tbody><tr><td>&nbsp;&nbsp;$appt_id </td><td> $appt_date</td><td>  $doc_name</td><td>  $shift</td><td>  $queue_no</td></tr></tbody></table></div>" ;
-              }
+                $pat_name = $cdrow3["user_name"];
+                echo "<tr><td>$appt_id <span class=''></span> </td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>$queue_no</td>
+                <td>confirmed</td>
+                </tr>" ;
+
+                //<a href='#' class='btn btn-sm btn-success'><span class='icon_check_alt2'></span> </a>
+                // <a class='btn btn-sm btn-danger' href='delete_appointment.php?appt_id=$appt_id'>X</a>
             }
-
           }
 
-          else
-          {
-            echo("<h5>No Appointments booked Yet</h5>");
+          if ($counttmpappt > 0){
+            echo "<tr><td colspan='6'>Unfconfirmed</td></tr>";
+            while ($cdrow2=mysqli_fetch_array($resulttmpappt)) {
+                //getting result from database
+                $tmp_id = $cdrow2["tmp_id"];
+                $pat_id = $cdrow2["pat_id"];
+                $appt_date = $cdrow2["appt_date"];
+                $shift = $cdrow2["shift"];
+                $shift_type = ($shift==0)?'Morning':'Evening';
+                //query to get doc name from view doctor
+                $docquery = $conn->query("select user_name from vw_patient where pat_id = $pat_id");
+                $cdrow3=mysqli_fetch_array($docquery);
+                $pat_name = $cdrow3["user_name"];
 
+                echo "<tr><td>$tmp_id</td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>unconfirmed</td>
+                <td>
+                  <a class='btn btn-sm btn-danger' href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=0'>X</a>
+                  <a href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=1' class='btn btn-sm btn-success'><span class='icon_check_alt2'></span></a>
+                </td></tr>" ;
+                //<a href='#' class='btn btn-sm btn-success'><span class='icon_check_alt2'></span> </a>
+                // <a class='btn btn-sm btn-danger' href='delete_appointment.php?appt_id=$appt_id'>X</a>
+            }
           }
+        }else{
+          echo "<tr><td colspan='6'>No appointments booked yet</td></tr>";
+        }
+
           ?>
+          <tbody>
+          </table>
 
         </div>
 
@@ -328,15 +354,15 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 </div>
               </div>
             </form>
-          </div>
+        </div>
 
-        <div class="tab-pane active" id="addinfo">
+        <div class="tab-pane" id="addinfo">
           <form class="" action="update_edu.php" method="post">
 
             <table id="edutable" class="table">
               <thead> <tr>
                 <th>Degree</th> <th>Year</th> <th>Institute</th>
-               <th>&nbsp;</th>
+                <th>&nbsp;</th>
               </tr> </thead>
 
               <tbody id = "educontrols">
@@ -344,17 +370,17 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 $rowcount = mysqli_num_rows($resultedu);
                 if($rowcount>0){
                   while(($r = mysqli_fetch_array($resultedu))!=null){
-                      $degree = $r['degree'];
-                      $year = $r['year'];
-                      $institute = $r['institute'];
-                ?>
-                  <tr>
-                    <td><input class='input-sm' name='degree[]' value="<?= $degree ?>"/></td>
-                    <td><input class='input-sm' name='year[]' value="<?= $year ?>"/></td>
-                    <td><input class='input-sm' name='institute[]'value="<?= $institute ?>" /></td>
-                    <td><input class='btn btn-danger btn-sm'onclick="delete_me(this)" type="button" Value = 'X'/></td>
-                  </tr>
-                  <?php
+                    $degree = $r['degree'];
+                    $year = $r['year'];
+                    $institute = $r['institute'];
+                    ?>
+                    <tr>
+                      <td><input class='input-sm' name='degree[]' value="<?= $degree ?>"/></td>
+                      <td><input class='input-sm' name='year[]' value="<?= $year ?>"/></td>
+                      <td><input class='input-sm' name='institute[]'value="<?= $institute ?>" /></td>
+                      <td><input class='btn btn-danger btn-sm'onclick="delete_me(this)" type="button" Value = 'X'/></td>
+                    </tr>
+                    <?php
                   }
                 }else{
                   ?>
@@ -366,7 +392,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                   </tr>
                   <?php
                 }
-                  ?>
+                ?>
                 <tr>
                   <td colspan="3">&nbsp;</td>
                   <td><input class='btn btn-primary btn-sm' type="button" id="add" Value="Add New" /></td>
@@ -378,22 +404,22 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           </form>
 
           <script type="text/javascript">
-            var add_button = $("#add");
+          var add_button = $("#add");
 
-            function delete_me(v) {
-              v = $(v).parent().parent();
+          function delete_me(v) {
+            v = $(v).parent().parent();
 
-              if(!v.is(":first-child")){
-                v.remove();
-              }
+            if(!v.is(":first-child")){
+              v.remove();
             }
+          }
 
-            // handle click and add class
-            add_button.on("click", function() {
+          // handle click and add class
+          add_button.on("click", function() {
             edu = $('#educontrols');
             control = $("#educontrols").children().first();
             edu.prepend(control[0].outerHTML);
-            });
+          });
           </script>
         </div>
 
