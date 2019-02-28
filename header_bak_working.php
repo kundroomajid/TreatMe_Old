@@ -61,21 +61,26 @@
 								<li id="user">
 										<?php
 								if(isset($_SESSION['login_user']))
-								{        
-									echo "<a href='welcome.php'> <figure> $imagepic </figure> <sub>$user</sub> </a>";
-									$username = ($_SESSION['login_user']);
-//									echo "<li><a href='logout.php' >&nbsp;&nbsp;&nbsp; Logout</a></li>";
-									echo "<li class='show-submenu'><a href='logout.php' tabindex='0'  class='show-submenu'><span class='glyphicon glyphicon-user'></span>Logout</a></li>";
-//									echo "<a href='logout.php'><img src='img/logout.png' alt='Logout' /> </a>";
-//									echo '<li><a href="./logout.php" onclick="restack(currentStack)" title="Logout"><i class="icon-logout"></i></a></li>';
+								{
+                                 
+//                                  echo "<div class='main-menu'><ul><li class='submenu'>
+//								<a href='welcome.php' class='show-submenu'> <figure>$imagepic<img src='' alt='' /></figure><i class='icon-down-open-mini'></i></a>
+//								<ul>
+//									<li><a href='./icon-pack-1.html'>Icon pack 1</a></li>
+//									<li><a href='404.html'>404 page</a></li>
+//								</ul>
+//							</li> </ul></div> ";
                                   
-									  
+									echo "<a href='welcome.php'><figure>$imagepic<img src='' alt='' /></figure>$user</a>";
+									$username = ($_SESSION['login_user']);
+									echo "<li class='show-submenu'><a href='logout.php' tabindex='0'  class='show-submenu'>&nbsp;<span class='glyphicon glyphicon-user'></span> &nbsp;&nbsp; Logout</a></li>";
+                                  
 
 								}
 								else
 								{
+									echo '<a href="./register.php" onclick="restack(currentStack)" title="Register Here"><i class="pe-7s-add-user"></i></a>';
 									echo '<li><a href="./login.php" onclick="restack(currentStack)" title="Login"><i class="pe-7s-user"></i></a></li>';
-									echo '<li><a href="./register.php" onclick="restack(currentStack)" title="Register Here"><i class="pe-7s-add-user"></i></a></li>';
 
 								}
 							?>
