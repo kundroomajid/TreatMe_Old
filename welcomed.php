@@ -3,17 +3,20 @@ include("header.php");
 $id = isset($_SESSION['id'])?$_SESSION['id']:null;
 
 
-function fn_resize($image_resource_id,$width,$height) 
-{
+function fn_resize($image_resource_id,$width,$height){
 
-$target_width =300;
-$target_height =300;
-$target_layer=imagecreatetruecolor($target_width,$target_height);
-imagecopyresampled($target_layer,$image_resource_id,0,0,0,0,$target_width,$target_height, $width,$height);
-return $target_layer;
+  $target_width =300;
+  $target_height =300;
+  $target_layer=imagecreatetruecolor($target_width,$target_height);
+  imagecopyresampled($target_layer,$image_resource_id,0,0,0,0,$target_width,$target_height, $width,$height);
+  return $target_layer;
 }
 
 if($id!=null){
+  $user_type = isset($_SESSION['user_type'])?$_SESSION['user_type']:null;
+  if($user_type==null || $user_type!='d'){
+    echo '<script>window.location = "welcome.php";</script>';
+  }
   $query ="select * from vw_doctor where user_id = $id";
   $result1=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
   $cdrow1=mysqli_fetch_array($result1);
@@ -42,12 +45,13 @@ if($id!=null){
 
 
   //get data from appointment table
-  $apptquery = "Select * from tb_appointment where doc_id = $id";
-  $resultappt = $conn->query($apptquery);
+  $resultappt = $conn->query("Select * from tb_appointment where doc_id = $id");
   $count = mysqli_num_rows($resultappt);
 
+  //get data from temp appointment tablet
+  $resulttmpappt = $conn->query("SELECT * FROM tmp_appointment WHERE doc_id = $id") ;
+  $counttmpappt = mysqli_num_rows($resulttmpappt);
   //get education data
-  $eduquery = "SELECT * FROM tb_doceducation where doc_id=$id";
   $resultedu = $conn->query("SELECT * FROM tb_doceducation where doc_id=$id");
 }else{
   echo '<script type="text/javascript">
@@ -56,8 +60,7 @@ if($id!=null){
   </script> ';
 }
 
-if($_SERVER["REQUEST_METHOD"] == "POST" )
-{
+if($_SERVER["REQUEST_METHOD"] == "POST" ){
   $file = addslashes(file_get_contents($_FILES['image']['tmp_name']));
   $file_size = $_FILES['image']['size'];
 
@@ -70,39 +73,35 @@ if($_SERVER["REQUEST_METHOD"] == "POST" )
   {
     //  unset($imagepic);
    $file = $_FILES['image']['tmp_name'];
-$source_properties = getimagesize($file);
-$image_type = $source_properties[2]; 
-  
-if( $image_type == IMAGETYPE_JPEG ) 
-{   
-$image_resource_id = imagecreatefromjpeg($file);  
-$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-imagejpeg($target_layer,'temp.jpg');
-$blob = addslashes(file_get_contents('./temp.jpg', true));
-$q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-  $conn->query($q);
-}
-elseif( $image_type == IMAGETYPE_GIF )  
-{  
-$image_resource_id = imagecreatefromgif($file);
-$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-imagejpeg($target_layer,'temp.jpg');
-$blob = addslashes(file_get_contents('./temp.jpg', true));
-$q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-  $conn->query($q);
-  
-}
-elseif( $image_type == IMAGETYPE_PNG ) 
-{
-$image_resource_id = imagecreatefrompng($file); 
-$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-imagejpeg($target_layer,'temp.jpg');
-$blob = addslashes(file_get_contents('./temp.jpg', true));
-$q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-  $conn->query($q);
-  
-}  
+   $source_properties = getimagesize($file);
+   $image_type = $source_properties[2];
+
+  if( $image_type == IMAGETYPE_JPEG ){
+    $image_resource_id = imagecreatefromjpeg($file);
+    $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
+    imagejpeg($target_layer,'temp.jpg');
+    $blob = addslashes(file_get_contents('./temp.jpg', true));
+    $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
+      $conn->query($q);
   }
+  elseif( $image_type == IMAGETYPE_GIF ) {
+    $image_resource_id = imagecreatefromgif($file);
+    $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
+    imagejpeg($target_layer,'temp.jpg');
+    $blob = addslashes(file_get_contents('./temp.jpg', true));
+    $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
+      $conn->query($q);
+
+  }
+  elseif( $image_type == IMAGETYPE_PNG ){
+    $image_resource_id = imagecreatefrompng($file);
+    $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
+    imagejpeg($target_layer,'temp.jpg');
+    $blob = addslashes(file_get_contents('./temp.jpg', true));
+    $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
+      $conn->query($q);
+  }
+    }
 }
 
 $str = "select photo from tb_user where user_id = '$id'";
@@ -188,7 +187,11 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           //   echo "No Appointments Booked yet";
           // } else {
           // if($resultappt->num_rows > 0)          {
-          if($count > 0)          {
+
+
+        if($count > 0 || $counttmpappt > 0) {
+
+          if($count > 0) {
             while ($cdrow2=mysqli_fetch_array($resultappt)) {
                 //getting result from database
                 $appt_id = $cdrow2["apptt_id"];
@@ -201,14 +204,42 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 $docquery = $conn->query("select user_name from vw_patient where pat_id = $pat_id");
                 $cdrow3=mysqli_fetch_array($docquery);
                 $pat_name = $cdrow3["user_name"];
-                echo "<tr><td>$appt_id <span class='pe-7s-remove-user'></span> </td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>$queue_no</td>
-                <td><a class='btn btn-sm btn-danger' href='delete_appointment.php?appt_id=$appt_id'>X</a>
-                <a href='#' class='btn btn-sm btn-success'>T</a></td>
+                echo "<tr><td>$appt_id <span class=''></span> </td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>$queue_no</td>
+                <td>confirmed</td>
                 </tr>" ;
+
+                //<a href='#' class='btn btn-sm btn-success'><span class='icon_check_alt2'></span> </a>
+                // <a class='btn btn-sm btn-danger' href='delete_appointment.php?appt_id=$appt_id'>X</a>
             }
-          }else {
-            echo("<tr><td colspan='6'><h5>No Appointments booked Yet</td></tr>");
           }
+
+          if ($counttmpappt > 0){
+            echo "<tr><td colspan='6'>Unfconfirmed</td></tr>";
+            while ($cdrow2=mysqli_fetch_array($resulttmpappt)) {
+                //getting result from database
+                $tmp_id = $cdrow2["tmp_id"];
+                $pat_id = $cdrow2["pat_id"];
+                $appt_date = $cdrow2["appt_date"];
+                $shift = $cdrow2["shift"];
+                $shift_type = ($shift==0)?'Morning':'Evening';
+                //query to get doc name from view doctor
+                $docquery = $conn->query("select user_name from vw_patient where pat_id = $pat_id");
+                $cdrow3=mysqli_fetch_array($docquery);
+                $pat_name = $cdrow3["user_name"];
+
+                echo "<tr><td>$tmp_id</td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>unconfirmed</td>
+                <td>
+                  <a class='btn btn-sm btn-danger' href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=0'>X</a>
+                  <a href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=1' class='btn btn-sm btn-success'><span class='icon_check_alt2'></span></a>
+                </td></tr>" ;
+                //<a href='#' class='btn btn-sm btn-success'><span class='icon_check_alt2'></span> </a>
+                // <a class='btn btn-sm btn-danger' href='delete_appointment.php?appt_id=$appt_id'>X</a>
+            }
+          }
+        }else{
+          echo "<tr><td colspan='6'>No appointments booked yet</td></tr>";
+        }
+
           ?>
           <tbody>
           </table>

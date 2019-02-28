@@ -1,5 +1,5 @@
 <html>
-  
+
 <?php include("header.php");
 include("config.php");
 $curr_date = date("Y-m-d"); // variable gets current date
@@ -63,7 +63,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 			<div class="row">
               <aside class="col-xl-4 col-lg-4" id="sidebar">
 					<div class="box_general_3 booking">
-						<form action ="book_appoinment.php">
+						<form action ="book_appointment.php">
 							<div class="title">
 							<h3>Book a Visit</h3>
                                 <br><small><b>Morning Shift:</b> <?= $morning_start_time." to ".$morning_end_time?></small>
@@ -72,20 +72,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 							<div class="row">
 								<div class="col-6">
 									<div class="form-group">
-                                      
-                                      
+
+
                                         <input class="input-group-addon" type="date" name="date" required min= "<?= $curr_date ?>" >
 <!--										<input class="input-group date" type="date" id="date" data-lang="en" data-min-year="2019" name="date"/>-->
-									
+
                                   </div>
 								</div>
-								<div>                            
+								<div>
                                         <label> <h5>Select Shift</h5></label> <br>
                                          <input type = "radio" required name = "shift" value = "0" />
                                         <label for = "shift">Morning Shift</label>
                                          <input type = "radio" required name = "shift"  value = "1" />
                                          <label for = "1">Evening Shift</label> <br> <br>
-                              
+
 								<input type="hidden" name="doc_id" value="<?=$doc_id?>">
 							</div>
 						</div>
@@ -113,7 +113,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 					<!-- /box_general -->
 				</aside>
 				<!-- /asdide -->
-		
+
 				<div class="col-xl-8 col-lg-8">
 					<nav id="secondary_nav">
 						<div class="container">
@@ -124,10 +124,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 							</ul>
 						</div>
 					</nav>
-                  
+
 					<div id="section_1">
 						<div class="box_general_3">
-                          
+
 							<div class="profile">
 								<div class="row">
 									<div class="col-lg-5 col-md-4">
@@ -456,7 +456,7 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 					<!-- /section_2 -->
 				</div>
 				<!-- /col -->
-				
+
 			</div>
 			<!-- /row -->
 		</div>
