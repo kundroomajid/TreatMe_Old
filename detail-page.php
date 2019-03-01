@@ -51,11 +51,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 <main>
 		<div id="breadcrumb">
 			<div class="container">
+<!--
 				<ul>
 					<li><a href="#">Home</a></li>
 					<li><a href="#">Category</a></li>
 					<li>Page active</li>
 				</ul>
+-->
 			</div>
 		</div>
 		<!-- /breadcrumb -->
@@ -70,15 +72,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                                <br> <small><b>Evening Shift:</b> <?= $evening_start_time ." to ".$evening_end_time?></small></br>
 							</div>
 							<div class="row">
-								<div class="col-6">
+<!--								<div class="col-6">-->
 									<div class="form-group">
-
-
-                                        <input class="input-group-addon" type="date" name="date" required min= "<?= $curr_date ?>" >
+                                       <div>
+                                        <label> <h5>Select Date</h5></label> <br>
+                                        <input type="date" class="input-group-addon "  name="date" placeholder="Select Date" required min= "<?= $curr_date ?>" >
 <!--										<input class="input-group date" type="date" id="date" data-lang="en" data-min-year="2019" name="date"/>-->
-
+                                       </div>
                                   </div>
-								</div>
+<!--								</div>-->
 								<div>
                                         <label> <h5>Select Shift</h5></label> <br>
                                          <input type = "radio" required name = "shift" value = "0" />
@@ -332,29 +334,35 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 								<!-- /row -->
 
 								<hr />
-                <!-- commnet box -->
+                <!-- commnet box --> 
 
-					<form action ="" method="post">
-					<div class="form-group">
-  					<label for="comment"><h6>Post Your Comment :</h6></label>
-  					<textarea class="form-control" rows="5" name="comment" id="comment" placeholder='Enter Your Comment Here' required></textarea>
-					<br /> <br />
-           			<div class="rev-text">
-						<div>
-                      <p align="right">
 
-<!--						  will disabble comment button if user not logged in-->
+<!--						  will disabble comment box and button if user not logged in-->
                         <?php
 						  if(isset($_SESSION['login_user']))
                         {
-
-                          echo "<input type='submit' id='postcommnet' class='btn_1' value='Post Comment'><br>";
+                           echo"<form action ='' method='post'>
+   <div class='form-group'>
+      <label for='comment'><h6>Post Your Comment :</h6> </label>
+      <textarea class='form-control' rows='5' name='comment' id='comment' placeholder='Enter Your Comment Here' required> </textarea>
+					<br /> <br />
+      <div class='rev-text'> 
+         <div>
+            <p align='right'>
+           			 <input type='submit' id='postcommnet' class='btn_1' value='Post Comment'><br>
+            </p>
+         </div>
+      </div>
+   </div>
+</form>";
 
 
 						  }
 						  else
 						  {
-							   echo "<input type='submit' id='postcommnet' class='btn_1' disabled = 'true'  title='Login to Post Comment' value='Post Comment'><br>";
+                             // disable display nothing
+                             
+//							   echo "<input type='submit' id='postcommnet' class='btn_1' disabled = 'true'  title='Login to Post Comment' value='Post                          Comment'><br>";
 						  }
 
 
@@ -362,11 +370,9 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 						  ?>
 
 
-                      </p>
-						</div>
-                    </div>
-                  </div>
-                </form>
+						
+                  
+                
 
 
 <!--                </div>-->
@@ -420,12 +426,13 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
                                 $comments = $cdrow["comment"];
                                 $date = $cdrow["date"];
 								$pic = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow2["photo"])."' width = '60px' height ='60px'/>";
+                                  
 
 								?>
 									<div class="review-box clearfix">
 
-                                  <?php   echo"<div class ='rev-thumb'>$pic</div>";?>
-
+                                  <?php   
+                                   echo"<div class ='rev-thumb'>$pic</div>";?>
 									<div class="rev-content">
 										<div class="rating">
 											<i class="icon-star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>

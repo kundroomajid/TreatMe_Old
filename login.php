@@ -1,6 +1,11 @@
 <?php
 session_start();
 include("config.php");
+// if(isset($_SESSION['login_user']))
+$log_status = isset($_SESSION['login_user'])?$_SESSION['login_user']:null;
+  if($log_status !=null){
+    echo '<script>window.location = "index.php";</script>';
+  }
 
 if (mysqli_connect_errno()) {
   printf("Connect failed: %s\n", mysqli_connect_error());

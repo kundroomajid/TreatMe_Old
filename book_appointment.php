@@ -1,10 +1,9 @@
-<?php include("header.php"); ?>
-<?php
+<?php include("header.php"); 
 
 include("session.php");
 include("config.php");
 if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION['user_type']=='p' ){
-
+   $username = ($_SESSION['login_user']);
   $doc_id = isset($_GET['doc_id'])?$_GET['doc_id']:null;
   $date1 = isset($_GET['date'])?$_GET['date']:null;
   $date = (new DateTime($date1))->format('Y-m-d');
@@ -115,11 +114,34 @@ function slotsFilled($doc_id,$date,$shift){
 ?>
 
 <main>
+   
   <div class="bg_color_2">
     <div class="container margin_60_35">
       <div id="login-2">
-        <h1>Thank You For Booking Appointment <?= "$pat_name" ?> </h1>
-        <p>A meail will be sent upon the confirmation of your appointment</p>
+         
+        <h4 style="color:white" align = "center" >Thank You   <?= "<small><i>$username</i></small>";?>   For Booking Appointment <br /> </h4>
+<!--         <h4 align ='center' style='color:white'><?= "$pat_name" ?></h4>-->
+        <p><h4 style="color:white" align = "center"><i>A Mail will be sent upon the confirmation of your appointment</i></p></h4>
+      
+         <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <td><h5> <b style='color:white'> Dr Name </b> </h5></td>
+        <td><?= "<h5 style='color:white'> <i>$doc_name</i></h5>";?></td>
+      </tr>
+      <tr>
+        <td><h5 style="color:white"> <b> Date </b> </h5></td>
+        <td><?= "<h5 style='color:white'> <i>$appt_date</i></h5>";?></td>
+      </tr>
+       <tr>
+        <td><h5 style="color:white"> <b> Shift </b> </h5></td>
+        <td><?= "<h5 style= 'color:white'> <i>$shift_name</i></h5>";?></td>
+      </tr>
+    </tbody>
+  </table>
+         
+         
+<!--
         <div class="box_form clearfix">
           <div class="wrapper_indent">
             <?= "<h2>Appointment id        :   $appt_id</h2>";?>
@@ -127,9 +149,8 @@ function slotsFilled($doc_id,$date,$shift){
             <?= "<h2>Date                  :   $appt_date</h2>";?>
             <?= "<h2>Shift                 :   $shift_name</h2>";?>
           </div>
-          <div class="box_login last">
-          </div>
         </div>
+-->
       </div>
 
     </div>

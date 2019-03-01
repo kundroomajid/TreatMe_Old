@@ -9,16 +9,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       $user_type =  mysqli_real_escape_string($conn,$_POST['user_type']);
       $user_email = mysqli_real_escape_string($conn,$_POST['user_email']);
       $user_password = mysqli_real_escape_string($conn,$_POST['user_password']);
+      $blob = addslashes(file_get_contents('./img/user.png', true));
 if ( !empty($user_password) || !empty($user_email) )
 {    //create connection
     if (mysqli_connect_error()) {
      die('Connect Error('. mysqli_connect_errno().')'. mysqli_connect_error());
-    } else
+    } else 
     {
 
      $hash = md5( rand(0,1000) );
      $SELECT = "SELECT user_email From tb_user Where user_email = ? Limit 1";
-     $INSERT = "INSERT Into tb_user (user_password,user_email,hash,user_type) values(?, ?,?,?)";
+     $INSERT = "INSERT Into tb_user (user_password,user_email,hash,user_type) values(?,?,?,?)";
      //Prepare statement
      $stmt = $conn->prepare($SELECT);
      $stmt->bind_param("s", $user_email);
@@ -32,19 +33,24 @@ if ( !empty($user_password) || !empty($user_email) )
       $stmt->bind_param("ssss",  $user_password,$user_email,$hash,$user_type);
      if( $stmt->execute() == False)
      {
+        
+         echo("Error description: " . mysqli_error($conn));
           echo '<script type="text/javascript">
          alert("execution failed of sql")
          window.location = "index.php";
          </script> ';
      }
      $_SESSION['email'] = $user_email;
+        $q = "UPDATE tb_user SET photo= '$blob' where user_email = '$user_email'";
+         $conn->query($q) or die(mysql_error($conn));
+        echo("Registered Sucessfully please confirm your email id please check spam folder also");
          echo '<script type="text/javascript">
          alert("Registered Sucessfully please confirm your email id please check spam folder also")
          window.location = "index.php";
          </script> ';
 
-     }
-        else
+     } 
+        else 
      {
           echo '<script type="text/javascript">
          alert("Someone already register using this email")
@@ -56,7 +62,7 @@ if ( !empty($user_password) || !empty($user_email) )
      $conn->close();
     }
 
-$to      = $user_email; // Send email to our user
+    $to      = $user_email; // Send email to our user
 $subject = 'Shifa | Signup | Verification'; // Give the email a subject
 $message = '
 
@@ -74,7 +80,7 @@ https://shifaddnn.000webhostapp.com/shifa/verify.php?email='.$user_email.'&hash=
 '; // Our message above including the link
 
 $headers = 'From:noreply@shifaddnn.000webhostapp.com/' . "\r\n"; // Set from headers
-mail($to, $subject, $message, $headers); // Send our email
+//mail($to, $subject, $message, $headers); // Send our email   TO DO
 } else {
  echo "All field are required";
  die();
