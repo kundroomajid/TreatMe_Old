@@ -13,12 +13,22 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
 
     if($confirmed==0){
       if($result = $conn->query("DELETE FROM tmp_appointment WHERE tmp_id=$tmp_id")){
+		  $_SESSION['msg'] ='<div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Reject Successfull
+  </div>';
         echo '<script type="text/javascript">
-        alert("Rejected Successfully"); window.location = "welcome.php";
+//        alert("Rejected Successfully"); 
+		window.location = "welcome.php";
         </script> ';
       }else{
+		   $_SESSION['msg'] ='<div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Unsuccessfull operation
+  </div>';
         echo '<script type="text/javascript">
-        alert("Unsuccessfull operation"); window.location = "welcome.php";
+//        alert("Unsuccessfull operation");
+		window.location = "welcome.php";
         </script> ';
       };
     }
@@ -31,9 +41,20 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
       $shift = $row['shift'];
 
       if(bookAppointment($doc_id,$pat_id,new DateTime($date),$shift) && ($result = $conn->query("DELETE FROM tmp_appointment WHERE tmp_id=$tmp_id")))
-        echo "<script>alert('Appointment Confirmed Sucessfully'); window.location = 'welcome.php'; </script>";
+	  {
+		  $_SESSION['msg'] = '<div class= "alert alert-info alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Appointment Confirmed Sucessfully</div>';
+        echo "<script> window.location = 'welcome.php'; </script>";
+		  }
       else
-        echo '<script type="text/javascript"> alert("Operation Unsuccessfull"); window.location = "welcome.php"; </script> ';
+	  {
+		  $_SESSION['msg'] ='<div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Operation Unsuccessfull
+  </div>';
+        echo '<script type="text/javascript">  window.location = "welcome.php"; </script> ';
+		  }
     }
   }
   else{
@@ -42,7 +63,7 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
 }
 else{
   echo '<script type="text/javascript">
-  alert("Please Login To Book an Appontmnet")
+//  alert("Please Login To Book an Appontmnet")
   window.location = "/shifa/login.php?doc_id='.$doc_id.'";
   </script> ';
 }

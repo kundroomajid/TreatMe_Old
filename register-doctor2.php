@@ -2,6 +2,49 @@
 include("header.php");
 include("config.php");
 include("session.php");
+$doc_email = $_GET['email'];
+$msg = $_SESSION['msg'];
+
+
+//echo $doc_email;
+
+$_SESSION['email'] = $doc_email;
+if((isset($_POST['name']))&isset($_GET['email'])){
+	// Verify data
+
+	$doc_name = $_POST['name'];
+	$phone_no = $_POST['phone_no'];
+	$gender = $_POST['gender'];
+	$dob = $_POST['dob'];
+	$district = $_POST['district'];
+
+
+	$sql = "UPDATE tb_user SET user_name= '$doc_name',user_phone= '$phone_no', dob = '$dob',gender = '$gender',district = '$district' WHERE user_email='$doc_email'";
+
+
+
+	if(mysqli_query($conn, $sql)){
+		$msg = '<div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Details Saved Sucessfully Continue
+  </div>';
+		echo '<script type="text/javascript">
+//		alert("Details Saved Sucessfully")
+		window.location = "./register-doctor3.php?email='.$doc_email.'";
+		</script> ';
+	} else {
+		$msg = '<div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Error!</strong> Some Error Occured
+  </div>';
+	}
+	$_SESSION['msg'] = $msg;
+	mysqli_close($conn);
+
+
+
+}
+
 
 ?>
 
@@ -33,6 +76,7 @@ include("session.php");
 				<div class="col-lg-5 ml-auto">
 					<br>
 					<div class="box_feat_2">
+						<div id="info" class="clearfix">  <?= "$msg";?> </div>
 						<h3>Please Enter Your Personal Details</h3>
 						<p>These Details will be kept Private. </p>
 					</div>
@@ -114,45 +158,7 @@ include("session.php");
 </main>
 <!-- /main -->
 
-<?php
-$doc_email = $_GET['email'];
-include("footer.php");
 
-echo $doc_email;
-$_SESSION['email'] = $doc_email;
-if((isset($_POST['name']))&isset($_GET['email'])){
-	// Verify data
-
-	$doc_name = $_POST['name'];
-	$phone_no = $_POST['phone_no'];
-	$gender = $_POST['gender'];
-	$dob = $_POST['dob'];
-	$district = $_POST['district'];
-
-
-	$sql = "UPDATE tb_user SET user_name= '$doc_name',user_phone= '$phone_no', dob = '$dob',gender = '$gender',district = '$district' WHERE user_email='$doc_email'";
-
-
-
-	if(mysqli_query($conn, $sql)){
-		echo '<script type="text/javascript">
-		alert("Details Saved Sucessfully")
-		window.location = "./register-doctor3.php?email='.$doc_email.'";
-		</script> ';
-	} else {
-		echo '<script language="javascript">';
-		echo 'alert("Error")';
-		echo '</script>';
-		echo "ERROR: Could not able to execute $sql. "
-		. mysqli_error($conn);
-	}
-	mysqli_close($conn);
-
-
-
-}
-
-
-?>
 </body>
 </html>
+<?php include("footer.php")?>

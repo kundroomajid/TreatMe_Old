@@ -1,6 +1,7 @@
 <?php
 include("header.php");
-
+$msg = $_SESSION['msg'];
+unset($_SESSION['msg']);
 function fn_resize($image_resource_id,$width,$height) {
   $target_width =300;
   $target_height =300;
@@ -38,7 +39,7 @@ if($id!=null) {
   $count = mysqli_num_rows($resultappt);
 } else {
   echo '<script type="text/javascript">
-  alert("Please Login To Continue ")
+//  alert("Please Login To Continue ")
   window.location = "./login.php";
   </script> ';
 }
@@ -48,9 +49,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
   $file_size = $_FILES['image']['size'];
   if (($file_size > 655000))
   {
-    $message = 'File too large. File must be less than 640 kb.';
-    echo '<script type="text/javascript">alert("'.$message.'");</script>';
-  } if($file!=null && $file!="")
+//    $message = 'File too large. File must be less than 640 kb.';
+//	   $msg = '<div class="alert alert-danger alert-dismissible">
+//     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+//     File too large. File must be less than 1Mb
+//    </div>';
+//    echo '<script type="text/javascript">alert("'.$message.'");</script>';
+  } 
+	if($file!=null && $file!="" && file_exists($_FILES['image']['tmp_name']))
   {
     $file = $_FILES['image']['tmp_name'];
     $source_properties = getimagesize($file);
@@ -85,10 +91,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
       $conn->query($q);
 
     }
+		$msg = '<div class="alert alert-danger alert-dismissible">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     Photo Uploaded Sucessfully
+    </div>';
+	}
+else{
+		$msg = '<div class="alert alert-danger alert-dismissible">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     File too large. File must be less than 1 MB
+    </div>';
+	}
 
 
-
-  }
+  
+	
 }
 $str = "select photo from tb_user where user_id = '$id'";
 $result = $conn->query($str);
@@ -130,6 +147,7 @@ this.value = "";
       </form>
 
       <div class="col-lg-8 order-lg-2">
+		  <div id="info" class="clearfix">  <?= "$msg";?> </div>
         <ul class="nav nav-tabs">
           <li class="nav-item">
             <a href="" data-target="#profile" data-toggle="tab" class="nav-link active">Profile</a>

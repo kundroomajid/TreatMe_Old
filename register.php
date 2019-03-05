@@ -43,19 +43,29 @@ if ( !empty($user_password) || !empty($user_email) )
      $_SESSION['email'] = $user_email;
         $q = "UPDATE tb_user SET photo= '$blob' where user_email = '$user_email'";
          $conn->query($q) or die(mysql_error($conn));
-        echo("Registered Sucessfully please confirm your email id please check spam folder also");
-         echo '<script type="text/javascript">
-         alert("Registered Sucessfully please confirm your email id please check spam folder also")
-         window.location = "index.php";
-         </script> ';
+      $msg = '<div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Registered Sucessfully please confirm your email id please check spam folder also.
+  </div>';
+      
+//        echo("Registered Sucessfully please confirm your email id please check spam folder also");
+//         echo '<script type="text/javascript">
+//         alert("Registered Sucessfully please confirm your email id please check spam folder also")
+//         window.location = "index.php";
+//         </script> ';
 
      } 
         else 
      {
-          echo '<script type="text/javascript">
-         alert("Someone already register using this email")
-         window.location = "./login.php";
-         </script> ';
+         $msg = '<div class="alert alert-danger alert-dismissible">
+     <a href="index.php" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     Someone is allready registered using this email
+    </div>';
+         
+//          echo '<script type="text/javascript">
+//         alert("Someone already register using this email")
+//         window.location = "./login.php";
+//         </script> ';
 
      }
      $stmt->close();
@@ -97,6 +107,8 @@ include("header.php");
 						<div class="col-md-5">
 							<form action="register.php" method="POST">
 								<div class="box_form">
+                                      <div id="info" class="clearfix">  <?= "$msg";?> </div>
+                                 
                   <div class="form-group">
                 <label>Select User Type</label>
                 <select id = "user_type" class="form-control" name ="user_type">
@@ -105,6 +117,7 @@ include("header.php");
                   <option value = "c">Clinic</option>
                 </select>
               </div>
+                            
 
                   </select>
 									<div class="form-group">

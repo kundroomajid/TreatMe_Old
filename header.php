@@ -1,4 +1,5 @@
-	<?php include('session.php');?>
+	<?php 
+include('session.php');?>
 		<!DOCTYPE html>
 		<html lang="en">
 
@@ -113,7 +114,12 @@
 					</div>
 				</div>
 				<!-- /container -->
+				
 			</header>
+<!--			<div id="info" class="clearfix">  <?= "$error";?> </div>-->
+			
 			<!-- /header -->
-			<div id="toTop"></div>
+			
+			
 			<!-- Back to top button -->
+			<div id="toTop"></div>

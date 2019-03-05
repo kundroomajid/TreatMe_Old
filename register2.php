@@ -1,11 +1,61 @@
 <?php
 include("header.php");
-include("config.php");?>
+include("config.php");
+
+$user_email = $_GET['email'];
+
+$_SESSION['email'] = $user_email;
+if((isset($_POST['name']))&isset($_POST['phone_no'])&isset($_POST['gender'])){
+  // Verify data
+  $name = $_POST['name'];
+  $phone_no = $_POST['phone_no'];
+  $gender = $_POST['gender'];
+  $dob = $_POST['dob'];
+  $address = $_POST['address'];
+  $district = $_POST['district'];
+  $pincode = $_POST['pincode'];
+  $bloodgroup = $_POST['bloodgroup'];
+  $height = $_POST['height'];
+  $weight = $_POST['weight'];
+
+  $idquery = "SELECT user_id from tb_user WHERE user_email='$user_email'";
+  $user_id = mysqli_query($conn,$idquery)->fetch_object()->user_id;
+
+
+  $sql = "UPDATE tb_user SET user_name= '$name',user_phone = '$phone_no',gender = '$gender',user_type = 'p',dob = '$dob',address = '$address',district ='$district',pincode = '$pincode' WHERE user_email='$user_email'";
+  $sql2 = "INSERT INTO tb_patient VALUES ($user_id, '$bloodgroup',$height,$weight)";
+  if(mysqli_query($conn, $sql) && mysqli_query($conn, $sql2)){
+    $msg = '<div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Details Saved Sucessfully 
+  </div>';
+    echo '<script type="text/javascript">
+//    alert("Details Saved Sucessfully")
+    window.location = "./upload_photo.php?email='.$user_email.'";
+    </script> ';
+  } else {
+    $msg = '<div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Alert!</strong> Some Error Occured while saving Details
+  </div>';
+//    echo '<script language="javascript">';
+//    echo 'alert("Error")';
+//    echo '</script>';
+  }
+  mysqli_close($conn);
+
+}
+
+$_SESSION['msg'] = $msg;
+
+?>
+
 
 <html>
 <main>
   <div class="bg_color_2">
     <div class="container margin_60_35"  id="register">
+      <div id="info" class="clearfix">  <?= "$msg";?> </div>
       <h1>Please Enter Your details to complete Your profile</h1>
       <div class="row justify-content-center">
         <div class="col-md-5">
@@ -112,46 +162,3 @@ include("config.php");?>
   </main>
 </main>
 </html>
-<?php
-
-
-$user_email = $_GET['email'];
-
-$_SESSION['email'] = $user_email;
-if((isset($_POST['name']))&isset($_POST['phone_no'])&isset($_POST['gender'])){
-  // Verify data
-  $name = $_POST['name'];
-  $phone_no = $_POST['phone_no'];
-  $gender = $_POST['gender'];
-  $dob = $_POST['dob'];
-  $address = $_POST['address'];
-  $district = $_POST['district'];
-  $pincode = $_POST['pincode'];
-  $bloodgroup = $_POST['bloodgroup'];
-  $height = $_POST['height'];
-  $weight = $_POST['weight'];
-
-  $idquery = "SELECT user_id from tb_user WHERE user_email='$user_email'";
-  $user_id = mysqli_query($conn,$idquery)->fetch_object()->user_id;
-
-
-  $sql = "UPDATE tb_user SET user_name= '$name',user_phone = '$phone_no',gender = '$gender',user_type = 'p',dob = '$dob',address = '$address',district ='$district',pincode = '$pincode' WHERE user_email='$user_email'";
-  $sql2 = "INSERT INTO tb_patient VALUES ($user_id, '$bloodgroup',$height,$weight)";
-  if(mysqli_query($conn, $sql) && mysqli_query($conn, $sql2)){
-    echo '<script type="text/javascript">
-    alert("Details Saved Sucessfully")
-    window.location = "./upload_photo.php?email='.$user_email.'";
-    </script> ';
-  } else {
-    echo '<script language="javascript">';
-    echo 'alert("Error")';
-    echo '</script>';
-    echo "ERROR: Unable to to execute <br/>$sql. <br/>"
-    . mysqli_error($conn);
-  }
-  mysqli_close($conn);
-
-}
-
-
-?>

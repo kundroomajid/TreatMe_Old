@@ -1,5 +1,7 @@
 <?php
 include("header.php");
+$msg = $_SESSION['msg'];
+unset($_SESSION['msg']);
 $id = isset($_SESSION['id'])?$_SESSION['id']:null;
 
 
@@ -55,7 +57,7 @@ if($id!=null){
   $resultedu = $conn->query("SELECT * FROM tb_doceducation where doc_id=$id");
 }else{
   echo '<script type="text/javascript">
-  alert("Please Login To Continue ")
+//  alert("Please Login To Continue ")
   window.location = "./login.php";
   </script> ';
 }
@@ -65,8 +67,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ){
   $file_size = $_FILES['image']['size'];
 
   if (($file_size > 655000)){
-    $message = 'File too large. File must be less than 640kb.';
-    echo '<script type="text/javascript">alert("'.$message.'");</script>';
+//    $message = 'File too large. File must be less than 640kb.';
+	  $msg = '<div class="alert alert-danger alert-dismissible">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     File too large. File must be less than 1Mb
+    </div>';
+//    echo '<script type="text/javascript">alert("'.$message.'");</script>';
   }
 
   if($file!=null && $file!="")
@@ -83,6 +89,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ){
     $blob = addslashes(file_get_contents('./temp.jpg', true));
     $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
       $conn->query($q);
+	  $msg = '<div class="alert alert-danger alert-dismissible">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     Photo uploaded Sucessfully
+    </div>';
   }
   elseif( $image_type == IMAGETYPE_GIF ) {
     $image_resource_id = imagecreatefromgif($file);
@@ -91,6 +101,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ){
     $blob = addslashes(file_get_contents('./temp.jpg', true));
     $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
       $conn->query($q);
+	  $msg = '<div class="alert alert-danger alert-dismissible">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     Photo uploaded Sucessfully
+    </div>';
 
   }
   elseif( $image_type == IMAGETYPE_PNG ){
@@ -100,8 +114,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ){
     $blob = addslashes(file_get_contents('./temp.jpg', true));
     $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
       $conn->query($q);
+	  $msg = '<div class="alert alert-danger alert-dismissible">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     Photo uploaded Sucessfully
+    </div>';
   }
     }
+	else{
+		$msg = '<div class="alert alert-danger alert-dismissible">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     Some Error Occured
+    </div>';
+	}
 }
 
 $str = "select photo from tb_user where user_id = '$id'";
@@ -136,6 +160,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
 
     <!---------------------TABS--------------------->
     <div class="col-lg-8 order-lg-2">
+		<div id="info" class="clearfix">  <?= "$msg";?> </div>
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a href="" data-target="#profile" data-toggle="tab" class="nav-link">Profile</a>

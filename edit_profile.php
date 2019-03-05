@@ -36,13 +36,19 @@ if($id!=null && $_SERVER["REQUEST_METHOD"] == "POST")
   }
 
   if(mysqli_query($conn, $sql) && mysqli_query($conn,$sql2)) {
-    echo ' Details Saved <script type="text/javascript">
-    alert("Details Saved Sucessfully")
+	  $_SESSION['msg'] = '<div class= "alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Details Updated Sucessfully </div>';
+    echo ' <script type="text/javascript">
+//    alert("Details Saved Sucessfully")
     window.location = "./welcome.php";
     </script> ';
   } else {
+	  $_SESSION['msg'] = '<div class= "alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Sorry Error Occured While Saving Your Details </div>';
     echo ' <script type="text/javascript">
-    alert("Sorry Some error occured")
+//    alert("Sorry Some error occured")
     window.location = "./welcome.php";
     </script> ';
   }

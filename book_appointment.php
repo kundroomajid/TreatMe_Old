@@ -1,5 +1,7 @@
 <?php include("header.php"); 
-
+$bookerror = " ";
+   unset($_SESSION['var']);
+//	unset($bookerror);
 include("session.php");
 include("config.php");
 if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION['user_type']=='p' ){
@@ -27,11 +29,17 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
       $appt_date = (new DateTime($cdrowofdetails['appt_date']))->format('d-m-Y');
       $shift_name = ($shift == '0')?"Morning":"Evening";
 
-      echo "<script>alert('Appointment Booked Sucessfully');</script>";
+//      echo "<script>alert('Appointment Booked Sucessfully');</script>";
     }
     else{
+      $bookerror = '<div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Sorry Slots for this Date are filled Please select another date
+  </div>';
+      $_SESSION['msg']= ' Sorry Slots for this Date are filled Please select another date';
+      $_SESSION['var'] = $bookerror;
       echo '<script type="text/javascript">
-      alert("Ssorry Slots for this Date are filled or you have already booked for the said date. Please select another date")
+//  alert("Ssorry Slots for this Date are filled or you have already booked for the said date. Please select another date")
       window.location = "detail-page.php?doc_id='.$doc_id.'";
       </script> ';
     }
@@ -41,8 +49,14 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
   }
 }
 else{
+  
+  $bookerror = '<div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Please Login To Book appointment
+  </div>';
+  
   echo '<script type="text/javascript">
-  alert("Please Login To Book an Appontmnet")
+//  alert("Please Login To Book an Appontmnet")
   window.location = "/shifa/login.php?doc_id='.$doc_id.'";
   </script> ';
 }

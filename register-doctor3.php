@@ -2,6 +2,7 @@
 include("header.php");
 include("config.php");
 include("session.php");
+$_SESSION['msg'] = ' ';
 ?>
 
 	<main>
@@ -151,8 +152,12 @@ if((isset($_POST['specialization'])) & (isset($_POST['morning_start_time']))& (i
 $sql ="INSERT into tb_doctor (doc_id,specialization,registration_council,registration_no,registration_year,morning_start_time,morning_end_time,evening_start_time,evening_end_time) values('$doc_id','$specialization','$registration_council','$registration_no','$registration_year','$morning_start_time','$morning_end_time','$evening_start_time','$evening_end_time')";
 $sql2 = "INSERT into tb_qualifications(doct_id,degree,institute,experience) values('$doc_id','$degree','$institution','$experience')";
 if(mysqli_query($conn, $sql) && mysqli_query($conn, $sql2)){
+	$msg = '<div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Details Saved Sucessfully 
+  </div>';
    echo '<script type="text/javascript">
-alert("Details Saved Sucessfully")
+//alert("Details Saved Sucessfully")
 window.location = "./upload_photo.php?email='.$doc_email.'";
 </script> ';
 } else {
@@ -168,11 +173,16 @@ mysqli_close($conn);
 
 }
 else {
+	$msg = '<div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Error Please Fill the Registration Form
+  </div>';
 	echo '<script language="javascript">';
-	echo 'alert("Error Please Fill the Registration Form")';
+//	echo 'alert("Error Please Fill the Registration Form")';
 	echo '</script>';
 }
 
+$_SESSION['msg']  = $msg;
 ?>
 </body>
 </html>

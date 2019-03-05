@@ -1,4 +1,9 @@
 <?php
+include("header.php");
+include("config.php");
+$user_email = $_GET['email'];
+
+$msg = $_SESSION['msg'];
 function fn_resize($image_resource_id,$width,$height)
 {
 
@@ -8,9 +13,7 @@ $target_layer=imagecreatetruecolor($target_width,$target_height);
 imagecopyresampled($target_layer,$image_resource_id,0,0,0,0,$target_width,$target_height, $width,$height);
 return $target_layer;
 }
-include("header.php");
-include("config.php");
-$user_email = $_GET['email'];
+
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {
 $file = addslashes(file_get_contents($_FILES['image']['tmp_name']));
@@ -90,6 +93,7 @@ uploadImage.onchange = function() {
 		<div class="bg_color_2">
 			<div class="container margin_60_35">
 				<div id="register">
+                  <div id="info" class="clearfix">  <?= "$msg";?> </div>
 					<h1>Upload Your Photo(optional)</h1>
 					<div class="row justify-content-center">
 						<div class="col-md-5">

@@ -1,5 +1,5 @@
 <?php
-session_start();
+include("header.php");
 include("config.php");
 // if(isset($_SESSION['login_user']))
 $log_status = isset($_SESSION['login_user'])?$_SESSION['login_user']:null;
@@ -14,7 +14,6 @@ if (mysqli_connect_errno()) {
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
   // email_id and password sent from form
-
   $myemail_id = mysqli_real_escape_string($conn,$_POST['email_id']);
   $mypassword = mysqli_real_escape_string($conn,$_POST['password']);
 
@@ -39,7 +38,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['login_user'] = $myemail_id;
     $_SESSION['id'] = $id;
     $_SESSION['user_type'] = $user_type;
-    echo "<script language='javascript'> alert('$user_type') </script>";
     $user_type = $_SESSION['user_type'];
     if($user_type=='d')
     {
@@ -53,15 +51,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   }
   else
   {
-    // $error = "Your Login Name or Password is invalid";
-
-    echo '<script language="javascript">';
-    echo 'alert("Your Login Name or Password is invalid")';
-    echo '</script>';
-    //echo("Your Login Name or Password is invalid");
+    // to display error alert box in html
+    $error = '<div class="alert alert-danger alert-dismissible">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     Invalid Username Or Password
+    </div>';
+    
   }
 }
-include("header.php");
+
 
 ?>
 <main>
@@ -69,14 +67,17 @@ include("header.php");
     <div class="container margin_60_35">
       <div id="login-2">
         <h1>Welcome to Healthcare</h1>
-        <form action="login.php" method="post">
+        <form action=" " method="post">
           <div class="box_form clearfix">
             <!--	<div class="box_login">
             <a href="#0" class="social_bt facebook">Login with Facebook</a>
             <a href="#0" class="social_bt google">Login with Google</a>
             <a href="#0" class="social_bt linkedin">Login with Linkedin</a>
           </div>-->
+            
           <div class="box_login last">
+            
+            <div id="info" class="clearfix">  <?= "$error";?> </div>
             <div class="form-group">
               <input type="email" name="email_id" class="form-control" placeholder="Your email address" />
             </div>
@@ -84,8 +85,9 @@ include("header.php");
               <input type="password" name="password" class="form-control" placeholder="Your password" />
               <a href="forgot.php" class="forgot"><small>Forgot password?</small></a>
             </div>
-            <div class="form-group">
-              <input class="btn_1" name ="submit" type="submit" value="Login" />
+            
+            <div class="form-group" align = "center">
+              <input class="btn_1" name ="submit" type="submit" value="Login"  />
             </div>
           </div>
         </div>

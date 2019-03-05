@@ -21,7 +21,7 @@ if(isset($_SESSION['login_user']))
      {
 
        echo '<script type="text/javascript">
-           alert("Comment Posted Sucessfully")
+//           alert("Comment Posted Sucessfully")
           // window.location = "/shifa/detail-page.php?doc_id='.$doc_id.'";
            </script> ';
      }
@@ -46,8 +46,8 @@ if(isset($_SESSION['login_user']))
 else
 {
   echo '<script type="text/javascript">
-  alert("Please Login To Post Comment")
-  window.location = "/shifa/login.php";
+//  alert("Please Login To Post Comment")
+  window.location = "./login.php";
   </script> ';
 
 }

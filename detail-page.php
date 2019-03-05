@@ -2,6 +2,9 @@
 
 <?php include("header.php");
 include("config.php");
+$bookerror = $_SESSION['var'];
+$msg = " ";
+
 $curr_date = date("Y-m-d"); // variable gets current date
 $doc_id = isset($_GET['doc_id'])?$_GET['doc_id']:null;
 $pat_id = isset($_SESSION['id'])?$_SESSION['id']:null;
@@ -30,14 +33,21 @@ else die("doc id not found");
 if($_SERVER["REQUEST_METHOD"] == "POST") {
  $comment = mysqli_real_escape_string($conn,$_POST['comment']);
  $sql = "INSERT into comments (pat_id,doc_id,comment) values ('$pat_id','$doc_id','$comment')";
+
  if(mysqli_query($conn, $sql)){
+	 $msg = '<div class= "alert alert-info alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Comment Posted Sucessfully</div>';
     echo '<script type="text/javascript">
-    alert("comment Sucessfully")
+//    alert("comment Sucessfully")
     </script> ';
     } else {
-    echo '<script language="javascript">';
-    echo '</script>';
-    echo "ERROR: Could not able to execute $sql. ". mysqli_error($conn);
+    
+	 $msg ='<div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Something went Wrong
+  </div>';
+    
         }
 
 }
@@ -74,6 +84,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 							<div class="row">
 <!--								<div class="col-6">-->
 									<div class="form-group">
+										 <div id=" " class="clearfix">  <?= "$bookerror";?> </div>
+										
                                        <div>
                                         <label> <h5>Select Date</h5></label> <br>
                                         <input type="date" class="input-group-addon "  name="date" placeholder="Select Date" required min= "<?= $curr_date ?>" >
@@ -341,8 +353,9 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
                         <?php
 						  if(isset($_SESSION['login_user']))
                         {
-                           echo"<form action ='' method='post'>
+                           echo"<form action ='#section_2' method='post'>
    <div class='form-group'>
+   <div id = msg>   $msg </div>
       <label for='comment'><h6>Post Your Comment :</h6> </label>
       <textarea class='form-control' rows='5' name='comment' id='comment' placeholder='Enter Your Comment Here' required> </textarea>
 					<br /> <br />
@@ -429,7 +442,7 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
                                   
 
 								?>
-									<div class="review-box clearfix">
+							<div class="review-box clearfix">
 
                                   <?php   
                                    echo"<div class ='rev-thumb'>$pic</div>";?>
@@ -471,6 +484,10 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 
 
 <?php include("footer.php"); ?>
+<?php
+   unset($_SESSION['var']);
+	unset($bookerror);
+?>
 	</main>
 	<!-- /main -->
 </html>
