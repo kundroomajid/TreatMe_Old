@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("header.php");
 include("config.php");
 // if(isset($_SESSION['login_user']))
@@ -39,14 +40,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['id'] = $id;
     $_SESSION['user_type'] = $user_type;
     $user_type = $_SESSION['user_type'];
+//	  echo '<script type="text/javascript"> alert("login sucesssful "); window.location = "./welcome.php"; </script>';
     if($user_type=='d')
     {
-      header("location:   welcomed.php");
+		echo '<script type="text/javascript"> window.location = "./welcomed.php"; </script>';
+//      header("location:   welcomed.php");
     }
     else
     {
-      header("location:   welcomep.php");
+		echo '<script type="text/javascript"> window.location = "./welcomep.php"; </script>';
+//      header("location:   welcomep.php");
     }
+	  echo '<script type="text/javascript"> window.location = "./welcome.php"; </script>';
 //    header("location:   welcome.php");
   }
   else

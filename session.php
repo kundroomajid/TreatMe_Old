@@ -1,6 +1,6 @@
 <?php
-session_start();
    include('config.php');
+session_start();
    // $_SESSION['login_user']= $myemail_id;
 if(isset($_SESSION['login_user']))
 {
