@@ -1,0 +1,42 @@
+body{
+  background: #555;
+  color:white;
+  margin: 0;
+}
+
+header{
+  background: #333;
+  color: white;
+  margin: 0;
+  padding: 0.5rem;
+  text-align: center;
+
+}
+
+nav{
+  color: white;
+  background: #444;
+  margin:0;
+  border:solid black thin;
+  padding: 0.2rem 1rem;
+}
+
+nav ul{
+  display:flex;
+  list-style: none;
+  padding: 0;
+}
+
+nav .current > a {
+  color:yellow;
+}
+
+nav a{
+  padding:10px;
+  color:white;
+  text-decoration: none;
+}
+
+article{
+  padding:1rem;
+}
