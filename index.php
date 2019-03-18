@@ -124,16 +124,16 @@ include("header.php");
 							<h3>Search by District</h3>
 						</div>
 						<ul>
-							<li><a href="#0"><strong>01</strong>Anantnag</a></li>
-							<li><a href="#0"><strong>02</strong>Baramulla</a></li>
-							<li><a href="#0"><strong>03</strong>Bandipora</a></li>
-							<li><a href="#0"><strong>04</strong>Budgam</a></li>
-							<li><a href="#0"><strong>05</strong>Ganderbal</a></li>
-							<li><a href="#0"><strong>06</strong>Kulgam</a></li>
-							<li><a href="#0"><strong>07</strong>Kupwara</a></li>
-							<li><a href="#0"><strong>08</strong>Pulwama</a></li>
-							<li><a href="#0"><strong>09</strong>Shopain</a></li>
-							<li><a href="#0"><strong>10</strong>Srinagar</a></li>
+							<li><a href="list.php?dist=anantnag"><strong>01</strong>Anantnag</a></li>
+							<li><a href="list.php?dist=baramulla"><strong>02</strong>Baramulla</a></li>
+							<li><a href="list.php?dist=bandipora"><strong>03</strong>Bandipora</a></li>
+							<li><a href="list.php?dist=budgam"><strong>04</strong>Budgam</a></li>
+							<li><a href="list.php?dist=ganderbal"><strong>05</strong>Ganderbal</a></li>
+							<li><a href="list.php?dist=kulgam"><strong>06</strong>Kulgam</a></li>
+							<li><a href="list.php?dist=kupwara"><strong>07</strong>Kupwara</a></li>
+							<li><a href="list.php?pulwama"><strong>08</strong>Pulwama</a></li>
+							<li><a href="list.php?shopain"><strong>09</strong>Shopain</a></li>
+							<li><a href="list.php?srinagar"><strong>10</strong>Srinagar</a></li>
 							<li><a href="#0">More...</a></li>
 						</ul>
 					</div>
@@ -145,15 +145,15 @@ include("header.php");
 							<h3>Search by type</h3>
 						</div>
 						<ul>
-							<li><a href="#0"><strong>01</strong>Allergist</a></li>
-							<li><a href="#0"><strong>02</strong>Cardiologist</a></li>
-							<li><a href="#0"><strong>03</strong>Chiropractor</a></li>
-							<li><a href="#0"><strong>04</strong>Dentist</a></li>
-							<li><a href="#0"><strong>05</strong>Dermatologist</a></li>
-							<li><a href="#0"><strong>06</strong>Gastroenterologist</a></li>
-							<li><a href="#0"><strong>07</strong>Ophthalmologist</a></li>
-							<li><a href="#0"><strong>08</strong>Optometrist</a></li>
-							<li><a href="#0"><strong>09</strong>Pediatrician</a></li>
+							<li><a href="list.php?spec=ortho"><strong>01</strong>Ortho</a></li>
+							<li><a href="list.php?spec=cardio"><strong>02</strong>Cardiologist</a></li>
+							<li><a href="list.php?spec=chiro"><strong>03</strong>Chiropractor</a></li>
+							<li><a href="list.php?spec=dentist"><strong>04</strong>Dentist</a></li>
+							<li><a href="list.php?spec=derma"><strong>05</strong>Dermatologist</a></li>
+							<li><a href="list.php?spec=gastro"><strong>06</strong>Gastroenterologist</a></li>
+							<li><a href="list.php?spec=optho"><strong>07</strong>Ophthalmologist</a></li>
+							<li><a href="list.php?spec=opto"><strong>08</strong>Optometrist</a></li>
+							<li><a href="list.php?spec=pedia"><strong>09</strong>Pediatrician</a></li>
 							<li><a href="#0">More....</a></li>
 						</ul>
 					</div>

@@ -1,9 +1,15 @@
+<html>
+
 <?php include("header.php");
 include("config.php");
+$bookerror = $_SESSION['var'];
+$msg = " ";
+
+$curr_date = date("Y-m-d"); // variable gets current date
 $doc_id = isset($_GET['doc_id'])?$_GET['doc_id']:null;
+$pat_id = isset($_SESSION['id'])?$_SESSION['id']:null;
 
 if($doc_id!=null){
-
             $query1="SELECT * FROM vw_doctor where user_id = $doc_id";
             $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
             $cdrow1=mysqli_fetch_array($result1);
@@ -18,29 +24,110 @@ if($doc_id!=null){
                 $morning_end_time = (new DateTime($cdrow["morning_end_time"]))->format("h:i A");
                 $evening_start_time = (new DateTime($cdrow["evening_start_time"]))->format("h:i A");
                 $evening_end_time = (new DateTime($cdrow["evening_end_time"]))->format("h:i A");
-                $image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow1["photo"])."' />";
+                $image = "<img src = 'data:image/jpeg;base64,".base64_encode( $cdrow1["photo"])."' width='250' height='200' /><br/>";
+
 
                 }
             }
 else die("doc id not found");
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+ $comment = mysqli_real_escape_string($conn,$_POST['comment']);
+ $sql = "INSERT into comments (pat_id,doc_id,comment) values ('$pat_id','$doc_id','$comment')";
+
+ if(mysqli_query($conn, $sql)){
+	 $msg = '<div class= "alert alert-info alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Comment Posted Sucessfully</div>';
+    echo '<script type="text/javascript">
+//    alert("comment Sucessfully")
+    </script> ';
+    } else {
+    
+	 $msg ='<div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Something went Wrong
+  </div>';
+    
+        }
+
+}
+
 
 
 ?>
 
+
+
 <main>
 		<div id="breadcrumb">
 			<div class="container">
+<!--
 				<ul>
 					<li><a href="#">Home</a></li>
 					<li><a href="#">Category</a></li>
 					<li>Page active</li>
 				</ul>
+-->
 			</div>
 		</div>
 		<!-- /breadcrumb -->
-
-		<div class="container margin_60">
+<div class="container margin_60">
 			<div class="row">
+              <aside class="col-xl-4 col-lg-4" id="sidebar">
+					<div class="box_general_3 booking">
+						<form action ="book_appointment.php">
+							<div class="title">
+							<h3>Book a Visit</h3>
+                                <br><small><b>Morning Shift:</b> <?= $morning_start_time." to ".$morning_end_time?></small>
+                               <br> <small><b>Evening Shift:</b> <?= $evening_start_time ." to ".$evening_end_time?></small></br>
+							</div>
+							<div class="row">
+<!--								<div class="col-6">-->
+									<div class="form-group">
+										 <div id=" " class="clearfix">  <?= "$bookerror";?> </div>
+										
+                                       <div>
+                                        <label> <h5>Select Date</h5></label> <br>
+                                        <input type="date" class="input-group-addon "  name="date" placeholder="Select Date" required min= "<?= $curr_date ?>" >
+<!--										<input class="input-group date" type="date" id="date" data-lang="en" data-min-year="2019" name="date"/>-->
+                                       </div>
+                                  </div>
+<!--								</div>-->
+								<div>
+                                        <label> <h5>Select Shift</h5></label> <br>
+                                         <input type = "radio" required name = "shift" value = "0" />
+                                        <label for = "shift">Morning Shift</label>
+                                         <input type = "radio" required name = "shift"  value = "1" />
+                                         <label for = "1">Evening Shift</label> <br> <br>
+
+								<input type="hidden" name="doc_id" value="<?=$doc_id?>">
+							</div>
+						</div>
+<!--						disable book now button if user is not logged in-->
+						 <?php
+						  if(isset($_SESSION['login_user']))
+                        {
+                          echo "<input type='submit' style = 'width:100%' class='btn_1 full-width' value='Book now'><br>";
+
+
+						  }
+						  else
+						  {
+							   echo "<input type='submit' style = 'width:100%' class='btn_1 full-width' disabled = 'true' title='Login to Book' value='Book now'><br>";
+						  }
+
+
+
+						  ?>
+
+
+
+						</form>
+					</div>
+					<!-- /box_general -->
+				</aside>
+				<!-- /asdide -->
+
 				<div class="col-xl-8 col-lg-8">
 					<nav id="secondary_nav">
 						<div class="container">
@@ -51,14 +138,15 @@ else die("doc id not found");
 							</ul>
 						</div>
 					</nav>
+
 					<div id="section_1">
 						<div class="box_general_3">
+
 							<div class="profile">
 								<div class="row">
 									<div class="col-lg-5 col-md-4">
 										<figure>
-											<img src="" alt="" class="img-fluid" />
-                      <?= "$image";?>
+                                            <?= "$image";?>
 										</figure>
 									</div>
 									<div class="col-lg-7 col-md-8">
@@ -258,66 +346,132 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 								<!-- /row -->
 
 								<hr />
-                <div class="review-box clearfix">
-                  <form action ="postcomment.php" method="post">
-									<div class="rev-content">
-                    <div class="title">
-                    <h6>Post Your Comment</h6>
+                <!-- commnet box --> 
 
-                    </div>
-                    <textarea rows="4" cols="50" id ="comment" placeholder="Enter Your Comment Here">
-                    </textarea>
+<!--			rating box from here-->
+							
+
+<!--	end rat	ing box					-->
+<!--						  will disabble comment box and button if user not logged in-->
+                        <?php
+						  if(isset($_SESSION['login_user']))
+                        {
+                           echo"<form action ='#section_2' method='post'>
+   <div class='form-group'>
+   <div id = msg>   $msg </div>
+      <label for='comment'><h6>Post Your Comment :</h6> </label>
+      <textarea class='form-control' rows='5' name='comment' id='comment' placeholder='Enter Your Comment Here' required> </textarea>
+					<br /> <br />
+      <div class='rev-text'> 
+         <div>
+            <p align='right'>
+           			 <input type='submit' id='postcommnet' class='btn_1' value='Post Comment'><br>
+            </p>
+         </div>
+      </div>
+   </div>
+</form>";
 
 
-										<div class="rev-text">
-											<p align="right">
-                          <input type="submit" id="postcommnet" class="btn_1" value="Post Comment"><br>
-											</p>
-                      <input type="hidden" name="doc_id" value="<?=$doc_id?>">
-                      <!-- <input type="hidden" name="comment" value="<?=$comment?>"> -->
-										</div>
-									</div>
-								</div>
+						  }
+						  else
+						  {
+                             // disable display nothing
+                             
+//							   echo "<input type='submit' id='postcommnet' class='btn_1' disabled = 'true'  title='Login to Post Comment' value='Post                          Comment'><br>";
+						  }
 
-								<!-- End review-box -->
 
-								<div class="review-box clearfix">
-									<figure class="rev-thumb"><img src="./img/avatar2.jpg" alt="" />
-									</figure>
+
+						  ?>
+
+
+						
+                  
+                
+
+
+<!--                </div>-->
+
+
+                 <!-- End Commnet box -->
+
+         <?php
+				$query="SELECT * FROM comments  WHERE doc_id= $doc_id ORDER BY date DESC";
+				$result=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
+				$count = mysqli_num_rows($result);
+        ?>
+
+                                <div class="col-md-6">
+						<?php
+						if($count >=10)
+						{
+							$disp = 10;// number of count displayed
+						}
+						else {
+							$disp = $count;
+						}
+						?>
+
+					<br />
+						<h6 align = "center"><strong>Showing <?= "$disp";?></strong> of <?= "$count";?> comments <br /></h6>
+					</div>
+								<br />
+
+<!--								Display reviews starts -->
+
+                                     <?php
+							     if($count == "0"){
+								$output = '<h2>No Comments Yet!</h2>';
+
+								echo "<small>$output</small>";
+
+							 }
+							else
+							{
+                                while ($cdrow=mysqli_fetch_array($result))
+								{
+//                                    select the unique id of eaach patient
+                                $id = $cdrow["pat_id"];
+//                                    get user details from the ids retrived above
+                                     $query2="SELECT * FROM vw_patient  WHERE user_id= $id";
+                                $resultuser=mysqli_query($conn,$query2) or die ("Inner query failed: ".mysqli_error());
+                                    $cdrow2 = mysqli_fetch_array($resultuser);
+
+                                $user_name=$cdrow2["user_name"];
+                                $comments = $cdrow["comment"];
+                                $date = $cdrow["date"];
+								$pic = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow2["photo"])."' width = '60px' height ='60px'/>";
+                                  
+
+								?>
+							<div class="review-box clearfix">
+
+                                  <?php   
+                                   echo"<div class ='rev-thumb'>$pic</div>";?>
 									<div class="rev-content">
 										<div class="rating">
 											<i class="icon-star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>
 										</div>
 										<div class="rev-info">
-											Rabiya Bhat  – April 01, 2016
+											<?= "<h6>$user_name</h6>";?> </h6> <?= "	<small>$date</small>";?>
 										</div>
 										<div class="rev-text">
 											<p>
-												Very Kind and helpful doctor.
+								            <?= "	<small>$comments</small>";?>
 											</p>
 										</div>
 									</div>
 								</div>
 								<!-- End review-box -->
+                                    <?php
+                                       }
+                            }
+                                    ?>
 
-								<div class="review-box clearfix">
-									<figure class="rev-thumb"><img src="./img/avatar3.jpg" alt="" />
-									</figure>
-									<div class="rev-content">
-										<div class="rating">
-											<i class="icon-star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>
-										</div>
-										<div class="rev-info">
-											Abdul Naffi – March 31, 2016
-										</div>
-										<div class="rev-text">
-											<p> I don't have words to explain what kind of doctor she is. She is the best doctor in valley as far as cardiology is concerned.
 
-											</p>
-										</div>
-									</div>
-								</div>
-								<!-- End review-box -->
+
+
 							</div>
 							<!-- End review-container -->
 						</div>
@@ -325,46 +479,18 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 					<!-- /section_2 -->
 				</div>
 				<!-- /col -->
-				<aside class="col-xl-4 col-lg-4" id="sidebar">
-					<div class="box_general_3 booking">
-						<form action ="book_appoinment.php">
-							<div class="title">
-							<h3>Book a Visit</h3>
-                                <br><small><b>Morning Shift:</b> <?= $morning_start_time." to ".$morning_end_time?></small>
-                               <br> <small><b>Evening Shift:</b> <?= $evening_start_time ." to ".$evening_end_time?></small></br>
-							</div>
-							<div class="row">
-								<div class="col-6">
-									<div class="form-group">
-                                        <input type="date" name="date">
-<!--										<input class="form-control" type="text" id="booking_date" data-lang="en" data-min-year="2017" data-max-year="2020" data-disabled-days="10/17/2017,11/18/2017" />-->
-									</div>
-								</div>
-                                <p>
-                                        <label>Select Shift</label> <br>
-                                         <input type = "radio"
-                                        name = "shift"
-                                         value = "0" />
-                                        <label for = "shift">Morning Shift</label><br>
-                                         <input type = "radio"
-                                          name = "shift"
 
-                                         value = "1" />
-                                         <label for = "1">Evening Shift</label><br>
-                                             </p>
-								<input type="hidden" name="doc_id" value="<?=$doc_id?>">
-							</div>
-                    <input type="submit" style = "width:100%" class="btn_1 full-width" value="Book now"><br>
-
-						</form>
-					</div>
-					<!-- /box_general -->
-				</aside>
-				<!-- /asdide -->
 			</div>
 			<!-- /row -->
 		</div>
 		<!-- /container -->
+
+
 <?php include("footer.php"); ?>
+<?php
+   unset($_SESSION['var']);
+	unset($bookerror);
+?>
 	</main>
 	<!-- /main -->
+</html>

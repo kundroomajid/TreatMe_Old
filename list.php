@@ -7,9 +7,29 @@ else {
 	$q=null;
 }
 
-$query="SELECT * FROM vw_doctor  WHERE `user_name` LIKE '%$q%' LIMIT 10";
+
+if(isset($_GET['dist']))
+{
+$dist = $_GET['dist'];
+$query ="SELECT * FROM vw_doctor  WHERE district = '$dist'";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
+}
+else if (isset($_GET['spec'])){
+	$spec = $_GET['spec'];
+$query="SELECT * FROM vw_doctor  WHERE `specialization` LIKE '%$spec%' LIMIT 10";
+$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$count = mysqli_num_rows($result);
+}
+else
+{
+	$dist=null;
+	$query="SELECT * FROM vw_doctor  WHERE `user_name` LIKE '%$q%' LIMIT 10";
+$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$count = mysqli_num_rows($result);
+}
+
+
 
 include("config.php");?>
 
@@ -58,14 +78,45 @@ include("config.php");?>
 							<label for="clinics">Clinics</label>
 						</div>
 					</li>
-					<!-- <li>
+					
+					<li>
+						<h6>Select By District</h6>
+						<select name="dist"  id = "dist" class="selectbox">
+                		<option value = "Anantnag">Anantnag</option>
+                		<option value = "Bandipora">Bandipora</option>
+							<option value = "Baramulla">Baramulla</option>
+                		<option value = "Budgam">Budgam</option>
+                			<option value = "Ganderbal">Ganderbal</option>
+							<option value = "Kulgam">Kulgam</option>
+							<option value = "Kupwara">Kupwara</option>
+							<option value = "Pulwama">Pulwama</option>
+                	<option value = "Shopain">Shopain</option>
+                	<option value = "Srinagar">Srinagar</option>
+                	<option value = "Doda">Doda</option>
+                	<option value = "Jammu">Jammu</option>
+                	<option value = "Kathua">Kathua</option>
+                	<option value = "Kishtwar">Kishtwar</option>
+                	<option value = "Poonch">Poonch</option>
+                	<option value = "Rajouri">Rajouri</option>
+                	<option value = "Reasi">Reasi</option>
+                	<option value = "Ramban">Ramban</option>
+                	<option value = "Samba">Samba</option>
+                	<option value = "Udhampur">Udhampur</option>
+                	<option value = "Kargil">Kargil</option>
+                	<option value = "Leh">Leh</option>
+              	</select>
+						
+					</li>
+<!--
+					 <li>
 						<h6>Layout</h6>
 						<div class="layout_view">
 							<a href="./grid-list.php"><i class="icon-th"></i></a>
 							<a href="#0" class="active"><i class="icon-th-list"></i></a>
 							<a href="./list-map.php"><i class="icon-map-1"></i></a>
 						</div>
-					</li> -->
+					</li> 
+-->
 					<li>
 						<h6>Sort by</h6>
 						<select name="orderby" class="selectbox">
@@ -115,7 +166,20 @@ include("config.php");?>
 							<a href="./detail-page.php"><img src="" alt="" /></a>
 							<?= "$image";?>
 						</figure>
-					<?= "	<small>$specialization</small>";?>
+						<?php if(strlen($specialization) > 20)
+						{
+							$spec_Array =  explode (",", $specialization);
+							$spec1 = $spec_Array[0];
+							$spec2 = $spec_Array[1];
+							echo ("<small>$spec1</small>");
+							echo ("<small>$spec2</small>");
+						}
+				else
+				{
+					echo ("<small>$specialization</small>");
+				}
+				?>
+<!--					<?= "<small>$specialization</small>";?>-->
 						<?= "<h3>$user_name</h3>";?>
 						<p>MD (AMU) CVD, CSD(Mumbai) </p> <
 						<span class="rating"><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i><i class="icon_star"></i> <small>(145)</small></span>

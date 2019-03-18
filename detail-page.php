@@ -348,7 +348,10 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 								<hr />
                 <!-- commnet box --> 
 
+<!--			rating box from here-->
+							
 
+<!--	end rat	ing box					-->
 <!--						  will disabble comment box and button if user not logged in-->
                         <?php
 						  if(isset($_SESSION['login_user']))

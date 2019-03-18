@@ -26,6 +26,7 @@ include('session.php');?>
 			<link href="./css/icon_fonts/css/all_icons_min.css" rel="stylesheet" />
 
 			<!-- YOUR CUSTOM CSS -->
+			
 	<!--
 			<link rel="stylesheet" type="text/css" href="./css/custom.css">
 
@@ -35,6 +36,7 @@ include('session.php');?>
 			<script src="./cdn-cgi/scripts/84a23a00/cloudflare-static/email-decode.min.js"></script><script src="./js/jquery-2.2.4.min.js"></script>
 			<script src="./js/common_scripts.min.js"></script>
 			<script src="./js/functions.js"></script>
+			
 
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
