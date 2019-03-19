@@ -1,4 +1,4 @@
-	<?php 
+	<?php
 include('session.php');?>
 		<!DOCTYPE html>
 		<html lang="en">
@@ -12,7 +12,7 @@ include('session.php');?>
 			<title> Healthcare- Reviews  | Find trusted medical advice from Kashmir's top doctors</title>
 
 			<!-- Favicons-->
-			<link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon" />
+			<link rel="shortcut icon" href="img/apple-touch-icon-57x57-precomposed.png" type="image/x-icon" />
 			<link rel="apple-touch-icon" type="image/x-icon" href="./img/apple-touch-icon-57x57-precomposed.png" />
 			<link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="./img/apple-touch-icon-72x72-precomposed.png" />
 			<link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="./img/apple-touch-icon-114x114-precomposed.png" />
@@ -26,17 +26,27 @@ include('session.php');?>
 			<link href="./css/icon_fonts/css/all_icons_min.css" rel="stylesheet" />
 
 			<!-- YOUR CUSTOM CSS -->
+<<<<<<< HEAD
 			
+=======
+
+
+>>>>>>> 0265ccc0fa1c48ca7b73e6b635dcdac064a8109d
 	<!--
 			<link rel="stylesheet" type="text/css" href="./css/custom.css">
 
 	-->
 
 			<!-- COMMON SCRIPTS -->
-			<script src="./cdn-cgi/scripts/84a23a00/cloudflare-static/email-decode.min.js"></script><script src="./js/jquery-2.2.4.min.js"></script>
+			<script src="./cdn-cgi/scripts/84a23a00/cloudflare-static/email-decode.min.js"></script>
+			<script src="./js/jquery-2.2.4.min.js"></script>
 			<script src="./js/common_scripts.min.js"></script>
 			<script src="./js/functions.js"></script>
+<<<<<<< HEAD
 			
+=======
+			<script src="./js/app.js"></script>
+>>>>>>> 0265ccc0fa1c48ca7b73e6b635dcdac064a8109d
 
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
@@ -64,15 +74,15 @@ include('session.php');?>
 								<li id="user">
 										<?php
 								if(isset($_SESSION['login_user']))
-								{        
+								{
 									echo "<a href='welcome.php'> <figure> $imagepic </figure> <sub>$user</sub> </a>";
 									$username = ($_SESSION['login_user']);
 //									echo "<li><a href='logout.php' >&nbsp;&nbsp;&nbsp; Logout</a></li>";
 									echo "<li class='show-submenu'><a href='logout.php' tabindex='0'  class='show-submenu'><span class='glyphicon glyphicon-user'></span>Logout</a></li>";
 //									echo "<a href='logout.php'><img src='img/logout.png' alt='Logout' /> </a>";
 //									echo '<li><a href="./logout.php" onclick="restack(currentStack)" title="Logout"><i class="icon-logout"></i></a></li>';
-                                  
-									  
+
+
 
 								}
 								else
@@ -116,12 +126,12 @@ include('session.php');?>
 					</div>
 				</div>
 				<!-- /container -->
-				
+
 			</header>
 <!--			<div id="info" class="clearfix">  <?= "$error";?> </div>-->
-			
+
 			<!-- /header -->
-			
-			
+
+
 			<!-- Back to top button -->
 			<div id="toTop"></div>
