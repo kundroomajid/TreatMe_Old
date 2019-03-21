@@ -1,5 +1,3 @@
-<html>
-
 <?php include("header.php");
 include("config.php");
 $bookerror = $_SESSION['var'];
@@ -10,26 +8,25 @@ $doc_id = isset($_GET['doc_id'])?$_GET['doc_id']:null;
 $pat_id = isset($_SESSION['id'])?$_SESSION['id']:null;
 
 if($doc_id!=null){
-            $query1="SELECT * FROM vw_doctor where user_id = $doc_id";
-            $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
-            $cdrow1=mysqli_fetch_array($result1);
+  $query1="SELECT * FROM vw_doctor where user_id = $doc_id";
+  $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
+  $cdrow1=mysqli_fetch_array($result1);
 
-            $query2="SELECT * FROM tb_doctor where doc_id = $doc_id";
-            $result2=mysqli_query($conn,$query2) or die ("Query to get data from firsttable failed: ".mysqli_error());
-            $cdrow=mysqli_fetch_array($result2);
-            if($cdrow1!=null){
-                $user_name = $cdrow1["user_name"];
-                $district = $cdrow1['district'];
-                $morning_start_time = (new DateTime($cdrow["morning_start_time"]))->format("h:i A");
-                $morning_end_time = (new DateTime($cdrow["morning_end_time"]))->format("h:i A");
-                $evening_start_time = (new DateTime($cdrow["evening_start_time"]))->format("h:i A");
-                $evening_end_time = (new DateTime($cdrow["evening_end_time"]))->format("h:i A");
-                $image = "<img src = 'data:image/jpeg;base64,".base64_encode( $cdrow1["photo"])."' width='250' height='200' /><br/>";
-
-
-                }
-            }
+  $query2="SELECT * FROM tb_doctor where doc_id = $doc_id";
+  $result2=mysqli_query($conn,$query2) or die ("Query to get data from firsttable failed: ".mysqli_error());
+  $cdrow=mysqli_fetch_array($result2);
+  if($cdrow1!=null){
+    $user_name = $cdrow1["user_name"];
+    $district = $cdrow1['district'];
+    $morning_start_time = (new DateTime($cdrow["morning_start_time"]))->format("h:i A");
+    $morning_end_time = (new DateTime($cdrow["morning_end_time"]))->format("h:i A");
+    $evening_start_time = (new DateTime($cdrow["evening_start_time"]))->format("h:i A");
+    $evening_end_time = (new DateTime($cdrow["evening_end_time"]))->format("h:i A");
+    $image = "<img src = 'data:image/jpeg;base64,".base64_encode( $cdrow1["photo"])."' width='250' height='200' /><br/>";
+  }
+}
 else die("doc id not found");
+
 if($_SERVER["REQUEST_METHOD"] == "POST") {
  $comment = mysqli_real_escape_string($conn,$_POST['comment']);
  $sql = "INSERT into comments (pat_id,doc_id,comment) values ('$pat_id','$doc_id','$comment')";
@@ -42,21 +39,49 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 //    alert("comment Sucessfully")
     </script> ';
     } else {
-    
 	 $msg ='<div class="alert alert-danger alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     Something went Wrong
   </div>';
-    
+
         }
 
 }
 
-
-
 ?>
 
 
+<script src="rating/index.js"></script>
+<script type="text/javascript">
+  function onload(event) {
+
+  	var starRating = raterJs( {
+  		starSize:16,
+  		isBusyText: "Rating in progress. Please wait...",
+  		element:document.querySelector("#rater"),
+  		rateCallback:function rateCallback(rating, done) {
+  			var parentObject = this;
+        var doc_id = <?= $doc_id ?>;
+  			$.ajax({
+  				url : "rating.php",
+  				data : 'doc_id=' + doc_id + '&rating='
+  				+ rating,
+  				type : "POST",
+  				success : function(data) {
+  					o = JSON.parse(data);
+  					parentObject.setRating(o.rating);
+  				}
+  			});
+
+  			//starRating.disable();
+  			done();
+  		}
+  	});
+
+  }
+
+  window.addEventListener("load", onload, false);
+</script>
 
 <main>
 		<div id="breadcrumb">
@@ -85,7 +110,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 <!--								<div class="col-6">-->
 									<div class="form-group">
 										 <div id=" " class="clearfix">  <?= "$bookerror";?> </div>
-										
+
                                        <div>
                                         <label> <h5>Select Date</h5></label> <br>
                                         <input type="date" class="input-group-addon "  name="date" placeholder="Select Date" required min= "<?= $curr_date ?>" >
@@ -152,7 +177,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 									<div class="col-lg-7 col-md-8">
 										<small>Primary care - Internist</small>
 										<h1><?= $user_name ?> </h1>
-										<span class="rating">
+                    <div id="rater"></div>
+                    <span class="rating">
 											<i class="icon_star voted"></i>
 											<i class="icon_star voted"></i>
 											<i class="icon_star voted"></i>
@@ -346,10 +372,10 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 								<!-- /row -->
 
 								<hr />
-                <!-- commnet box --> 
+                <!-- commnet box -->
 
 <!--			rating box from here-->
-							
+
 
 <!--	end rat	ing box					-->
 <!--						  will disabble comment box and button if user not logged in-->
@@ -362,7 +388,7 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
       <label for='comment'><h6>Post Your Comment :</h6> </label>
       <textarea class='form-control' rows='5' name='comment' id='comment' placeholder='Enter Your Comment Here' required> </textarea>
 					<br /> <br />
-      <div class='rev-text'> 
+      <div class='rev-text'>
          <div>
             <p align='right'>
            			 <input type='submit' id='postcommnet' class='btn_1' value='Post Comment'><br>
@@ -377,7 +403,7 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 						  else
 						  {
                              // disable display nothing
-                             
+
 //							   echo "<input type='submit' id='postcommnet' class='btn_1' disabled = 'true'  title='Login to Post Comment' value='Post                          Comment'><br>";
 						  }
 
@@ -386,9 +412,9 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 						  ?>
 
 
-						
-                  
-                
+
+
+
 
 
 <!--                </div>-->
@@ -442,12 +468,12 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
                                 $comments = $cdrow["comment"];
                                 $date = $cdrow["date"];
 								$pic = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow2["photo"])."' width = '60px' height ='60px'/>";
-                                  
+
 
 								?>
 							<div class="review-box clearfix">
 
-                                  <?php   
+                                  <?php
                                    echo"<div class ='rev-thumb'>$pic</div>";?>
 									<div class="rev-content">
 										<div class="rating">
