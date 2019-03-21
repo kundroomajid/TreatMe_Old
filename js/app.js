@@ -1,7 +1,7 @@
 if ('serviceWorker' in navigator) {
   window.addEventListener('load',function(){
     console.log('here');
-    navigator.serviceWorker.register('../sw_pages.js').then(function(reg) {
+    navigator.serviceWorker.register('./sw_pages.js').then(function(reg) {
 
       if(reg.installing) {
         console.log('Service worker installing');

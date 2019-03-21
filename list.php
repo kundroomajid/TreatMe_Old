@@ -83,6 +83,7 @@ include("config.php");?>
 					<li>
 						<h6>Select By District</h6>
 						<select name="dist"  id = "dist" class="selectbox">
+							<option value = "">Select District</option>
                 		<option value = "Anantnag">Anantnag</option>
                 		<option value = "Bandipora">Bandipora</option>
 							<option value = "Baramulla">Baramulla</option>
@@ -106,7 +107,13 @@ include("config.php");?>
                 	<option value = "Kargil">Kargil</option>
                 	<option value = "Leh">Leh</option>
               	</select>
-						
+					<script>
+    document.getElementById("dist").onchange = function() {
+        if (this.selectedIndex!==0) {
+            window.location.href = './list.php?dist='+ this.value;
+        }        
+    };
+</script>	
 					</li>
 <!--
 					 <li>
