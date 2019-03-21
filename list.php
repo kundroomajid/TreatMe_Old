@@ -21,6 +21,7 @@ $query="SELECT * FROM vw_doctor  WHERE `specialization` LIKE '%$spec%' LIMIT 10"
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
 }
+
 else
 {
 	$dist=null;
@@ -38,7 +39,7 @@ include("config.php");?>
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<?php
+						<?php // TO DO
 						if($count >=10)
 						{
 							$disp = 10;// number of coun displayed
@@ -166,28 +167,31 @@ include("config.php");?>
 							<a href="./detail-page.php"><img src="" alt="" /></a>
 							<?= "$image";?>
 						</figure>
-						<?php if(strlen($specialization) > 20)
+						<?php if(strlen($specialization) > 24)
 						{
 							$spec_Array =  explode (",", $specialization);
 							$spec1 = $spec_Array[0];
 							$spec2 = $spec_Array[1];
-							echo ("<small>$spec1</small>");
-							echo ("<small>$spec2</small>");
+							$spec3 = $spec_Array[2];
+							$spec4 = $spec_Array[3];
+							echo ("<small>$spec1,$spec2</small>");
+							echo ("<small>$spec3,$spec4</small>");
+							
 						}
 				else
 				{
 					echo ("<small>$specialization</small>");
 				}
 				?>
-<!--					<?= "<small>$specialization</small>";?>-->
+
 						<?= "<h3>$user_name</h3>";?>
-						<p>MD (AMU) CVD, CSD(Mumbai) </p> <
+						<p>MD (AMU) CVD, CSD(Mumbai) </p> 
 						<span class="rating"><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i><i class="icon_star"></i> <small>(145)</small></span>
-						<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>
+<!--						<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
 						<ul>
 							<li><a href="#0" onclick="onHtmlClick('Doctors', 0)" class="btn_listing">View on Map</a></li>
-							<li><a href="https://www.google.com/maps/dir//Assistance+%E2%80%93+H%C3%B4pitaux+De+Paris,+3+Avenue+Victoria,+75004+Paris,+Francia/@48.8606548,2.3348734,14z/data=!4m15!1m6!3m5!1s0x0:0xa6a9af76b1e2d899!2sAssistance+%E2%80%93+H%C3%B4pitaux+De+Paris!8m2!3d48.8568376!4d2.3504305!4m7!1m0!1m5!1m1!1s0x47e67031f8c20147:0xa6a9af76b1e2d899!2m2!1d2.3504327!2d48.8568361" target="_blank">Directions</a></li>
-							<li><a href="./detail-page.php?doc_id=<?= $doc_id ?>">View Profile</a></li>
+							<li><a href=" ">Directions</a></li>
+							<li><a href="./detail-page.php?doc_id=<?= $doc_id ?>" class="btn_listing">View Profile</a></li>
 						</ul>
 					</div>
 
@@ -199,7 +203,7 @@ include("config.php");?>
 
 
 
-					<!-- <nav aria-label="" class="add_top_20">
+					 <nav aria-label="" class="add_top_20">
 						<ul class="pagination pagination-sm">
 							<li class="page-item disabled">
 								<a class="page-link" href="#" tabindex="-1">Previous</a>
@@ -212,14 +216,17 @@ include("config.php");?>
 							</li>
 						</ul>
 					</nav>
-					<!-- /pagination -->
+					<!-- /pagination 
 				</div>
 				<!-- /col -->
 
+<!--
+map listinig sidebar
 				<aside class="col-lg-5" id="sidebar">
 					<div id="map_listing" class="normal_list">
 					</div>
 				</aside>
+-->
 				<!-- /aside -->
 
 			</div>

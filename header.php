@@ -26,12 +26,7 @@ include('session.php');?>
 			<link href="./css/icon_fonts/css/all_icons_min.css" rel="stylesheet" />
 
 			<!-- YOUR CUSTOM CSS -->
-<<<<<<< HEAD
-			
-=======
 
-
->>>>>>> 0265ccc0fa1c48ca7b73e6b635dcdac064a8109d
 	<!--
 			<link rel="stylesheet" type="text/css" href="./css/custom.css">
 
@@ -42,11 +37,9 @@ include('session.php');?>
 			<script src="./js/jquery-2.2.4.min.js"></script>
 			<script src="./js/common_scripts.min.js"></script>
 			<script src="./js/functions.js"></script>
-<<<<<<< HEAD
-			
-=======
-			<script src="./js/app.js"></script>
->>>>>>> 0265ccc0fa1c48ca7b73e6b635dcdac064a8109d
+
+<!--			<script src="./js/app.js"></script>-->
+
 
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
@@ -110,10 +103,12 @@ include('session.php');?>
 
 									</li>
 
+<!--
 									<li class="menu">
 										<a href="#0" class="show-submenu">Appoinments<i class="menu"></i></a>
 
 									</li>
+-->
 
 									<li class="menu">
 										<a href="#0" class="show-submenu">About<i class="menu"></i></a>

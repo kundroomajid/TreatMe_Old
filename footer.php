@@ -57,7 +57,7 @@
 					</ul>
 				</div>
 				<div class="col-md-4">
-					<div id="copy">© 2018 Healthcare</div>
+					<div id="copy">© 2019 Healthcare</div>
 				</div>
 			</div>
 		</div>
