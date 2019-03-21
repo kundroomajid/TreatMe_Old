@@ -127,9 +127,7 @@ this.value = "";
 </script>
 -->
 <html>
-<head>
-  <title>Welcome </title>
-</head>
+
 <body>
   <div class="container">
     <form method="POST" enctype="multipart/form-data">
@@ -160,6 +158,7 @@ this.value = "";
           </li>
         </ul>
         <div class="tab-content py-4">
+          <div class="tab-pane active" id="profile">
           <div class="row tab-pane" id="profile">
             <h4 class="col-md-12"> <?= $user."(".getAge($dob).")".$gender_symbol  ?></h4>
 
@@ -176,8 +175,8 @@ this.value = "";
               </table>
             </div>
           </div>
-          <div class="tab-pane active" id="myappointments">
-
+          </div>
+          <div class="tab-pane" id="myappointments">
             <table class='table table-responsive'>
               <thead>
                 <tr><th>Appt Id</th><th>Date</th><th>Doc Name</th><th>Shift</th><th>Queue No</th><th>&nbsp;</th></tr>
@@ -210,7 +209,7 @@ this.value = "";
                 }
                 ?>
                 <tbody> </table>
-                </div>
+          </div>
                 <div class="tab-pane" id="edit">
                   <form role="form" method="post" action="edit_profile.php">
                     <div class="form-group row">
@@ -323,8 +322,9 @@ this.value = "";
             </div>
           </div>
 
-        </div>
+       
       </body>
+</html>
 
 
       <?php include("footer.php");

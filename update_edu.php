@@ -7,7 +7,12 @@
     $a = transposeData($_POST);
     //print_r($a);
     $q = "DELETE FROM tb_doceducation where doc_id=$id";
-    $result = mysqli_query($conn,$q) or die ('<script type="text/javascript"> alert("Deleteion Failed "); window.location = "./welcomed.php"; </script> ');
+    $result = mysqli_query($conn,$q) or die ( '<script type="text/javascript"> window.location = "./welcomed.php"; 
+    </script> ');
+    $msg = '<div class="alert alert-danger alert-dismissible">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     Deleted Sucessfully
+    </div>';
 
     $q = "INSERT INTO tb_doceducation(doc_id,degree,year,institute) VALUES ";
     if(count($a)>1){
@@ -24,12 +29,16 @@
     }else if (count($a) == 1){
       $q = $q."($id,'$degree',$year,'$institute');";
     }
-    $result = mysqli_query($conn,$q) or die ('<script type="text/javascript"> alert("Deleteion Failed "); window.location = "./welcomed.php"; </script> ');
-    echo '<script type="text/javascript"> alert("Updated Successfully "); window.location = "./welcomed.php"; </script>';
+    $result = mysqli_query($conn,$q) or die ('<script type="text/javascript">  window.location = "./welcomed.php"; </script> ');
+    echo '<script type="text/javascript">  window.location = "./welcomed.php"; </script>';
+    $msg = '<div class="alert alert-danger alert-dismissible">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     Details saved  Sucessfully
+    </div>';
   }else{
     echo "Illegal entry";
   }
-
+$_SESSION['msg'] = $msg;
   function transposeData($data) {
     $retData = array();
     foreach ($data as $row => $columns) {

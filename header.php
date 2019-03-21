@@ -40,6 +40,7 @@ include('session.php');?>
 
 			<script src="./js/app.js"></script>
 
+
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 
 		<body>
@@ -102,10 +103,12 @@ include('session.php');?>
 
 									</li>
 
+<!--
 									<li class="menu">
 										<a href="#0" class="show-submenu">Appoinments<i class="menu"></i></a>
 
 									</li>
+-->
 
 									<li class="menu">
 										<a href="#0" class="show-submenu">About<i class="menu"></i></a>

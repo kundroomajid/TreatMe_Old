@@ -163,10 +163,10 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
 		<div id="info" class="clearfix">  <?= "$msg";?> </div>
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a href="" data-target="#profile" data-toggle="tab" class="nav-link">Profile</a>
+          <a href="" data-target="#profile" data-toggle="tab" class="nav-link active">Profile</a>
         </li>
         <li class="nav-item">
-          <a href="" data-target="#myappointments" data-toggle="tab" class="nav-link active">Appointments</a>
+          <a href="" data-target="#myappointments" data-toggle="tab" class="nav-link ">Appointments</a>
         </li>
         <li class="nav-item">
           <a href="" data-target="#edit" data-toggle="tab" class="nav-link">Edit Profile</a>
@@ -177,7 +177,10 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
       </ul>
 
       <div class="tab-content py-4">
-        <div class="tab-pane" id="profile">
+        
+
+        <div class="tab-pane active" id="profile">
+          <div class="tab-pane" id="profile">
           <div class="row">
             <div class="col-md-8 ">
               <h4> <?= $user."(".getAge($dob).")".$gender_symbol  ?></h4>
@@ -200,9 +203,11 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
             </div>
           </div>
         </div>
+          
 
-        <div class="tab-pane active" id="myappointments">
-          <table class='table table-responsive'>
+        </div>
+        <div class="tab-pane" id ="myappointments">
+          <table class='table'>
             <thead>
               <tr><th>Appt Id</th><th>Date</th><th>Patient Name</th><th>Shift</th><th>Queue No</th><th>&nbsp;</th></tr>
             </thead>
@@ -268,7 +273,6 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           ?>
           <tbody>
           </table>
-
         </div>
 
         <div class="tab-pane" id="edit">
@@ -450,8 +454,8 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
 
         </div>
       </div>
-    </div>
-    <!--/div-->
+   
+   
   </div>
 
 

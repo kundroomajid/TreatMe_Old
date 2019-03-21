@@ -8,23 +8,41 @@ $doc_id = isset($_GET['doc_id'])?$_GET['doc_id']:null;
 $pat_id = isset($_SESSION['id'])?$_SESSION['id']:null;
 
 if($doc_id!=null){
-  $query1="SELECT * FROM vw_doctor where user_id = $doc_id";
-  $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
-  $cdrow1=mysqli_fetch_array($result1);
+            $query1="SELECT * FROM vw_doctor where user_id = $doc_id";
+            $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
+            $cdrow1=mysqli_fetch_array($result1);
 
-  $query2="SELECT * FROM tb_doctor where doc_id = $doc_id";
-  $result2=mysqli_query($conn,$query2) or die ("Query to get data from firsttable failed: ".mysqli_error());
-  $cdrow=mysqli_fetch_array($result2);
-  if($cdrow1!=null){
-    $user_name = $cdrow1["user_name"];
-    $district = $cdrow1['district'];
-    $morning_start_time = (new DateTime($cdrow["morning_start_time"]))->format("h:i A");
-    $morning_end_time = (new DateTime($cdrow["morning_end_time"]))->format("h:i A");
-    $evening_start_time = (new DateTime($cdrow["evening_start_time"]))->format("h:i A");
-    $evening_end_time = (new DateTime($cdrow["evening_end_time"]))->format("h:i A");
-    $image = "<img src = 'data:image/jpeg;base64,".base64_encode( $cdrow1["photo"])."' width='250' height='200' /><br/>";
-  }
-}
+            $query2="SELECT * FROM tb_doctor where doc_id = $doc_id";
+            $result2=mysqli_query($conn,$query2) or die ("Query to get data from firsttable failed: ".mysqli_error());
+            $cdrow=mysqli_fetch_array($result2);
+            if($cdrow1!=null){
+                $user_name = $cdrow1["user_name"];
+                $district = $cdrow1['district'];
+                $morning_start_time = (new DateTime($cdrow["morning_start_time"]))->format("h:i A");
+                $morning_end_time = (new DateTime($cdrow["morning_end_time"]))->format("h:i A");
+                $evening_start_time = (new DateTime($cdrow["evening_start_time"]))->format("h:i A");
+                $evening_end_time = (new DateTime($cdrow["evening_end_time"]))->format("h:i A");
+                $image = "<img src = 'data:image/jpeg;base64,".base64_encode( $cdrow1["photo"])."' width='250' height='200' /><br/>";
+				$specialization = $cdrow1["specialization"];
+				$exprience = 5; //TO DO add experience column in database and registration fields
+				if(strlen($specialization) > 24)
+						{
+							$spec_Array =  explode (",", $specialization);
+							$spec1 = $spec_Array[0];
+							$spec2 = $spec_Array[1];
+
+							echo ("<small>$spec1,$spec2</small>");
+							echo ("<small>$spec3,$spec4</small>");
+
+						}
+				else
+				{
+					$spec1 = $specialization;
+				}
+
+
+                }
+            }
 else die("doc id not found");
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -195,10 +213,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 											<li>
 												<h6>Address</h6>
 												<?= "$district";?>
-												<a href="https://www.google.com/maps/dir//Assistance+%E2%80%93+H%C3%B4pitaux+De+Paris,+3+Avenue+Victoria,+75004+Paris,+Francia/@48.8606548,2.3348734,14z/data=!4m15!1m6!3m5!1s0x0:0xa6a9af76b1e2d899!2sAssistance+%E2%80%93+H%C3%B4pitaux+De+Paris!8m2!3d48.8568376!4d2.3504305!4m7!1m0!1m5!1m1!1s0x47e67031f8c20147:0xa6a9af76b1e2d899!2m2!1d2.3504327!2d48.8568361" target="_blank"> <strong>View on map</strong></a>
+<!--												<a href=""> <strong>View on map</strong></a>-->
 											</li>
 											<li>
-												<h6>Phone</h6> <a href="tel://000434323342">+01942-246579</a> - <a href="tel://000434323342">+01942-246578</a></li>
+												<h6>Phone</h6> <a href="tel://01942-246579">+01942-246579</a> - <a href="tel://01942-246578">+01942-246578</a></li>
 										</ul>
 									</div>
 								</div>
@@ -214,19 +232,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 Cardiologist, 49 Years Experience</p>
 							</div>
 							<div class="wrapper_indent">
-								<p>Dr. Seerat Mohammad is a Cardiologist in Srinagar and has an experience of 49 years in this field. Dr. Seerat at The Caring Touch Laser & Implant Centre in New Rajendra Nagar, Delhi. She completed MBBS from All India Institute of Medical Sciences, Patna in 1962,MD - General Medicine from All India Institute of Medical Sciences, New Delhi in 1966 and DM - Cardiology from All India Institute of Medical Sciences, New Delhi in 1969.
+								<p>Dr. <?= $user_name ?> is a <?= $spec1,$spec2 ?> from <?= $district ?> and has an experience of  <?= $exprience ?> years in this field.
 
-She is a member of Delhi Medical Council. Some of the services provided by the doctor are: Cardiography and Chest Pain Treatment etc.</p>
+<!--TO DO add fields from database									She completed MBBS from All India Institute of Medical Sciences, Patna in 1962,MD - General Medicine from All India Institute of Medical Sciences, New Delhi in 1966 and DM - Cardiology from All India Institute of Medical Sciences, New Delhi in 1969.She is a member of Delhi Medical Council. Some of the services provided by the doctor are: Cardiography and Chest Pain Treatment etc.</p>-->
 								<h6>Specializations</h6>
 								<div class="row">
 									<div class="col-lg-6">
 										<ul class="bullets">
-											<li>Abdominal Radiology</li>
-											<li>Addiction Psychiatry</li>
+											<li><?= $spec1 ?></li>
+											<li><?= $spec2 ?></li>
 											<li>Adolescent Medicine</li>
 											<li>Cardiothoracic Radiology </li>
 										</ul>
 									</div>
+<!--
 									<div class="col-lg-6">
 										<ul class="bullets">
 											<li>Abdominal Radiology</li>
@@ -235,6 +254,7 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 											<li>Cardiothoracic Radiology </li>
 										</ul>
 									</div>
+-->
 								</div>
 								<!-- /row-->
 							</div>
@@ -249,6 +269,7 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 							</div>
 							<div class="wrapper_indent">
 								<p></p>
+<!--								TO DO details from database-->
 								<h6>Curriculum</h6>
 								<ul class="list_edu">
 									<li><strong>AIMS PATNA </strong> - MBBS </li>
@@ -260,6 +281,7 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 
 							<hr />
 
+<!--
 							<div class="indent_title_in">
 								<i class="pe-7s-cash"></i>
 								<h3>Prices &amp; Payments</h3>
@@ -302,8 +324,9 @@ She is a member of Delhi Medical Council. Some of the services provided by the d
 									</tbody>
 								</table>
 							</div>
-							<!--  /wrapper_indent -->
+							  /wrapper_indent
 						</div>
+-->
 						<!-- /section_1 -->
 					</div>
 					<!-- /box_general -->
