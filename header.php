@@ -24,6 +24,7 @@ include('session.php');?>
 			<link href="./css/menu.css" rel="stylesheet" />
 			<link href="./css/vendors.css" rel="stylesheet" />
 			<link href="./css/icon_fonts/css/all_icons_min.css" rel="stylesheet" />
+          <link href="./css/ratecss.css" rel="stylesheet">
 
 			<!-- YOUR CUSTOM CSS -->
 

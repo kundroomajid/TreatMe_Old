@@ -31,6 +31,7 @@ $count = mysqli_num_rows($result);
 }
 
 
+                
 
 include("config.php");?>
 
@@ -161,12 +162,8 @@ include("config.php");?>
             while ($cdrow=mysqli_fetch_array($result)) {
                 $user_name=$cdrow["user_name"];
                 $doc_id=$cdrow["doc_id"];
-								$specialization = $cdrow["specialization"];
-                               
-								$image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' />";
-
-
-
+				$specialization = $cdrow["specialization"];
+                $image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' />";
             ?>
 					<div class="strip_list wow fadeIn" >
 						<a href="#0" class="wish_bt"></a>
@@ -193,7 +190,13 @@ include("config.php");?>
 
 						<?= "<h3>$user_name</h3>";?>
 						<p>MD (AMU) CVD, CSD(Mumbai) </p> 
-						<span class="rating"><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i><i class="icon_star"></i> <small>(145)</small></span>
+						<span class="rating">
+                          <i class="icon_star voted"></i>
+                          <i class="icon_star voted"></i>
+                          <i class="icon_star voted"></i>
+                          <i class="icon_star"></i>
+                          <i class="icon_star"></i> 
+                          <small>(<?php echo $rate_times; ?>)</small></span>
 <!--						<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
 						<ul>
 							<li><a href="#0" onclick="onHtmlClick('Doctors', 0)" class="btn_listing">View on Map</a></li>
