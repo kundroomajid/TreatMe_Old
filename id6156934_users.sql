@@ -2,10 +2,10 @@
 -- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Mar 21, 2019 at 10:40 AM
--- Server version: 5.7.23
--- PHP Version: 7.2.10
+-- Host: 127.0.0.1
+-- Generation Time: Mar 22, 2019 at 04:33 AM
+-- Server version: 10.1.36-MariaDB
+-- PHP Version: 7.2.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -28,15 +28,13 @@ SET time_zone = "+00:00";
 -- Table structure for table `comments`
 --
 
-DROP TABLE IF EXISTS `comments`;
-CREATE TABLE IF NOT EXISTS `comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `comments` (
+  `id` int(11) NOT NULL,
   `pat_id` int(11) NOT NULL,
   `doc_id` int(11) NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `comment` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=latin1;
+  `comment` text NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `comments`
@@ -62,17 +60,14 @@ INSERT INTO `comments` (`id`, `pat_id`, `doc_id`, `date`, `comment`) VALUES
 -- Table structure for table `tb_appointment`
 --
 
-DROP TABLE IF EXISTS `tb_appointment`;
-CREATE TABLE IF NOT EXISTS `tb_appointment` (
-  `apptt_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tb_appointment` (
+  `apptt_id` int(11) NOT NULL,
   `doc_id` int(11) DEFAULT NULL,
   `pat_id` int(11) DEFAULT NULL,
   `appt_date` date NOT NULL,
   `queue_no` int(11) NOT NULL,
-  `shift` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`apptt_id`),
-  UNIQUE KEY `un_apptt` (`doc_id`,`pat_id`,`appt_date`,`shift`)
-) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=latin1;
+  `shift` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tb_appointment`
@@ -98,13 +93,11 @@ INSERT INTO `tb_appointment` (`apptt_id`, `doc_id`, `pat_id`, `appt_date`, `queu
 -- Table structure for table `tb_clinics`
 --
 
-DROP TABLE IF EXISTS `tb_clinics`;
-CREATE TABLE IF NOT EXISTS `tb_clinics` (
-  `clinic_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tb_clinics` (
+  `clinic_id` int(11) NOT NULL,
   `clinic_name` varchar(64) DEFAULT NULL,
   `clinic_address` varchar(255) DEFAULT NULL,
-  `clinic_district` varchar(16) DEFAULT NULL,
-  PRIMARY KEY (`clinic_id`)
+  `clinic_district` varchar(16) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -113,8 +106,7 @@ CREATE TABLE IF NOT EXISTS `tb_clinics` (
 -- Table structure for table `tb_doceducation`
 --
 
-DROP TABLE IF EXISTS `tb_doceducation`;
-CREATE TABLE IF NOT EXISTS `tb_doceducation` (
+CREATE TABLE `tb_doceducation` (
   `doc_id` int(11) DEFAULT NULL,
   `degree` varchar(50) DEFAULT NULL,
   `year` int(4) DEFAULT NULL,
@@ -135,8 +127,7 @@ INSERT INTO `tb_doceducation` (`doc_id`, `degree`, `year`, `institute`) VALUES
 -- Table structure for table `tb_doctor`
 --
 
-DROP TABLE IF EXISTS `tb_doctor`;
-CREATE TABLE IF NOT EXISTS `tb_doctor` (
+CREATE TABLE `tb_doctor` (
   `doc_id` int(11) NOT NULL,
   `specialization` varchar(64) DEFAULT NULL,
   `registration_council` varchar(64) DEFAULT NULL,
@@ -146,18 +137,19 @@ CREATE TABLE IF NOT EXISTS `tb_doctor` (
   `morning_end_time` time NOT NULL,
   `evening_start_time` time NOT NULL,
   `evening_end_time` time NOT NULL,
-  PRIMARY KEY (`doc_id`)
+  `rating_number` int(11) NOT NULL,
+  `total_points` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tb_doctor`
 --
 
-INSERT INTO `tb_doctor` (`doc_id`, `specialization`, `registration_council`, `registration_no`, `registration_year`, `morning_start_time`, `morning_end_time`, `evening_start_time`, `evening_end_time`) VALUES
-(8, 'ortho,chemo', 'acite', 'MNOPW', '2010', '05:00:00', '05:15:00', '17:00:00', '23:15:00'),
-(19, 'Cardiology,Nephrology,Sociology,caromology', 'MCJK', 'JK01F23332', '2033', '10:10:00', '11:11:00', '22:10:00', '23:11:00'),
-(33, 'ortho,chemo', 'ugc', '121212', '2012', '02:00:00', '04:00:00', '17:00:00', '18:00:00'),
-(36, 'Dentist', 'acite', 'MNOPW', '2010', '04:00:00', '09:00:00', '18:00:00', '20:00:00');
+INSERT INTO `tb_doctor` (`doc_id`, `specialization`, `registration_council`, `registration_no`, `registration_year`, `morning_start_time`, `morning_end_time`, `evening_start_time`, `evening_end_time`, `rating_number`, `total_points`) VALUES
+(8, 'ortho,chemo', 'acite', 'MNOPW', '2010', '05:00:00', '05:15:00', '17:00:00', '23:15:00', 12, 31),
+(19, 'Cardiology,Nephrology,Sociology,caromology', 'MCJK', 'JK01F23332', '2033', '10:10:00', '11:11:00', '22:10:00', '23:11:00', 0, 0),
+(33, 'ortho,chemo', 'ugc', '121212', '2012', '02:00:00', '04:00:00', '17:00:00', '18:00:00', 0, 0),
+(36, 'Dentist', 'acite', 'MNOPW', '2010', '04:00:00', '09:00:00', '18:00:00', '20:00:00', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -165,13 +157,11 @@ INSERT INTO `tb_doctor` (`doc_id`, `specialization`, `registration_council`, `re
 -- Table structure for table `tb_patient`
 --
 
-DROP TABLE IF EXISTS `tb_patient`;
-CREATE TABLE IF NOT EXISTS `tb_patient` (
+CREATE TABLE `tb_patient` (
   `pat_id` int(11) NOT NULL,
   `blood_group` varchar(8) DEFAULT NULL,
   `height` double DEFAULT NULL,
-  `weight` double DEFAULT NULL,
-  PRIMARY KEY (`pat_id`)
+  `weight` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -192,14 +182,12 @@ INSERT INTO `tb_patient` (`pat_id`, `blood_group`, `height`, `weight`) VALUES
 -- Table structure for table `tb_qualifications`
 --
 
-DROP TABLE IF EXISTS `tb_qualifications`;
-CREATE TABLE IF NOT EXISTS `tb_qualifications` (
+CREATE TABLE `tb_qualifications` (
   `doct_id` int(11) NOT NULL,
   `degree` varchar(32) DEFAULT NULL,
   `institute` varchar(64) DEFAULT NULL,
   `completion_year` char(4) DEFAULT NULL,
-  `experience` int(4) NOT NULL,
-  PRIMARY KEY (`doct_id`)
+  `experience` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -219,9 +207,8 @@ INSERT INTO `tb_qualifications` (`doct_id`, `degree`, `institute`, `completion_y
 -- Table structure for table `tb_user`
 --
 
-DROP TABLE IF EXISTS `tb_user`;
-CREATE TABLE IF NOT EXISTS `tb_user` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tb_user` (
+  `user_id` int(11) NOT NULL,
   `user_name` varchar(32) DEFAULT NULL,
   `user_email` varchar(64) NOT NULL,
   `user_password` varchar(16) NOT NULL,
@@ -234,9 +221,8 @@ CREATE TABLE IF NOT EXISTS `tb_user` (
   `gender` enum('Male','Female','Other','') DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `district` varchar(16) DEFAULT NULL,
-  `pincode` char(6) DEFAULT NULL,
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+  `pincode` char(6) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tb_user`
@@ -265,16 +251,13 @@ INSERT INTO `tb_user` (`user_id`, `user_name`, `user_email`, `user_password`, `h
 -- Table structure for table `tmp_appointment`
 --
 
-DROP TABLE IF EXISTS `tmp_appointment`;
-CREATE TABLE IF NOT EXISTS `tmp_appointment` (
-  `tmp_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tmp_appointment` (
+  `tmp_id` int(11) NOT NULL,
   `doc_id` int(11) DEFAULT NULL,
   `pat_id` int(11) DEFAULT NULL,
   `appt_date` date NOT NULL,
-  `shift` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`tmp_id`),
-  UNIQUE KEY `doc_id` (`doc_id`,`pat_id`,`appt_date`,`shift`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=latin1;
+  `shift` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tmp_appointment`
@@ -297,17 +280,15 @@ INSERT INTO `tmp_appointment` (`tmp_id`, `doc_id`, `pat_id`, `appt_date`, `shift
 -- Table structure for table `view_rating`
 --
 
-DROP TABLE IF EXISTS `view_rating`;
-CREATE TABLE IF NOT EXISTS `view_rating` (
-  `rating_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `view_rating` (
+  `rating_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
   `rating_number` int(11) NOT NULL,
   `total_points` int(11) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 = Block, 0 = Unblock',
-  PRIMARY KEY (`rating_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 = Block, 0 = Unblock'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `view_rating`
@@ -322,8 +303,7 @@ INSERT INTO `view_rating` (`rating_id`, `post_id`, `rating_number`, `total_point
 -- Stand-in structure for view `vw_doctor`
 -- (See below for the actual view)
 --
-DROP VIEW IF EXISTS `vw_doctor`;
-CREATE TABLE IF NOT EXISTS `vw_doctor` (
+CREATE TABLE `vw_doctor` (
 `user_id` int(11)
 ,`user_name` varchar(32)
 ,`user_email` varchar(64)
@@ -355,8 +335,7 @@ CREATE TABLE IF NOT EXISTS `vw_doctor` (
 -- Stand-in structure for view `vw_patient`
 -- (See below for the actual view)
 --
-DROP VIEW IF EXISTS `vw_patient`;
-CREATE TABLE IF NOT EXISTS `vw_patient` (
+CREATE TABLE `vw_patient` (
 `user_id` int(11)
 ,`user_name` varchar(32)
 ,`user_email` varchar(64)
@@ -394,6 +373,106 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `vw_patient`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_patient`  AS  select `tb_user`.`user_id` AS `user_id`,`tb_user`.`user_name` AS `user_name`,`tb_user`.`user_email` AS `user_email`,`tb_user`.`user_password` AS `user_password`,`tb_user`.`hash` AS `hash`,`tb_user`.`user_phone` AS `user_phone`,`tb_user`.`dob` AS `dob`,`tb_user`.`user_type` AS `user_type`,`tb_user`.`active` AS `active`,`tb_user`.`photo` AS `photo`,`tb_user`.`gender` AS `gender`,`tb_user`.`address` AS `address`,`tb_user`.`district` AS `district`,`tb_user`.`pincode` AS `pincode`,`tb_patient`.`pat_id` AS `pat_id`,`tb_patient`.`blood_group` AS `blood_group`,`tb_patient`.`height` AS `height`,`tb_patient`.`weight` AS `weight` from (`tb_user` join `tb_patient`) where (`tb_patient`.`pat_id` = `tb_user`.`user_id`) ;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tb_appointment`
+--
+ALTER TABLE `tb_appointment`
+  ADD PRIMARY KEY (`apptt_id`),
+  ADD UNIQUE KEY `un_apptt` (`doc_id`,`pat_id`,`appt_date`,`shift`);
+
+--
+-- Indexes for table `tb_clinics`
+--
+ALTER TABLE `tb_clinics`
+  ADD PRIMARY KEY (`clinic_id`);
+
+--
+-- Indexes for table `tb_doctor`
+--
+ALTER TABLE `tb_doctor`
+  ADD PRIMARY KEY (`doc_id`);
+
+--
+-- Indexes for table `tb_patient`
+--
+ALTER TABLE `tb_patient`
+  ADD PRIMARY KEY (`pat_id`);
+
+--
+-- Indexes for table `tb_qualifications`
+--
+ALTER TABLE `tb_qualifications`
+  ADD PRIMARY KEY (`doct_id`);
+
+--
+-- Indexes for table `tb_user`
+--
+ALTER TABLE `tb_user`
+  ADD PRIMARY KEY (`user_id`);
+
+--
+-- Indexes for table `tmp_appointment`
+--
+ALTER TABLE `tmp_appointment`
+  ADD PRIMARY KEY (`tmp_id`),
+  ADD UNIQUE KEY `doc_id` (`doc_id`,`pat_id`,`appt_date`,`shift`);
+
+--
+-- Indexes for table `view_rating`
+--
+ALTER TABLE `view_rating`
+  ADD PRIMARY KEY (`rating_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+
+--
+-- AUTO_INCREMENT for table `tb_appointment`
+--
+ALTER TABLE `tb_appointment`
+  MODIFY `apptt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
+
+--
+-- AUTO_INCREMENT for table `tb_clinics`
+--
+ALTER TABLE `tb_clinics`
+  MODIFY `clinic_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tb_user`
+--
+ALTER TABLE `tb_user`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
+-- AUTO_INCREMENT for table `tmp_appointment`
+--
+ALTER TABLE `tmp_appointment`
+  MODIFY `tmp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+
+--
+-- AUTO_INCREMENT for table `view_rating`
+--
+ALTER TABLE `view_rating`
+  MODIFY `rating_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables

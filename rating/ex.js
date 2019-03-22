@@ -6,6 +6,7 @@ function onload(event) {
 		element:document.querySelector("#rater"),
 		rateCallback:function rateCallback(rating, done) {
 			var parentObject = this;
+			window.location:'rating.php?'
 			$.ajax({
 				url : "rating.php",
 				data : 'id=' + 1 + '&rating='
