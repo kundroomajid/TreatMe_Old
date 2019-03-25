@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 22, 2019 at 04:33 AM
+-- Generation Time: Mar 25, 2019 at 03:10 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.11
 
@@ -52,7 +52,8 @@ INSERT INTO `comments` (`id`, `pat_id`, `doc_id`, `date`, `comment`) VALUES
 (56, 18, 8, '2019-03-01 18:49:07', ' kjkl'),
 (61, 30, 8, '2019-03-04 14:16:58', ' jjjj'),
 (62, 30, 8, '2019-03-04 14:21:05', ' test'),
-(63, 18, 8, '2019-03-04 20:36:39', ' jkhsd');
+(63, 18, 8, '2019-03-04 20:36:39', ' jkhsd'),
+(65, 18, 8, '2019-03-22 15:31:02', ' kljasd');
 
 -- --------------------------------------------------------
 
@@ -137,16 +138,16 @@ CREATE TABLE `tb_doctor` (
   `morning_end_time` time NOT NULL,
   `evening_start_time` time NOT NULL,
   `evening_end_time` time NOT NULL,
-  `rating_number` int(11) NOT NULL,
-  `total_points` bigint(20) NOT NULL
+  `rated_by` int(11) NOT NULL DEFAULT '0',
+  `avg_rating` float NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tb_doctor`
 --
 
-INSERT INTO `tb_doctor` (`doc_id`, `specialization`, `registration_council`, `registration_no`, `registration_year`, `morning_start_time`, `morning_end_time`, `evening_start_time`, `evening_end_time`, `rating_number`, `total_points`) VALUES
-(8, 'ortho,chemo', 'acite', 'MNOPW', '2010', '05:00:00', '05:15:00', '17:00:00', '23:15:00', 12, 31),
+INSERT INTO `tb_doctor` (`doc_id`, `specialization`, `registration_council`, `registration_no`, `registration_year`, `morning_start_time`, `morning_end_time`, `evening_start_time`, `evening_end_time`, `rated_by`, `avg_rating`) VALUES
+(8, 'ortho,chemo', 'acite', 'MNOPW', '2010', '05:00:00', '05:15:00', '17:00:00', '23:15:00', 3, 2.33333),
 (19, 'Cardiology,Nephrology,Sociology,caromology', 'MCJK', 'JK01F23332', '2033', '10:10:00', '11:11:00', '22:10:00', '23:11:00', 0, 0),
 (33, 'ortho,chemo', 'ugc', '121212', '2012', '02:00:00', '04:00:00', '17:00:00', '18:00:00', 0, 0),
 (36, 'Dentist', 'acite', 'MNOPW', '2010', '04:00:00', '09:00:00', '18:00:00', '20:00:00', 0, 0);
@@ -200,6 +201,29 @@ INSERT INTO `tb_qualifications` (`doct_id`, `degree`, `institute`, `completion_y
 (19, 'NODegree', 'College of Never', NULL, 213),
 (33, 'BDS', 'SKIMS', NULL, 12),
 (36, 'mbbs', 'SKIMS', NULL, 12);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_rating`
+--
+
+CREATE TABLE `tb_rating` (
+  `id` int(11) NOT NULL,
+  `doc_id` int(11) NOT NULL,
+  `pat_id` int(11) NOT NULL,
+  `rate` float NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tb_rating`
+--
+
+INSERT INTO `tb_rating` (`id`, `doc_id`, `pat_id`, `rate`, `timestamp`) VALUES
+(8, 8, 18, 3, '2019-03-22 13:34:08'),
+(5, 8, 2, 5, '0000-00-00 00:00:00'),
+(6, 8, 3, 1, '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -277,25 +301,18 @@ INSERT INTO `tmp_appointment` (`tmp_id`, `doc_id`, `pat_id`, `appt_date`, `shift
 -- --------------------------------------------------------
 
 --
--- Table structure for table `view_rating`
+-- Stand-in structure for view `vw_comments`
+-- (See below for the actual view)
 --
-
-CREATE TABLE `view_rating` (
-  `rating_id` int(11) NOT NULL,
-  `post_id` int(11) NOT NULL,
-  `rating_number` int(11) NOT NULL,
-  `total_points` int(11) NOT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 = Block, 0 = Unblock'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `view_rating`
---
-
-INSERT INTO `view_rating` (`rating_id`, `post_id`, `rating_number`, `total_points`, `created`, `modified`, `status`) VALUES
-(1, 1, 15, 68, '2019-03-19 13:46:19', '2019-03-19 14:53:13', 1);
+CREATE TABLE `vw_comments` (
+`id` int(11)
+,`pat_id` int(11)
+,`pat_name` varchar(32)
+,`photo` blob
+,`doc_id` int(11)
+,`date` datetime
+,`comment` text
+);
 
 -- --------------------------------------------------------
 
@@ -318,6 +335,8 @@ CREATE TABLE `vw_doctor` (
 ,`address` varchar(255)
 ,`district` varchar(16)
 ,`pincode` char(6)
+,`rated_by` int(11)
+,`avg_rating` float
 ,`doc_id` int(11)
 ,`specialization` varchar(64)
 ,`registration_council` varchar(64)
@@ -359,11 +378,20 @@ CREATE TABLE `vw_patient` (
 -- --------------------------------------------------------
 
 --
+-- Structure for view `vw_comments`
+--
+DROP TABLE IF EXISTS `vw_comments`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_comments`  AS  select `comments`.`id` AS `id`,`comments`.`pat_id` AS `pat_id`,`vw_patient`.`user_name` AS `pat_name`,`vw_patient`.`photo` AS `photo`,`comments`.`doc_id` AS `doc_id`,`comments`.`date` AS `date`,`comments`.`comment` AS `comment` from (`comments` join `vw_patient`) where (`vw_patient`.`user_id` = `comments`.`pat_id`) ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `vw_doctor`
 --
 DROP TABLE IF EXISTS `vw_doctor`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_doctor`  AS  select `tb_user`.`user_id` AS `user_id`,`tb_user`.`user_name` AS `user_name`,`tb_user`.`user_email` AS `user_email`,`tb_user`.`user_password` AS `user_password`,`tb_user`.`hash` AS `hash`,`tb_user`.`user_phone` AS `user_phone`,`tb_user`.`dob` AS `dob`,`tb_user`.`user_type` AS `user_type`,`tb_user`.`active` AS `active`,`tb_user`.`photo` AS `photo`,`tb_user`.`gender` AS `gender`,`tb_user`.`address` AS `address`,`tb_user`.`district` AS `district`,`tb_user`.`pincode` AS `pincode`,`tb_doctor`.`doc_id` AS `doc_id`,`tb_doctor`.`specialization` AS `specialization`,`tb_doctor`.`registration_council` AS `registration_council`,`tb_doctor`.`registration_no` AS `registration_no`,`tb_doctor`.`registration_year` AS `registration_year`,`tb_doctor`.`morning_start_time` AS `morning_start_time`,`tb_doctor`.`morning_end_time` AS `morning_end_time`,`tb_doctor`.`evening_start_time` AS `evening_start_time`,`tb_doctor`.`evening_end_time` AS `evening_end_time` from (`tb_user` join `tb_doctor`) where (`tb_doctor`.`doc_id` = `tb_user`.`user_id`) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_doctor`  AS  select `tb_user`.`user_id` AS `user_id`,`tb_user`.`user_name` AS `user_name`,`tb_user`.`user_email` AS `user_email`,`tb_user`.`user_password` AS `user_password`,`tb_user`.`hash` AS `hash`,`tb_user`.`user_phone` AS `user_phone`,`tb_user`.`dob` AS `dob`,`tb_user`.`user_type` AS `user_type`,`tb_user`.`active` AS `active`,`tb_user`.`photo` AS `photo`,`tb_user`.`gender` AS `gender`,`tb_user`.`address` AS `address`,`tb_user`.`district` AS `district`,`tb_user`.`pincode` AS `pincode`,`tb_doctor`.`rated_by` AS `rated_by`,`tb_doctor`.`avg_rating` AS `avg_rating`,`tb_doctor`.`doc_id` AS `doc_id`,`tb_doctor`.`specialization` AS `specialization`,`tb_doctor`.`registration_council` AS `registration_council`,`tb_doctor`.`registration_no` AS `registration_no`,`tb_doctor`.`registration_year` AS `registration_year`,`tb_doctor`.`morning_start_time` AS `morning_start_time`,`tb_doctor`.`morning_end_time` AS `morning_end_time`,`tb_doctor`.`evening_start_time` AS `evening_start_time`,`tb_doctor`.`evening_end_time` AS `evening_end_time` from (`tb_user` join `tb_doctor`) where (`tb_doctor`.`doc_id` = `tb_user`.`user_id`) ;
 
 -- --------------------------------------------------------
 
@@ -416,6 +444,12 @@ ALTER TABLE `tb_qualifications`
   ADD PRIMARY KEY (`doct_id`);
 
 --
+-- Indexes for table `tb_rating`
+--
+ALTER TABLE `tb_rating`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tb_user`
 --
 ALTER TABLE `tb_user`
@@ -429,12 +463,6 @@ ALTER TABLE `tmp_appointment`
   ADD UNIQUE KEY `doc_id` (`doc_id`,`pat_id`,`appt_date`,`shift`);
 
 --
--- Indexes for table `view_rating`
---
-ALTER TABLE `view_rating`
-  ADD PRIMARY KEY (`rating_id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -442,7 +470,7 @@ ALTER TABLE `view_rating`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `tb_appointment`
@@ -457,6 +485,12 @@ ALTER TABLE `tb_clinics`
   MODIFY `clinic_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `tb_rating`
+--
+ALTER TABLE `tb_rating`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `tb_user`
 --
 ALTER TABLE `tb_user`
@@ -467,12 +501,6 @@ ALTER TABLE `tb_user`
 --
 ALTER TABLE `tmp_appointment`
   MODIFY `tmp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
-
---
--- AUTO_INCREMENT for table `view_rating`
---
-ALTER TABLE `view_rating`
-  MODIFY `rating_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
