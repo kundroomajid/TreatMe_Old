@@ -10,7 +10,13 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
   $doc_id = isset($_SESSION['id'])?$_SESSION['id']:null;
 
   if($doc_id!=null && $tmp_id!=null){
-
+    
+    $result = $conn->query("select patients FROM vw_doctor WHERE doc_id=$doc_id");
+    $row = mysqli_fetch_assoc($result);
+      $patients = $row['patients'];
+    
+    
+    
     if($confirmed==0){
       if($result = $conn->query("DELETE FROM tmp_appointment WHERE tmp_id=$tmp_id")){
 		  $_SESSION['msg'] ='<div class="alert alert-danger alert-dismissible">
@@ -42,6 +48,9 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
 
       if(bookAppointment($doc_id,$pat_id,new DateTime($date),$shift) && ($result = $conn->query("DELETE FROM tmp_appointment WHERE tmp_id=$tmp_id")))
 	  {
+        $patients = $patients + 1;
+        $q = "update tb_doctor SET patients = '$patients'";
+      mysqli_query($conn,$q);
 		  $_SESSION['msg'] = '<div class= "alert alert-info alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     Appointment Confirmed Sucessfully</div>';

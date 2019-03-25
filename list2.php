@@ -8,15 +8,15 @@ else {
 }
 
 
-if (isset($_GET['page'])) 
-{
-  $page = $_GET['page'];
-} else 
-{
-$page = 1;
-  }
-$no_of_records_per_page = 1;
-$offset = ($page-1) * $no_of_records_per_page;
+$limit = 10;   
+    if (isset($_GET["page"])) {  
+      $pn  = $_GET["page"];  
+    }  
+    else {  
+      $pn=1;  
+    };   
+  
+    $start_from = ($pn-1) * $limit;   
 
 if(isset($_GET['dist']))
 {
@@ -32,15 +32,29 @@ $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable fa
 $count = mysqli_num_rows($result);
 }
 
-else
+else if (isset($_GET['q']))
 {
-	$dist=null;
+	$q = $_GET['q'];
 	$query="SELECT * FROM vw_doctor WHERE `user_name` LIKE '%$q%' LIMIT $offset,$no_of_records_per_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
 }
 
+else
+{
+  $query="SELECT * FROM vw_doctor LIMIT $start_from, $limit";
+$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$count = mysqli_num_rows($result);
+  
+}
 
+ // code to get total number of fields and pages
+
+$sql = "SELECT COUNT(*) FROM vw_doctor";   
+        $rs_result = mysqli_query($conn,$sql);   
+        $row = mysqli_fetch_row($rs_result);   
+        $total_records = $row[0];   
+        $total_pages = ceil($total_records / $limit);
                 
 
 include("config.php");?>
@@ -59,7 +73,7 @@ include("config.php");?>
 							$disp = $count;
 						}
 						?>
-						<h4><strong>Showing <?= "$disp";?></strong> of <?= "$count";?> results</h4>
+						<h4><strong>Showing <?= "$disp";?></strong> of <?= "$total_records";?> results</h4>
 					</div>
 
 					<div class="col-md-6">
@@ -257,9 +271,36 @@ include("config.php");?>
 					?>
 
 
+                 
+                  
 
 					 <nav aria-label="" class="add_top_20"> 
 						<ul class="pagination pagination-sm">
+                          <?php
+                          $k = (($pn+4>$total_pages)?$total_pages-4:(($pn-4<1)?5:$pn));         
+        $pagLink = ""; 
+        if($pn>=2){ 
+            echo "<li class='page-item '><a class='page-link' href='list2.php?page=1'> First </a></li>"; 
+            echo "<li class='page-item '><a class='page-link' href='list2.php?page=".($pn-1)."'> Previous </a></li>"; 
+        } 
+        for ($i=1; $i<=4; $i++) { 
+          if($k+$i==$pn) 
+            $pagLink .= "<li class='page-item active'><a class='page-link' href='list2.php?page=".($k+$i)."'>".($k+$i)."</a></li>"; 
+          else
+            $pagLink .= "<li class='page-item '><a class='page-link' href='list2.php?page=".($k+$i)."'>".($k+$i)."</a></li>";   
+        };   
+        echo $pagLink; 
+        if($pn<$total_pages){ 
+           echo "<li class='page-item '><a class='page-link' href='list2.php?page=".($pn+1)."'> Next </a></li>"; 
+           echo "<li class='page-item '><a class='page-link' href='list2.php?page=".$total_pages."'> Last </a></li>"; 
+        }     
+      ?> 
+      </ul> 
+
+                          
+              
+                          
+<!--
 							<li class="page-item disabled">
 								<a class="page-link" href="#" tabindex="-1">Previous</a>
 							</li>
@@ -269,9 +310,11 @@ include("config.php");?>
 							<li class="page-item">
 								<a class="page-link" href="#">Next</a>
 							</li>
+-->
 						</ul>
 					</nav>
 					<!-- /pagination 
+
 				</div>
 				<!-- /col -->
 
