@@ -7,27 +7,82 @@ else {
 	$q=null;
 }
 
+if(isset($_GET["page"]))
+{
+ $page = $_GET["page"];
+}
+else
+{
+ $page = 1;
+}
+
+$num_results_on_page = 1;// number of details displayed
+$offset = ($page-1) * $num_results_on_page;
+
+
 
 if(isset($_GET['dist']))
 {
-$dist = $_GET['dist'];
-$query ="SELECT * FROM vw_doctor  WHERE district = '$dist'";
+$dist = $_GET['dist'];	
+	
+$sql = "SELECT count(*) as total_records from vw_doctor WHERE district = '$dist'";
+$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$total_rows = mysqli_fetch_array($result)[0];
+$total_records = $total_rows;
+$total_pages = ceil($total_rows / $num_results_on_page);
+
+	
+
+$query ="SELECT * FROM vw_doctor WHERE district = '$dist' LIMIT $offset, $num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
 }
 else if (isset($_GET['spec'])){
-	$spec = $_GET['spec'];
-$query="SELECT * FROM vw_doctor  WHERE `specialization` LIKE '%$spec%' LIMIT 10";
+$spec = $_GET['spec'];
+	
+$sql = "SELECT count(*) as total_records from vw_doctor WHERE `specialization` LIKE '%$spec%'";
+$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$total_rows = mysqli_fetch_array($result)[0];
+$total_records = $total_rows;
+$total_pages = ceil($total_rows / $num_results_on_page);
+	
+	
+
+$query="SELECT * FROM vw_doctor  WHERE `specialization` LIKE '%$spec%' LIMIT $offset, $num_results_on_page";
+$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$count = mysqli_num_rows($result);
+}
+
+else if (isset($_GET['q']))
+{
+	$q=$_GET['q'];
+	
+	$sql = "SELECT count(*) as total_records from vw_doctor WHERE `user_name` LIKE '%$q%'";
+$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$total_rows = mysqli_fetch_array($result)[0];
+$total_records = $total_rows;
+$total_pages = ceil($total_rows / $num_results_on_page);
+
+	
+	
+	$query="SELECT * FROM vw_doctor WHERE `user_name` LIKE '%$q%' LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
 }
 
 else
 {
-	$dist=null;
-	$query="SELECT * FROM vw_doctor  WHERE `user_name` LIKE '%$q%' LIMIT 10";
+	$sql = "SELECT count(*) as total_records from vw_doctor";
+$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$total_rows = mysqli_fetch_array($result)[0];
+$total_records = $total_rows;
+$total_pages = ceil($total_rows / $num_results_on_page);
+
+	
+	$query="SELECT * FROM vw_doctor LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
+	
 }
 
 
@@ -49,7 +104,7 @@ include("config.php");?>
 							$disp = $count;
 						}
 						?>
-						<h4><strong>Showing <?= "$disp";?></strong> of <?= "$count";?> results</h4>
+						<h4><strong>Showing <?= "$disp";?></strong> of <?= "$total_pages";?> results</h4>
 					</div>
 
 					<div class="col-md-6">
@@ -111,7 +166,7 @@ include("config.php");?>
 					<script>
     document.getElementById("dist").onchange = function() {
         if (this.selectedIndex!==0) {
-            window.location.href = './list.php?dist='+ this.value;
+            window.location.href = 'list.php?dist='+ this.value;
         }        
     };
 </script>	
@@ -164,6 +219,8 @@ include("config.php");?>
                 $doc_id=$cdrow["doc_id"];
 				$specialization = $cdrow["specialization"];
                 $image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' />";
+                $rate_times = $cdrow['rated_by'];
+                 $avg_rating = $cdrow['avg_rating'];
             ?>
 					<div class="strip_list wow fadeIn" >
 						<a href="#0" class="wish_bt"></a>
@@ -188,14 +245,47 @@ include("config.php");?>
 				}
 				?>
 
+                       <?php 
+               $query1="SELECT * FROM tb_qualifications where doct_id = $doc_id";
+            $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
+            $cdrow1=mysqli_fetch_array($result1);
+              $degree = strtoupper($cdrow1['degree']);
+              $institute = strtoupper($cdrow1['institute']);
+              $experience = $cdrow1['experience'];
+              
+              ?>
+                      
 						<?= "<h3>$user_name</h3>";?>
-						<p>MD (AMU) CVD, CSD(Mumbai) </p> 
+                       <p><?= $degree ?> ( <?= $institute ?> ), <?= $experience ?> Years Experience</p>
 						<span class="rating">
-                          <i class="icon_star voted"></i>
-                          <i class="icon_star voted"></i>
-                          <i class="icon_star voted"></i>
-                          <i class="icon_star"></i>
-                          <i class="icon_star"></i> 
+                           <?php  
+                                            $x = 0;
+                                        
+                                            if($avg_rating < 5)
+                                            {
+                                            for ($x; $x < $avg_rating; $x++) 
+                                            {
+                                            echo "<i class='icon_star voted'></i>";
+                                            }
+                                              $diff = ceil(5-$x);
+                                              for ($i = 0; $i < $diff; $i++) 
+                                            {
+                                            echo "<i class='icon_star'></i>";
+                                            }
+                                            }
+                                            
+                                          
+                                              else 
+                                              {
+                                            echo ('<i class="icon_star"></i>
+											<i class="icon_star"></i>
+											<i class="icon_star"></i>
+											<i class="icon_star"></i>
+											<i class="icon_star "></i>');
+                                              }
+                                              
+                                               
+?>  
                           <small>(<?php echo $rate_times; ?>)</small></span>
 <!--						<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
 						<ul>
@@ -210,22 +300,56 @@ include("config.php");?>
             }
 }
 					?>
+<nav aria-label="" class="add_top_20"> 
+						<ul class="pagination pagination-sm">
+		<?php if (ceil($total_pages / $num_results_on_page) > 0): ?>
+				<?php if ($page > 1): ?>
+				<li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page-1 ?>">Prev</a></li>
+				<?php endif; ?>
 
+				<?php if ($page > 3): ?>
+				<li class="page-item "><a class="page-link" href="list.php?page=1">1</a></li>
+<!--				<li class="page-item ">...</li>-->
+				<?php endif; ?>
 
+				<?php if ($page-2 > 0): ?><li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page-2 ?>"><?php echo $page-2 ?></a></li><?php endif; ?>
+				<?php if ($page-1 > 0): ?><li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page-1 ?>"><?php echo $page-1 ?></a></li><?php endif; ?>
 
-					 <nav aria-label="" class="add_top_20">
+				<li class="page-item active"><a class="page-link" href="list.php?page=<?php echo $page ?>"><?php echo $page ?></a></li>
+
+				<?php if ($page+1 < ceil($total_pages / $num_results_on_page)+1): ?><li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page+1 ?>"><?php echo $page+1 ?></a></li><?php endif; ?>
+				<?php if ($page+2 < ceil($total_pages / $num_results_on_page)+1): ?><li class="page-item"><a class="page-link"  href="list.php?page=<?php echo $page+2 ?>"><?php echo $page+2 ?></a></li><?php endif; ?>
+
+				<?php if ($page < ceil($total_pages / $num_results_on_page)-2): ?>
+<!--				<li class="page-item">...</li>-->
+				<li class="page-item"><a class="page-link" href="list.php?page=<?php echo ceil($total_pages / $num_results_on_page) ?>"><?php echo ceil($total_pages / $num_results_on_page) ?></a></li>
+				<?php endif; ?>
+
+				<?php if ($page < ceil($total_pages / $num_results_on_page)): ?>
+				<li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page+1 ?>">Next</a></li>
+				<?php endif; ?>
+			</ul>
+			<?php endif; ?>
+							
+
+					
+					
+
+<!--
+					 <nav aria-label="" class="add_top_20"> 
 						<ul class="pagination pagination-sm">
 							<li class="page-item disabled">
 								<a class="page-link" href="#" tabindex="-1">Previous</a>
 							</li>
 							<li class="page-item active"><a class="page-link" href="#">1</a></li>
-							<li class="page-item"><a class="page-link" href="#">2</a></li>
-							<li class="page-item"><a class="page-link" href="#">3</a></li>
+							<li class="page-item"><a class="page-link" href="?page=2">2</a></li>
+							<li class="page-item"><a class="page-link" href="?page=3">3</a></li>
 							<li class="page-item">
 								<a class="page-link" href="#">Next</a>
 							</li>
 						</ul>
 					</nav>
+-->
 					<!-- /pagination 
 				</div>
 				<!-- /col -->
