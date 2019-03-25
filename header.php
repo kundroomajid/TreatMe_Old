@@ -112,7 +112,7 @@ include('session.php');?>
 -->
 
 									<li class="menu">
-										<a href="./about.php" class="show-submenu">About<i class="menu"></i></a>
+										<a href="#0" class="show-submenu">About<i class="menu"></i></a>
 
 									</li>
 								</ul>

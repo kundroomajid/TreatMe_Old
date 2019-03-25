@@ -63,14 +63,16 @@
     $x->execute();
 
 
-    $message = "You are receiving this email because you had signed up on shifa.com and requested to recover your password.
+    $message = '
+
+    You are receiving this email because you had signed up on shifa.com and requested to recover your password.
     Please click the following link or paste it in your browser to reset yoru passowrd.
 
-    localhost/reset.php?token='.$hash.'&email='.$user_email"; // Our message above including the link
+    localhost/reset.php?token='.$hash.'&email='.$user_email; // Our message above including the link
 
     $headers = 'From:noreply@locah.com/' . "\r\n"; // Set from headers
 
-//    echo $message;
+    echo $message;
     mail($to, $subject, $message, $headers);
 
   }

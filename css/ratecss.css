@@ -14,11 +14,11 @@
 .rate .rate-btn{
 	width: 45px; height:40px;
 	float: left;
-	background: url(../img/rate-btn.png) no-repeat;
+	background: url(/site/img/rate-btn.png) no-repeat;
 	cursor: pointer;
 }
 .rate .rate-btn:hover, .rate  .rate-btn-hover, .rate  .rate-btn-active{
-	background: url(../img/rate-btn-hover.png) no-repeat;
+	background: url(/site/img/rate-btn-hover.png) no-repeat;
 }
 
 .result-container{
@@ -30,7 +30,7 @@
 }
 .rate-stars{
 	width: 82px; height: 18px;
-	background: url(../img/rate-stars.png) no-repeat;
+	background: url(/site/img/rate-stars.png) no-repeat;
 	position: absolute;
 }
 .rate-bg{

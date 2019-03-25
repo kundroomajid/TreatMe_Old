@@ -10,10 +10,10 @@ x<?php include("header.php"); ?>
 			</div>
 		</div>
 		<!-- /breadcrumb -->
-<h1>HealthCare Blog Comming Soon</h1>
-<!--		<div class="container margin_60">-->
+
+		<div class="container margin_60">
 			<div class="main_title">
-				<h1>HealthCare Blog Comming Soon</h1>
+				<h1>Findoctor Blog</h1>
 				<p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri. In eum omnes molestie. Sed ad debet scaevola, ne mel.</p>
 			</div>
 			<div class="row">

@@ -13,11 +13,9 @@
 				<div class="col-lg-3 col-md-4">
 					<h5>About</h5>
 					<ul class="links">
-						<li><a href="./about.php">About us</a></li>
-<!--
+						<li><a href="#0">About us</a></li>
 						<li><a href="./blog-1.php">Blog</a></li>
 						<li><a href="#0">FAQ</a></li>
--->
 						<li><a href="./login.php">Login</a></li>
 						<li><a href="./register.php">Register</a></li>
 					</ul>
@@ -25,10 +23,10 @@
 				<div class="col-lg-3 col-md-4">
 					<h5>Useful links</h5>
 					<ul class="links">
-						<li><a href="./list.php">Doctors</a></li>
-						<li><a href="./list.php">Clinics</a></li>
-<!--						<li><a href="#0">Specialization</a></li>-->
-						<li><a href="./register.php">Join as a Doctor</a></li>
+						<li><a href="#0">Doctors</a></li>
+						<li><a href="#0">Clinics</a></li>
+						<li><a href="#0">Specialization</a></li>
+						<li><a href="#0">Join as a Doctor</a></li>
 						<li><a href="#0">Download App</a></li>
 					</ul>
 				</div>
@@ -70,9 +68,11 @@
 	<!-- Back to top button -->
 
 	<!-- COMMON SCRIPTS -->
+<!--
 <script src="../cdn-cgi/scripts/84a23a00/cloudflare-static/email-decode.min.js"></script><script src="./js/jquery-2.2.4.min.js"></script>
 	<script src="./js/common_scripts.min.js"></script>
 	<script src="./js/functions.js"></script>
+-->
 
 
 </html>

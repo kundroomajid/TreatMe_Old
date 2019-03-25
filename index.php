@@ -88,13 +88,12 @@ include("header.php");
             while ($cdrow=mysqli_fetch_array($result)) {
                 $user_name=$cdrow["user_name"];
                 $doc_id=$cdrow["doc_id"];
-				$specialization = $cdrow["specialization"]; 
-               $views = $cdrow['views'];
+				$specialization = $cdrow["specialization"];               
 				$image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' />";
 					?>
 					<div class="item">
 						<a href="./detail-page.php?doc_id=<?="$doc_id";?>">
-							<div class="views"><i class="icon-eye-7"></i><?= "$views";?></div>
+							<div class="views"><i class="icon-eye-7"></i>98</div>
 							<div class="title">
 								<h4><?= "$user_name";?>  <em><?= "$specialization";?></em></h4>
 							</div>
