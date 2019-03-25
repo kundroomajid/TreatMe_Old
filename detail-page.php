@@ -28,7 +28,8 @@ if($doc_id!=null){
     $evening_end_time = (new DateTime($cdrow["evening_end_time"]))->format("h:i A");
     $image = "<img src = 'data:image/jpeg;base64,".base64_encode( $cdrow1["photo"])."' width='250' height='200' /><br/>";
     $specialization = $cdrow1["specialization"];
-    $exprience = 5; //TO DO add experience column in database and registration fields
+    $views = $cdrow1['views'];
+    $patients = $cdrow1['patients'];
     if(strlen($specialization) > 24)
     {
       $spec_Array =  explode (",", $specialization);
@@ -223,8 +224,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                   <!--											<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
                 </span>
                 <ul class="statistic">
-                  <li>854 Views</li>
-                  <li>124 Patients</li>
+                  <li><?= $views ?> Views</li>
+                  <li><?= $patients ?>  Patients</li>
                 </ul>
                 <ul class="contacts">
                   <li>
@@ -268,10 +269,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="col-lg-6">
                       <ul class="bullets">
                         <li><?= $spec1 ?></li>
-                        <li><?= $spec2 ?></li>
-                        <li>Adolescent Medicine</li>
-                        <li>Cardiothoracic Radiology </li>
-                      </ul>
+<!--                        <li><?= $spec2 ?></li>-->
+                        
                     </div>
                     <!--
                     <div class="col-lg-6">
@@ -290,6 +289,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
           <hr />
 
+<!--
           <div class="indent_title_in">
             <i class="pe-7s-news-paper"></i>
             <h3>Education</h3>
@@ -297,7 +297,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
           </div>
           <div class="wrapper_indent">
             <p></p>
-            <!--								TO DO details from database-->
+            							//	TO DO details from database
             <h6>Curriculum</h6>
             <ul class="list_edu">
               <li><strong>AIMS PATNA </strong> - MBBS </li>
@@ -305,6 +305,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
               <li><strong>AIMS </strong> - D.M</li>
             </ul>
           </div>
+-->
           <!--  End wrapper indent -->
 
           <hr />

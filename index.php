@@ -81,7 +81,7 @@ include("header.php");
 				<div id="reccomended" class="owl-carousel owl-theme">
 					<?php 
 					
-					$query="SELECT * FROM vw_doctor LIMIT 10";
+					$query="SELECT * FROM vw_doctor GROUP BY avg_rating LIMIT 10";
 					$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 					$count = mysqli_num_rows($result);
 									
