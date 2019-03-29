@@ -257,6 +257,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
               $institute = strtoupper($cdrow1['institute']);
               $experience = $cdrow1['experience'];
               
+
               ?>
               <p><?= $degree ?> from ( <?= $institute ?> ), <?= $experience ?> Years Experience</p>
               </div>
@@ -270,7 +271,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                       <ul class="bullets">
                         <li><?= $spec1 ?></li>
 <!--                        <li><?= $spec2 ?></li>-->
-                        
                     </div>
                     <!--
                     <div class="col-lg-6">

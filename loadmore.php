@@ -4,7 +4,7 @@
   $offset = isset($_REQUEST['offset'])?$_REQUEST['offset']:0;
 
   if($doc_id!=null){
-    $query="SELECT * FROM vw_comments  WHERE doc_id= $doc_id ORDER BY date DESC LIMIT 1 OFFSET $offset";
+    $query="SELECT * FROM vw_comments  WHERE doc_id= $doc_id ORDER BY date DESC LIMIT 3 OFFSET $offset";
     $result=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
     $count = mysqli_num_rows($result);
     if($count>0){
