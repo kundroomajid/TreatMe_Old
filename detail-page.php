@@ -19,6 +19,47 @@ if($doc_id!=null){
   $query2="SELECT * FROM tb_doctor where doc_id = $doc_id";
   $result2=mysqli_query($conn,$query2) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $cdrow=mysqli_fetch_array($result2);
+	
+//	queries to get number of 5,4,3,2,1, star ratiings from db
+	$sql = "SELECT count(*) as total from tb_rating where doc_id = $doc_id";
+  $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+  $row = mysqli_fetch_array($res);
+  $total = $row['total'];
+	
+  $sql = "SELECT count(*) as stars from tb_rating where rate = 5 and doc_id = $doc_id";
+  $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+  $row = mysqli_fetch_array($res);
+  $fivestars = $row['stars'];
+	$fivestars = ($fivestars / $total) *100;
+	
+	// get number of four stars
+   $sql = "SELECT count(*) as stars from tb_rating where rate = 4 and doc_id = $doc_id";
+  $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+  $row = mysqli_fetch_array($res);
+  $fourstars = $row['stars'];
+	$fourstars = ($fourstars / $total) *100;
+	
+	 $sql = "SELECT count(*) as stars from tb_rating where rate = 3 and doc_id = $doc_id";
+  $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+  $row = mysqli_fetch_array($res);
+  $threestars = $row['stars'];
+	$threestars = ($threestars / $total) *100;
+	
+	 $sql = "SELECT count(*) as stars from tb_rating where rate = 2 and doc_id = $doc_id";
+  $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+  $row = mysqli_fetch_array($res);
+  $twostars = $row['stars'];
+	$twostars = ($twostars / $total) *100;
+	
+	 $sql = "SELECT count(*) as stars from tb_rating where rate = 1 and doc_id = $doc_id";
+  $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+  $row = mysqli_fetch_array($res);
+  $onestars = $row['stars'];
+	$onestars = ($onestars / $total) *100;
+
+	
+	
+	
   if($cdrow1!=null){
     $user_name = $cdrow1["user_name"];
     $district = $cdrow1['district'];
@@ -30,6 +71,7 @@ if($doc_id!=null){
     $specialization = $cdrow1["specialization"];
     $views = $cdrow1['views'];
     $patients = $cdrow1['patients'];
+	  $avg_rating = $cdrow1['avg_rating'];
     if(strlen($specialization) > 24)
     {
       $spec_Array =  explode (",", $specialization);
@@ -60,8 +102,9 @@ if($doc_id!=null){
       $rate_bg = 0;
     }
 
-
-
+$sql = "Update tb_doctor set rated_by = $rate_times,avg_rating = $rate_value,views = $views+1 where doc_id = $doc_id";
+  $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+  
   }
 }
 
@@ -187,40 +230,42 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
               <div class="col-lg-7 col-md-8">
                 <!--										<small>Primary care - Internist</small>-->
                 <h1><?= $user_name ?> </h1>
+				 <h6>Rated <?= substr($avg_rating,0,4) ?> on average by <?=$rate_times?>  users</h6>
                 <span class="rating">
                   <!--                                          TO DO GET STARS from databse-->
 
-                  <?php
-                  $x = 0;
+                  <?php  
+				  
+                                            $x = 0;
+											$avg_rating = round($avg_rating,0);
+											
+                                            if($avg_rating <= 5)
+                                            	{
+                                            		for ($x; $x < $avg_rating; $x++) 
+                                            			{
+                                            				echo "<i class='icon_star voted'></i>";
+                                            			}
+                                              		$diff = 5-$x;
+                                              		for ($i = 0; $i < $diff; $i++) 
+                                            			{
+                                            				echo "<i class='icon_star'></i>";
+                                            			}
+                                            	}
+                                            
+                                          
+                                              else 
+                                              	{
+												  echo ('<i class="icon_star"></i>
+												<i class="icon_star"></i>
+												<i class="icon_star"></i>
+												<i class="icon_star"></i>
+												<i class="icon_star "></i>');
+											  	}
+                                              
+                                               
+?>  
 
-                  if($rate_value < 5)
-                  {
-                    for ($x; $x < $rate_value; $x++)
-                    {
-                      echo "<i class='icon_star voted'></i>";
-                    }
-                    $diff = ceil(5-$x);
-                    for ($i = 0; $i < $diff; $i++)
-                    {
-                      echo "<i class='icon_star'></i>";
-                    }
-                  }
-
-
-                  else
-                  {
-                    echo ('<i class="icon_star"></i>
-                    <i class="icon_star"></i>
-                    <i class="icon_star"></i>
-                    <i class="icon_star"></i>
-                    <i class="icon_star "></i>');
-                  }
-
-
-                  ?>
-
-
-                  <small>(<?php echo $rate_times; ?>)</small>
+                  
                   <!--											<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
                 </span>
                 <ul class="statistic">
@@ -417,7 +462,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="col-lg-3">
         <div id="review_summary">
 
-          <strong><?php echo substr($rate_value,0,3); ?></strong>
+           <strong><?php echo substr($rate_value,0,3); ?></strong>
 
 
 
@@ -427,14 +472,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <!--												<i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>-->
           </div>
-          <small>Based on <?php echo $rate_times; ?> reviews</small>
+          <small>Based on <?php echo substr($rate_times,0,3); ?> reviews</small>
         </div>
       </div>
       <div class="col-lg-9">
         <div class="row">
           <div class="col-lg-10 col-9">
             <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar" role="progressbar" style="width: <?= $fivestars ?>%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
           <div class="col-lg-2 col-3"><small><strong>5 stars</strong></small></div>
@@ -443,7 +488,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row">
           <div class="col-lg-10 col-9">
             <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar" role="progressbar" style="width:<?= $fourstars ?>%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
           <div class="col-lg-2 col-3"><small><strong>4 stars</strong></small></div>
@@ -452,7 +497,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row">
           <div class="col-lg-10 col-9">
             <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar" role="progressbar" style="width: <?= $threestars ?>%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
           <div class="col-lg-2 col-3"><small><strong>3 stars</strong></small></div>
@@ -461,7 +506,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row">
           <div class="col-lg-10 col-9">
             <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar" role="progressbar" style="width: <?= $twostars ?>%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
           <div class="col-lg-2 col-3"><small><strong>2 stars</strong></small></div>
@@ -470,7 +515,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row">
           <div class="col-lg-10 col-9">
             <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: 0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar" role="progressbar" style="width: <?= $onestars ?>%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
           <div class="col-lg-2 col-3"><small><strong>1 stars</strong></small></div>

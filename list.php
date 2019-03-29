@@ -16,7 +16,7 @@ else
  $page = 1;
 }
 
-$num_results_on_page = 1;// number of details displayed
+$num_results_on_page = 10;// number of details displayed
 $offset = ($page-1) * $num_results_on_page;
 
 
@@ -36,7 +36,7 @@ $total_pages = ceil($total_rows / $num_results_on_page);
 
 	
 
-$query ="SELECT * FROM vw_doctor WHERE district = '$dist' LIMIT $offset, $num_results_on_page";
+$query ="SELECT * FROM vw_doctor WHERE district = '$dist' ORDER BY avg_rating DESC LIMIT $offset, $num_results_on_page ";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
 }
@@ -53,7 +53,7 @@ $total_pages = ceil($total_rows / $num_results_on_page);
 	
 	
 
-$query="SELECT * FROM vw_doctor  WHERE `specialization` LIKE '%$spec%' LIMIT $offset, $num_results_on_page";
+$query="SELECT * FROM vw_doctor  WHERE `specialization` LIKE '%$spec%' ORDER BY avg_rating DESC LIMIT $offset, $num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
 }
@@ -71,7 +71,7 @@ $total_pages = ceil($total_rows / $num_results_on_page);
 
 	
 	
-	$query="SELECT * FROM vw_doctor WHERE `user_name` LIKE '%$q%' LIMIT $offset,$num_results_on_page";
+	$query="SELECT * FROM vw_doctor WHERE `user_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
 }
@@ -85,7 +85,7 @@ $total_records = $total_rows;
 $total_pages = ceil($total_rows / $num_results_on_page);
 
 	
-	$query="SELECT * FROM vw_doctor LIMIT $offset,$num_results_on_page";
+	$query="SELECT * FROM vw_doctor ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
 	
@@ -263,32 +263,37 @@ include("config.php");?>
                       
 						<?= "<h3>$user_name</h3>";?>
                        <p><?= $degree ?> ( <?= $institute ?> ), <?= $experience ?> Years Experience</p>
+<!--						code to display stars from database-->
 						<span class="rating">
+							
                            <?php  
+				  $avg_rating = substr($avg_rating,0,4);
+				  echo("<small>($avg_rating) </small>");
                                             $x = 0;
-                                        
-                                            if($avg_rating < 5)
-                                            {
-                                            for ($x; $x < $avg_rating; $x++) 
-                                            {
-                                            echo "<i class='icon_star voted'></i>";
-                                            }
-                                              $diff = ceil(5-$x);
-                                              for ($i = 0; $i < $diff; $i++) 
-                                            {
-                                            echo "<i class='icon_star'></i>";
-                                            }
-                                            }
+											$avg_rating = round($avg_rating,0);
+											
+                                            if($avg_rating <= 5)
+                                            	{
+                                            		for ($x; $x < $avg_rating; $x++) 
+                                            			{
+                                            				echo "<i class='icon_star voted'></i>";
+                                            			}
+                                              		$diff = 5-$x;
+                                              		for ($i = 0; $i < $diff; $i++) 
+                                            			{
+                                            				echo "<i class='icon_star'></i>";
+                                            			}
+                                            	}
                                             
                                           
                                               else 
-                                              {
-                                            echo ('<i class="icon_star"></i>
-											<i class="icon_star"></i>
-											<i class="icon_star"></i>
-											<i class="icon_star"></i>
-											<i class="icon_star "></i>');
-                                              }
+                                              	{
+												  echo ('<i class="icon_star"></i>
+												<i class="icon_star"></i>
+												<i class="icon_star"></i>
+												<i class="icon_star"></i>
+												<i class="icon_star "></i>');
+											  	}
                                               
                                                
 ?>  

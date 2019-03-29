@@ -81,7 +81,7 @@ include("header.php");
 				<div id="reccomended" class="owl-carousel owl-theme">
 					<?php 
 					
-					$query="SELECT * FROM vw_doctor GROUP BY avg_rating LIMIT 10";
+					$query="SELECT * FROM vw_doctor ORDER BY avg_rating DESC LIMIT 10";
 					$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 					$count = mysqli_num_rows($result);
 									
@@ -135,7 +135,7 @@ include("header.php");
 							<li><a href="list.php?pulwama"><strong>08</strong>Pulwama</a></li>
 							<li><a href="list.php?shopain"><strong>09</strong>Shopain</a></li>
 							<li><a href="list.php?srinagar"><strong>10</strong>Srinagar</a></li>
-							<li><a href="#0">More...</a></li>
+<!--							<li><a href="#0">More...</a></li>-->
 						</ul>
 					</div>
 				</div>
@@ -155,7 +155,7 @@ include("header.php");
 							<li><a href="list.php?spec=optho"><strong>07</strong>Ophthalmologist</a></li>
 							<li><a href="list.php?spec=opto"><strong>08</strong>Optometrist</a></li>
 							<li><a href="list.php?spec=pedia"><strong>09</strong>Pediatrician</a></li>
-							<li><a href="#0">More....</a></li>
+<!--							<li><a href="#0">More....</a></li>-->
 						</ul>
 					</div>
 				</div>
