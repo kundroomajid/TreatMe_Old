@@ -249,14 +249,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
               <i class="pe-7s-user"></i>
               <h3>Professional statement</h3>
 <!--               retrive details from table qualifications-->
-              <?php 
+              <?php
                $query1="SELECT * FROM tb_qualifications where doct_id = $doc_id";
             $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
             $cdrow1=mysqli_fetch_array($result1);
               $degree = strtoupper($cdrow1['degree']);
               $institute = strtoupper($cdrow1['institute']);
               $experience = $cdrow1['experience'];
-              
 
               ?>
               <p><?= $degree ?> from ( <?= $institute ?> ), <?= $experience ?> Years Experience</p>
@@ -271,6 +270,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                       <ul class="bullets">
                         <li><?= $spec1 ?></li>
 <!--                        <li><?= $spec2 ?></li>-->
+
                     </div>
                     <!--
                     <div class="col-lg-6">
@@ -544,7 +544,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <input type='hidden' value='0' id='offset' />
     <input type='hidden' value='<?= $doc_id ?>' id='doc_id' />
-    <div id="loadmore" class="btn btn-primary" style="width:100%">Load More</div>
+    <button id="loadmore" class="btn btn-primary" style="width:100%">Load More</button>
   </div>
 <!-- - - - - - - - - - - - - - - - COMMENTS END HERE - - - - - - - - - - - -->
 
