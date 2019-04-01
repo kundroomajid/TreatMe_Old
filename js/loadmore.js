@@ -4,15 +4,19 @@ offset =  document.getElementById('offset');
 doc = document.getElementById('doc_id');
 doc_id = doc.value;
 loadmore.addEventListener('click', function(e){
-  offset.value =  (parseInt(offset.value))+1;
+  os = parseInt(offset.value);
   //window.location = "loadmore.php?doc_id="+doc_id+"&offset="+offset.value;
   $.ajax({
     type : "POST",
-    url : "loadmore.php?doc_id="+doc_id+"&offset="+offset.value,
+    beforeSend: function(){ $("#loadmore").attr("disabled", true); },
+    complete: function(){ $("#loadmore").attr("disabled", false); },
+    url : "loadmore.php?doc_id="+doc_id+"&offset="+os,
     success:function(data){
       comments.innerHTML = comments.innerHTML + data;
     }
   });
+  os = os + 3;
+  offset.value = os;
 });
 
 
