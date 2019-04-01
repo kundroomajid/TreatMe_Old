@@ -110,7 +110,7 @@ include("config.php");?>
 							$disp = $count;
 						}
 						?>
-						<h4><strong>Showing <?= "$disp";?></strong> of <?= "$total_pages";?> results</h4>
+						<h4><strong>Showing <?= "$disp";?></strong> of <?= "$count";?> results</h4>
 					</div>
 
 					<div class="col-md-6">
