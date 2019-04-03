@@ -3,7 +3,7 @@
   $doc_id = isset($_REQUEST['doc_id'])?$_REQUEST['doc_id']:null;
   $offset = isset($_REQUEST['offset'])?$_REQUEST['offset']:0;
   
-$rowperpage = 2;
+$rowperpage = 3;
   if($doc_id!=null){
     
     
