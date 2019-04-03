@@ -2,9 +2,12 @@
   include_once('config.php');
   $doc_id = isset($_REQUEST['doc_id'])?$_REQUEST['doc_id']:null;
   $offset = isset($_REQUEST['offset'])?$_REQUEST['offset']:0;
-
+  
+$rowperpage = 2;
   if($doc_id!=null){
-    $query="SELECT * FROM vw_comments  WHERE doc_id= $doc_id ORDER BY date DESC LIMIT 3 OFFSET $offset";
+    
+    
+    $query="SELECT * FROM vw_comments  WHERE doc_id= $doc_id ORDER BY date DESC LIMIT $offset,$rowperpage";
     $result=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
     $count = mysqli_num_rows($result);
     if($count>0){
@@ -57,6 +60,7 @@
               ?>
             </div>
             <div class="rev-info">
+              
               <h6><?= $pat_name ?></h6>  <small><?= $date; ?></small>
             </div>
             <div class="rev-text">

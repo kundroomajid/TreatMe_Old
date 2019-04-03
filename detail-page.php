@@ -56,7 +56,13 @@ if($doc_id!=null){
   $row = mysqli_fetch_array($res);
   $onestars = $row['stars'];
 	$onestars = ($onestars / $total) *100;
-
+  
+  
+	 $sql = "SELECT count(*) as t_comments from comments where doc_id = $doc_id";
+  $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+  $row = mysqli_fetch_array($res);
+  $total_comments = $row['t_comments'];
+  
 	
 	
 	
@@ -576,21 +582,98 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-  </div>
-  <!-- End review-container -->
-
-</div>
 
 <!-- - - - - - - - - - - - - - - - COMMENTS BEGIN HERE - - - - - - - - - - - -->
+      <div class="box_general_3">
+    <h4>Showing <i id="count"> 3 </i> of <i><?=$total_comments?></i> Comments</h4>
+      <?php
 
-  <div class="box_general_3">
-    <h4>Comments</h4>
-    <div class="" id="comments">
+  
+$rowperpage = 3;    
+    $query="SELECT * FROM vw_comments  WHERE doc_id= $doc_id ORDER BY date DESC LIMIT 0, $rowperpage";
+    $result=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
+    $count = mysqli_num_rows($result);
+    if($count>0)
+    {
+      while ($cdrow=mysqli_fetch_array($result))
+      {
+        $pat_name=$cdrow["pat_name"];
+        $comment = $cdrow["comment"];
+        $date = $cdrow["date"];
+        $pat_id = $cdrow['pat_id'];
+        $pic = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' width = '60px' height ='60px'/>";
+?>
+
+        <div class="review-box clearfix">
+          <div class ='rev-thumb'><?= $pic ?></div>
+          <div class="rev-content">
+            <div class="rating">
+               <?php 
+          $query1 = "Select rate as rating from tb_rating where doc_id = $doc_id and pat_id = $pat_id ORDER BY timestamp DESC LIMIT 1";
+        $result1=mysqli_query($conn,$query1) or die ("Query to get data from first table failed: ".mysqli_error());
+        $cdrow1=mysqli_fetch_array($result1);
+        $rating = $cdrow1['rating'];
+               $x = 0;
+											$avg_rating = round($rating,0);
+											
+                                            if($avg_rating <= 5)
+                                            	{
+                                            		for ($x; $x < $avg_rating; $x++) 
+                                            			{
+                                            				echo "<i class='icon_star voted'></i>";
+                                            			}
+                                              		$diff = 5-$x;
+                                              		for ($i = 0; $i < $diff; $i++) 
+                                            			{
+                                            				echo "<i class='icon_star'></i>";
+                                            			}
+                                            	}
+                                            
+                                          
+                                              else 
+                                              	{
+												  echo ('<i class="icon_star"></i>
+												<i class="icon_star"></i>
+												<i class="icon_star"></i>
+												<i class="icon_star"></i>
+												<i class="icon_star "></i>');
+											  	}
+              
+              
+              
+              ?>
+            
+            </div>
+            <div class="rev-info">
+              <h6><?= $pat_name ?></h6>  <small><?= $date; ?></small>
+            </div>
+            <div class="rev-text">
+              <p><?= $comment ?></p>
+            </div>
+          </div>
+        </div>
+      <?php
+      }?>
+        <div class="" id="comments">
     </div>
-    <input type='hidden' value='0' id='offset' />
+    <input type='hidden' value='3' id='offset' />
     <input type='hidden' value='<?= $doc_id ?>' id='doc_id' />
     <button id="loadmore" class="btn btn-primary" style="width:100%">Load More</button>
   </div>
+      
+  </div>
+      
+   <?php }
+        else
+        {
+         echo('<h4>No Comments Yet!</h4>');
+        }
+          ?>
+
+    
+  <!-- End review-container -->
+
+</div>
 <!-- - - - - - - - - - - - - - - - COMMENTS END HERE - - - - - - - - - - - -->
 
 </div>
