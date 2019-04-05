@@ -46,11 +46,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 		echo '<script type="text/javascript"> window.location = "./welcomed.php"; </script>';
 //      header("location:   welcomed.php");
     }
-    else
+    else if($user_type == 'p')
     {
 		echo '<script type="text/javascript"> window.location = "./welcomep.php"; </script>';
 //      header("location:   welcomep.php");
     }
+    else if($user_type == 'c')
+    {
+		echo '<script type="text/javascript"> window.location = "./welcomec.php"; </script>';
+    }
+    
+    
 	  echo '<script type="text/javascript"> window.location = "./welcome.php"; </script>';
 //    header("location:   welcome.php");
   }

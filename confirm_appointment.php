@@ -3,7 +3,7 @@
 //include("header.php");
 include("session.php");
 include("config.php");
-if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION['user_type']=='d' ){
+if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION['user_type']=='d' || $_SESSION['user_type']=='c'){
 
   $tmp_id = isset($_GET['tmp_id'])?$_GET['tmp_id']:null;
   $confirmed = isset($_GET['confirmed'])?$_GET['confirmed']:null;

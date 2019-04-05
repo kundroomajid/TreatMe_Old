@@ -4,9 +4,8 @@
   $offset = isset($_REQUEST['offset'])?$_REQUEST['offset']:0;
   
 $rowperpage = 3;
-  if($doc_id!=null){
-    
-    
+  if($doc_id!=null)
+  {
     $query="SELECT * FROM vw_comments  WHERE doc_id= $doc_id ORDER BY date DESC LIMIT $offset,$rowperpage";
     $result=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
     $count = mysqli_num_rows($result);

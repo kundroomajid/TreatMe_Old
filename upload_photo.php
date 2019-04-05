@@ -107,7 +107,19 @@ uploadImage.onchange = function() {
 
   	                  <input type="submit" class = "btn_1" value = "Upload" />
                       <?= "$output";?>
-                      	<p class="text-center"><a href="./login.php" class="btn_1 medium">Proceed</a></p>
+                                  <?php
+                                  if(isset($_SESSION['login_user']))
+                                    {
+                                   echo ('<p class="text-center"><a href="./welcome.php" class="btn_1 medium">Proceed</a></p>');
+                                  }
+                                  
+                                  else
+                                  {
+                                    echo('<p class="text-center"><a href="./login.php" class="btn_1 medium">Proceed</a></p>');
+                                  }
+                                  
+                                  ?>
+                      	
                     </div>
                   </div>
                 </div>

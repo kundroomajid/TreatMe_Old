@@ -83,6 +83,10 @@ else if($user_type == 'p')
       $link = "./register2.php?email=$email";
 
     }
+else if($user_type == 'c')
+{
+  $link = "./registerclinic.php?email=$email";
+}
 else
 {
 

@@ -4,7 +4,6 @@ offset =  document.getElementById('offset');
 doc = document.getElementById('doc_id');
 doc_id = doc.value;
 
-
   
 loadmore.addEventListener('click', function(e){
   os = parseInt(offset.value);
@@ -18,6 +17,7 @@ loadmore.addEventListener('click', function(e){
     success:function(data){
       comments.innerHTML = comments.innerHTML + data;
       count.innerHTML = os;
+      
     }
   });
   os = os + 3;
