@@ -16,7 +16,7 @@ else
  $page = 1;
 }
 
-$num_results_on_page = 10;// number of details displayed
+$num_results_on_page = 3;// number of details displayed
 $offset = ($page-1) * $num_results_on_page;
 
 
@@ -78,21 +78,13 @@ $count = mysqli_num_rows($result);
 
 else
 {
-//query to get count of doctors and clinics
-	$sql = "SELECT count(*) as c1 from vw_doctor";
+	$sql = "SELECT count(*) as total_records from vw_doctor union select count(*) from vw_clinic";
 $result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$c1 = mysqli_fetch_array($result)[0];
-	$sql2 = "SELECT count(*) as c2 from vw_clinic";
-	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$c2 = mysqli_fetch_array($result2)[0];
-
-	$total_rows = $c1 + $c2;
-	$total_records = $total_rows;
-	
+$total_rows = mysqli_fetch_array($result)[0];
+$total_records = $total_rows;
 $total_pages = ceil($total_rows / $num_results_on_page);
-	
-	
-  
+  echo($total_pages);
+
 	
 //$query="SELECT * FROM vw_doctor ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
 //$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
@@ -101,7 +93,6 @@ $total_pages = ceil($total_rows / $num_results_on_page);
   $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor UNION SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
-	
 	
 }
 
@@ -358,38 +349,40 @@ include("config.php");?>
 					
 <nav aria-label="" class="add_top_20"> 
 						<ul class="pagination pagination-sm">
-										<?php 
-							if($total_pages > 1)
-							{
-								$curr_page = $_GET['page']?$_GET['page']:1;
-								if($curr_page >1)
-									{
-									$ppage = $page -1;
-										echo("<li class='page-item '><a class='page-link' href='list.php?page=$ppage$district$sp$que'> Prev </a></li>");
-									}
-								for ($page = 1; $page <= $total_pages; $page++) 
-								{
-									
-									
-									if($page == $curr_page)
-									{
-										echo("<li class='page-item active '><a class='page-link' href='list.php?page=$page$district$sp$que'> $page </a></li>");
-									}
-									else
-									{
-										echo("<li class='page-item '><a class='page-link' href='list.php?page=$page$district$sp$que'> $page </a></li>");
-									}
-    							
-								} 
-//								next page
-							$npage = $curr_page + 1;
-										echo("<li class='page-item '><a class='page-link' href='list.php?page=$npage$district$sp$que'> Next </a></li>");
-								
-							}
+				<?php if (ceil($total_pages / $num_results_on_page) > 0): ?>
+				<?php if ($page > 1): ?>
+				<li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page-1 ?><?php echo $district ?><?php echo $sp ?><?php echo $que ?>">Prev</a></li>
+				<?php endif; ?>		
 							
-							?>
+				
+<!--
+				<?php if ($page > 3): ?>
+				<li class="page-item "><a class="page-link" href="list.php?page=1">1</a></li>
+				<li class="page-item ">...</li>
+				<?php endif; ?>
+-->
+
+				<?php if ($page-2 > 0): ?><li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page-2 ?><?php echo $district ?><?php echo $sp ?><?php echo $que ?>"><?php echo $page-2 ?></a></li><?php endif; ?>
+				<?php if ($page-1 > 0): ?><li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page-1 ?><?php echo $district ?><?php echo $sp?><?php echo $que ?>"><?php echo $page-1 ?></a></li><?php endif; ?>
+
+				<li class="page-item active"><a class="page-link" href="list.php?page=<?php echo $page ?><?php echo $district ?><?php echo $sp?><?php echo $que ?>"><?php echo $page ?></a></li>
+
+				<?php if ($page+1 < ceil($total_pages / $num_results_on_page)+1): ?><li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page+1 ?><?php echo $district ?><?php echo $sp?><?php echo $que ?>"><?php echo $page+1 ?></a></li><?php endif; ?>
+				<?php if ($page+2 < ceil($total_pages / $num_results_on_page)+1): ?><li class="page-item"><a class="page-link"  href="list.php?page=<?php echo $page+2 ?><?php echo $district ?><?php echo $sp?><?php echo $que ?>"><?php echo $page+2 ?></a></li><?php endif; ?>
+
+				<?php if ($page < ceil($total_pages / $num_results_on_page)-2): ?>
+				<li class="page-item">...</li>
+				<li class="page-item"><a class="page-link" href="list.php?page=<?php echo ceil($total_pages / $num_results_on_page) ?>"><?php echo ceil($total_pages / $num_results_on_page) ?></a></li>
+				<?php endif; ?>
+
+				<?php if ($page < ceil($total_pages / $num_results_on_page)): ?>
+				<li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page+1 ?><?php echo $district ?><?php echo $sp?><?php echo $que ?>">Next</a></li>
+				<?php endif; ?>
+			</ul>
+			<?php endif; ?>
 							
 
+					
 					
 
 <!--

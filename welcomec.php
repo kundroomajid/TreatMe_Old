@@ -192,7 +192,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
         <div class="tab-pane" id ="myappointments">
           <table class='table'>
             <thead>
-              <tr><th>Appt Id</th><th>Date</th><th>Patient Name</th><th>Shift</th><th>Queue No</th><th>&nbsp;</th></tr>
+              <tr><th>Appt Id</th><th>Date</th><th>Patient Name</th><th>Shift</th><th>Queue No</th><th>Status</th></tr>
             </thead>
             <tbody>
           <?php

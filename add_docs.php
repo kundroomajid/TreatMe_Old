@@ -3,6 +3,7 @@ include("config.php");
 include("session.php");
 $msg = $_SESSION['msg'];
 $clinic_id = isset($_SESSION['id'])?$_SESSION['id']:null;
+$blob = addslashes(file_get_contents('./img/user.png', true));
 
 if((isset($_POST['doc_name']))&& isset($_POST['doc_email']) && isset($_POST['doc_password']))
 {
@@ -22,9 +23,9 @@ if((isset($_POST['doc_name']))&& isset($_POST['doc_email']) && isset($_POST['doc
      $evening_start_time = (new DateTime($_POST['evening_start_time']))->format("H:i");
      $evening_end_time = (new DateTime($_POST['evening_end_time']))->format("H:i");
 
-    echo($doc_email);
+   
 
-$sql ="INSERT into tb_user (user_name,user_email,user_password,user_phone,user_type,active,gender)          values('$doc_name','$doc_email','$doc_password',$doc_phone,'d',1,'$gender')";
+$sql ="INSERT into tb_user (user_name,user_email,user_password,user_phone,user_type,active,gender,district,photo)          values('$doc_name','$doc_email','$doc_password',$doc_phone,'d',1,'$gender','$district','$blob')";
   if(mysqli_query($conn, $sql))
      {
        //  get doc id generated
