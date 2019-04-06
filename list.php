@@ -28,17 +28,25 @@ if(isset($_GET['dist']))
 $district = "&dist=".$_GET['dist'];
 $dist = $_GET['dist'];	
 	
-$sql = "SELECT count(*) as total_records from vw_doctor WHERE district = '$dist'";
+	//query to get count of doctors and clinics
+	$sql = "SELECT count(*) as c1 from vw_doctor where district = '$dist'";
 $result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$total_rows = mysqli_fetch_array($result)[0];
-$total_records = $total_rows;
-$total_pages = ceil($total_rows / $num_results_on_page);
+$c1 = mysqli_fetch_array($result)[0];
+	$sql2 = "SELECT count(*) as c2 from vw_clinic where district = '$dist'";
+	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$c2 = mysqli_fetch_array($result2)[0];
 
+	$total_rows = $c1 + $c2;
+	$total_records = $total_rows;
 	
-
-$query ="SELECT * FROM vw_doctor WHERE district = '$dist' ORDER BY avg_rating DESC LIMIT $offset, $num_results_on_page ";
+$total_pages = ceil($total_rows / $num_results_on_page);
+	
+  $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor where district ='$dist' UNION SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic where district ='$dist' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
+	
+	
+	
 }
 else if (isset($_GET['spec'])){
 $sp = "&spec=".$_GET['spec'];	
@@ -63,17 +71,22 @@ else if (isset($_GET['q']))
  $que = "&q=".$_GET['q'];
 $q = $_GET['q'];
 	
-	$sql = "SELECT count(*) as total_records from vw_doctor WHERE `user_name` LIKE '%$q%'";
+	$sql = "SELECT count(*) as c1 from vw_doctor WHERE `user_name` LIKE '%$q%'";
 $result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$total_rows = mysqli_fetch_array($result)[0];
-$total_records = $total_rows;
-$total_pages = ceil($total_rows / $num_results_on_page);
+$c1 = mysqli_fetch_array($result)[0];
+	$sql2 = "SELECT count(*) as c2 from vw_clinic WHERE `clinic_name` LIKE '%$q%'";
+	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$c2 = mysqli_fetch_array($result2)[0];
 
+	$total_rows = $c1 + $c2;
+	$total_records = $total_rows;
 	
+$total_pages = ceil($total_rows / $num_results_on_page);
 	
-	$query="SELECT * FROM vw_doctor WHERE `user_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
+  $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor WHERE `user_name` LIKE '%$q%' UNION SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic  WHERE `clinic_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
+
 }
 
 else
