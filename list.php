@@ -1,4 +1,5 @@
 <?php include("header.php");
+$radio_search = $_GET['radio_search'];
 if(isset($_GET['q']))
 {
 $q = $_GET['q'];
@@ -19,6 +20,7 @@ else
 $num_results_on_page = 10;// number of details displayed
 $offset = ($page-1) * $num_results_on_page;
 
+$rs_query = isset($_GET['radio_search'])?"&radio_search=".$_GET['radio_search']:"";
 
 $district = ' ';
 $spec = ' '; 
@@ -70,22 +72,57 @@ else if (isset($_GET['q']))
 {
  $que = "&q=".$_GET['q'];
 $q = $_GET['q'];
-	
-	$sql = "SELECT count(*) as c1 from vw_doctor WHERE `user_name` LIKE '%$q%'";
-$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$c1 = mysqli_fetch_array($result)[0];
+	//	if user selcts clinic radio button on homepage
+	if($radio_search == 'clinic')
+	{
 	$sql2 = "SELECT count(*) as c2 from vw_clinic WHERE `clinic_name` LIKE '%$q%'";
 	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$c2 = mysqli_fetch_array($result2)[0];
+		$c2 = mysqli_fetch_array($result2)[0];
+	$total_rows = $c2;
+	$total_records = $total_rows;
+		
+		$total_pages = ceil($total_rows / $num_results_on_page);
+	
+  $query="SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic WHERE `clinic_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
+$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$count = mysqli_num_rows($result);	
+	}
+	
+	
+//	if user selcts doctor radio button on homepage
+	else if($radio_search =='doctor')
+	{
+	$sql = "SELECT count(*) as c1 from vw_doctor WHERE `user_name` LIKE '%$q%'";
+		$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+		$c1 = mysqli_fetch_array($result)[0];
+
+	$total_rows = $c1;
+	$total_records = $total_rows;
+	
+		$total_pages = ceil($total_rows / $num_results_on_page);
+	
+  $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor WHERE `user_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
+$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$count = mysqli_num_rows($result);	
+	}
+	else
+	{
+		$sql = "SELECT count(*) as c1 from vw_doctor WHERE `user_name` LIKE '%$q%'";
+		$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+		$c1 = mysqli_fetch_array($result)[0];
+	$sql2 = "SELECT count(*) as c2 from vw_clinic WHERE `clinic_name` LIKE '%$q%'";
+	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
+		$c2 = mysqli_fetch_array($result2)[0];
 
 	$total_rows = $c1 + $c2;
 	$total_records = $total_rows;
 	
-$total_pages = ceil($total_rows / $num_results_on_page);
+		$total_pages = ceil($total_rows / $num_results_on_page);
 	
   $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor WHERE `user_name` LIKE '%$q%' UNION SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic  WHERE `clinic_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
+	}
 
 }
 
@@ -147,6 +184,7 @@ include("config.php");?>
 							<input type="submit" value="Search" />
 						</div>
 					</div>
+					</form>
 				</div>
 				<!-- /row -->
 			</div>
@@ -159,14 +197,33 @@ include("config.php");?>
 				<ul class="clearfix">
 					<li>
 						<h6>Type</h6>
-						<div class="switch-field">
-							<input type="radio" id="all" name="type_patient" value="all" checked="" />
+						<div class="switch-field" id="switch">
+							<input type="radio" id="all" name="type_patient" value="all"  />
 							<label for="all">All</label>
-							<input type="radio" id="doctors" name="type_patient" value="doctors" />
+							<input type="radio" id="doctors" name="type_patient" value="doctor" />
 							<label for="doctors">Doctors</label>
-							<input type="radio" id="clinics" name="type_patient" value="clinics" />
+							<input type="radio" id="clinics" name="type_patient" value="clinic"  />
 							<label for="clinics">Clinics</label>
 						</div>
+						<script>			
+    document.getElementById("doctors").onchange = function() {
+        if (this.selectedIndex!==0) {
+            window.location.href = '?q=&radio_search='+ this.value;
+			
+			
+        }        
+    };
+	document.getElementById("clinics").onchange = function() {
+        if (this.selectedIndex!==0) {
+            window.location.href = '?q=&radio_search='+ this.value;
+        }        
+    };
+							document.getElementById("all").onchange = function() {
+        if (this.selectedIndex!==0) {
+            window.location.href = '?q=&radio_search='+ this.value;
+        }        
+    };
+</script>	
 					</li>
 					
 					<li>
@@ -199,7 +256,7 @@ include("config.php");?>
 					<script>
     document.getElementById("dist").onchange = function() {
         if (this.selectedIndex!==0) {
-            window.location.href = '?dist='+ this.value;
+            window.location.href = '?dist='+ this.value+'<?=$rs_query?>';
         }        
     };
 </script>	
@@ -250,7 +307,9 @@ include("config.php");?>
             while ($cdrow=mysqli_fetch_array($result)) {
               $user_type = $cdrow["user_type"];
                 $user_name=$cdrow["user_name"];
+				$clinic_name = $cdrow["clinic_name"];
                 $doc_id=$cdrow["doc_id"];
+				$clinic_id = $cdrow["clinic_id"];
               $doc_district = strtoupper($cdrow["district"]);
 				$specialization = $cdrow["specialization"];
                 $image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' />";
@@ -298,7 +357,8 @@ include("config.php");?>
                               }
                             else if($user_type == 'c')
                             {
-                              echo( "<h3><font color='blue'><i >Clinic</font></i> $user_name</h3>");
+								
+                              echo( "<h3><font color='blue'><i >Clinic</font></i> $clinic_name $user_name</h3>");
                               echo("<p> Dist : $doc_district</p>");
                             }
               
@@ -346,14 +406,17 @@ include("config.php");?>
 						<ul>
 							<li><a href="#0" onclick="onHtmlClick('Doctors', 0)" class="btn_listing">View on Map</a></li>
 							<li><a href=" ">Directions</a></li>
+							
                           <?php
+
                               if ($user_type == 'd')
                               {
                                 echo("<li><a href='./detail-page.php?doc_id=".$doc_id."' class='btn_listing'>View Profile</a></li>");
                               }
                             else if($user_type == 'c')
                             {
-                               echo("<li><a href='./detail-clinic.php?clinic_id=".$doc_id."' class='btn_listing'>View Profile</a></li>");
+								
+                               echo("<li><a href='./detail-clinic.php?clinic_id=".$doc_id.$clinic_id."' class='btn_listing'>View Profile</a></li>");
                             }
               
                           ?>

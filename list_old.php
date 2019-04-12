@@ -145,6 +145,7 @@ include("config.php");?>
 							<input type="radio" id="clinics" name="type_patient" value="clinics" />
 							<label for="clinics">Clinics</label>
 						</div>
+						
 					</li>
 					
 					<li>

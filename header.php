@@ -100,7 +100,7 @@ include('session.php');?>
 
 									</li>
 									<li class="menu">
-										<a href="./list.php" class="show-submenu">Find a Hospital<i class="menu"></i></a>
+										<a href="./list.php?q=&radio_search=clinic" class="show-submenu">Find a Clinic<i class="menu"></i></a>
 
 									</li>
 

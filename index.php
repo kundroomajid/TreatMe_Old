@@ -135,7 +135,7 @@ include("header.php");
 							<li><a href="list.php?pulwama"><strong>08</strong>Pulwama</a></li>
 							<li><a href="list.php?shopain"><strong>09</strong>Shopain</a></li>
 							<li><a href="list.php?srinagar"><strong>10</strong>Srinagar</a></li>
-<!--							<li><a href="#0">More...</a></li>-->
+							<li><a href="#0">More...</a></li>
 						</ul>
 					</div>
 				</div>
@@ -155,7 +155,7 @@ include("header.php");
 							<li><a href="list.php?spec=optho"><strong>07</strong>Ophthalmologist</a></li>
 							<li><a href="list.php?spec=opto"><strong>08</strong>Optometrist</a></li>
 							<li><a href="list.php?spec=pedia"><strong>09</strong>Pediatrician</a></li>
-<!--							<li><a href="#0">More....</a></li>-->
+							<li><a href="#0">More....</a></li>
 						</ul>
 					</div>
 				</div>
@@ -185,7 +185,7 @@ Like millions of Healthcare users, book your appointments anytime, anywhere.
 							<path stroke-linecap="round" stroke-linejoin="round" class="draw-arrow tail-1" d="M40.6,78.1C39,71.3,37.2,64.6,35.2,58"></path>
 							<path stroke-linecap="round" stroke-linejoin="round" class="draw-arrow tail-2" d="M39.8,78.5c-7.2,1.7-14.3,3.3-21.5,4.9"></path>
 						</svg>
-							<a href="#0" class="fadeIn"><img src="./img/apple_app.png" alt="" width="150" height="50" data-retina="true" /></a>
+<!--							<a href="#0" class="fadeIn"><img src="./img/apple_app.png" alt="" width="150" height="50" data-retina="true" /></a>-->
 							<a href="#0" class="fadeIn"><img src="./img/google_play_app.png" alt="" width="150" height="50" data-retina="true" /></a>
 						</div>
 					</div>
