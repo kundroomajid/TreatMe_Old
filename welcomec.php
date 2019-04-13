@@ -258,8 +258,8 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 $pat_name = $cdrow3["user_name"];
 
                 echo "<tr><td>$tmp_id</td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>unconfirmed</td>
-                <td>
-                  <a class='btn btn-sm btn-danger' href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=0'>X</a>
+                <td>                
+                  <a class='btn btn-sm btn-danger' href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=0'><span class='icon_close_alt2'></span></a>
                   <a href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=1' class='btn btn-sm btn-success'><span class='icon_check_alt2'></span></a>
                 </td></tr>" ;
                 //<a href='#' class='btn btn-sm btn-success'><span class='icon_check_alt2'></span> </a>
@@ -337,10 +337,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
             <div class="form-group row">
               <label class="col-lg-3 col-form-label form-control-label">Specialization</label>
               <div class="col-lg-9">
-                <input class="form-control" type="text" name ="specialization" id = "specialization" value="<?= $specialization ?>"> </div>
-                <script type="text/javascript">
-                $('#specialization').tagsInput();
-                </script>
+                <input class="form-control" type="text"  id = "specialization" value="<?= $specialization ?>"> </div>
               </div>
 -->
 <!--
@@ -497,7 +494,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
         <div class="tab-pane" id="addinfo">
             <table class='table table-responsive'>
               <thead>
-                <tr><th>Doc Id</th><th>Name</th><th>Degree</th><th>Specalization</th><th>&nbsp;</th></tr>
+                <tr><th>Doc Id</th><th>Name</th><th>Degree</th><th>Specalization</th><th>Delete</th></tr>
               </thead>
               <tbody>
                 <?php
@@ -524,7 +521,9 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                       $degree = strtoupper($cdrow1['degree']);
                                 
                     
-                    echo "<tr><td>$doc_id</td><td>$user_name</td><td>$degree</td><td>$specalization</td></tr>" ;
+                    echo "<tr><td>$doc_id</td><td>$user_name</td><td>$degree</td><td>$specalization</td>
+                    <td><a class = 'btn btn-danger' href='./deletedoc.php?doc_id=$doc_id'><span class = 'icon_close_alt2'> </span></a></td>
+                    </tr>" ;
                   }
                   // }
                 }else 

@@ -1,6 +1,6 @@
 <?php
 include("config.php");
-$query = $_GET['q'];
+$query =  mysqli_real_escape_string($conn,$_GET['q']);
 echo $query;
 
  ?>

@@ -4,13 +4,13 @@ $user_type = isset($_SESSION['user_type'])?$_SESSION['user_type']:null;
 //for edit profile
 if($id!=null && $_SERVER["REQUEST_METHOD"] == "POST")
 {
-  $name = $_POST['name'];
-  $phone_no = $_POST['phone_no'];
-  $gender = $_POST['gender'];
-  $dob = $_POST['dob'];
-  $address = $_POST['address'];
-  $district = $_POST['district'];
-  $pincode = $_POST['pin'];
+  $name =  mysqli_real_escape_string($conn,$_POST['name']);
+  $phone_no =  mysqli_real_escape_string($conn,$_POST['phone_no']);
+  $gender =  mysqli_real_escape_string($conn,$_POST['gender']);
+  $dob =  mysqli_real_escape_string($conn,$_POST['dob']);
+  $address =  mysqli_real_escape_string($conn,$_POST['address']);
+  $district =  mysqli_real_escape_string($conn,$_POST['district']);
+  $pincode =  mysqli_real_escape_string($conn,$_POST['pin']);
 
   
 
@@ -19,10 +19,10 @@ if($id!=null && $_SERVER["REQUEST_METHOD"] == "POST")
   {
     $sql = "UPDATE tb_user SET user_name= '$name',user_phone = '$phone_no',gender = '$gender',dob = '$dob',district ='$district',pincode = '$pincode', address='$address' WHERE user_id='$id'";
 
-    $specialization = $_POST['specialization'];
-    $registration_council = $_POST['registration_council'];
-    $registration_year = $_POST['registration_year'];
-    $registration_no = $_POST['registration_no'];
+    $specialization =  mysqli_real_escape_string($conn,$_POST['specialization']);
+    $registration_council =  mysqli_real_escape_string($conn,$_POST['registration_council']);
+    $registration_year =  mysqli_real_escape_string($conn,$_POST['registration_year']);
+    $registration_no =  mysqli_real_escape_string($conn,$_POST['registration_no']);
     $morning_start_time = $_POST['morning_start_time'];
     $morning_end_time = $_POST['morning_end_time'];
     $evening_start_time = $_POST['evening_start_time'];
@@ -39,9 +39,9 @@ if($id!=null && $_SERVER["REQUEST_METHOD"] == "POST")
   else
   {
     $sql2 = "";
-    $height = $_POST['height'];
-    $weight = $_POST['weight'];
-    $blood_group = $_POST['blood_group'];
+    $height =  mysqli_real_escape_string($conn,$_POST['height']);
+    $weight =  mysqli_real_escape_string($conn,$_POST['weight']);
+    $blood_group =  mysqli_real_escape_string($conn,$_POST['blood_group']);
     $sql2 = "UPDATE tb_patient SET height=$height, weight=$weight, blood_group='$blood_group' WHERE pat_id=$id";
   }
 

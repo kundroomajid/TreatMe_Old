@@ -44,10 +44,7 @@ $_SESSION['msg'] = ' ';
 								<div class="box_form">
 										<div class="form-group">
 												<label>Specializations</label>
-												<input type="text" id="specialization" name ="specialization"class="form-control" placeholder="What is Your specialization" />
-												<script type="text/javascript">
-													$('#specialization').tagsInput();
-												</script>
+												<input type="text" name ="specialization" class="form-control" placeholder="What is Your specialization" />											
 										</div>
 										<div class="form-group">
 														<label>Degree</label>
@@ -123,7 +120,7 @@ $_SESSION['msg'] = ' ';
 	<?php
 include("footer.php");
 
-$doc_email = $_GET['email'];
+$doc_email = mysqli_real_escape_string($conn,$_GET['email']);
 $sql = "SELECT user_id FROM tb_user WHERE user_email = '$doc_email'";
 
  $result = mysqli_query($conn,$sql);
@@ -133,24 +130,24 @@ $sql = "SELECT user_id FROM tb_user WHERE user_email = '$doc_email'";
 	echo $doc_id;
 if((isset($_POST['specialization'])) & (isset($_POST['morning_start_time']))& (isset($_POST['evening_start_time']))){
             // Verify data
-  $specialization = $_POST['specialization'];
-	$degree = $_POST['degree'];
-	$institution = $_POST['institution'];
-	$experience = $_POST['experience'];
-	$registration_no = $_POST['registration_no'];
-	$registration_year= $_POST['registration_year'];
-	$registration_council = $_POST['registration_council'];
+  	$specialization = mysqli_real_escape_string($conn,$_POST['specialization']);
+	$degree = mysqli_real_escape_string($conn,$_POST['degree']);
+	$institution = mysqli_real_escape_string($conn,$_POST['institution']);
+	$experience = mysqli_real_escape_string($conn,$_POST['experience']);
+	$registration_no = mysqli_real_escape_string($conn,$_POST['registration_no']);
+	$registration_year= mysqli_real_escape_string($conn,$_POST['registration_year']);
+	$registration_council = mysqli_real_escape_string($conn,$_POST['registration_council']);
 //	$clinic = $_POST['clinic'];
 //	$address = $_POST['address'];
     $morning_start_time = (new DateTime($_POST['morning_start_time']))->format("H:i");
-     $morning_end_time = (new DateTime($_POST['morning_end_time']))->format("H:i");
-     $evening_start_time = (new DateTime($_POST['evening_start_time']))->format("H:i");
-     $evening_end_time = (new DateTime($_POST['evening_end_time']))->format("H:i");
+    $morning_end_time = (new DateTime($_POST['morning_end_time']))->format("H:i");
+    $evening_start_time = (new DateTime($_POST['evening_start_time']))->format("H:i");
+    $evening_end_time = (new DateTime($_POST['evening_end_time']))->format("H:i");
 
 
 
-$sql ="INSERT into tb_doctor (doc_id,specialization,registration_council,registration_no,registration_year,morning_start_time,morning_end_time,evening_start_time,evening_end_time) values('$doc_id','$specialization','$registration_council','$registration_no','$registration_year','$morning_start_time','$morning_end_time','$evening_start_time','$evening_end_time')";
-$sql2 = "INSERT into tb_qualifications(doct_id,degree,institute,experience) values('$doc_id','$degree','$institution','$experience')";
+$sql ="INSERT into tb_doctor (doc_id,specialization,registration_council,registration_no,registration_year,morning_start_time,morning_end_time,evening_start_time,evening_end_time,experience) values('$doc_id','$specialization','$registration_council','$registration_no','$registration_year','$morning_start_time','$morning_end_time','$evening_start_time','$evening_end_time',$experience)";
+$sql2 = "INSERT into tb_qualifications(doct_id,degree,institute) values('$doc_id','$degree','$institution')";
 if(mysqli_query($conn, $sql) && mysqli_query($conn, $sql2)){
 	$msg = '<div class="alert alert-success alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -161,12 +158,13 @@ if(mysqli_query($conn, $sql) && mysqli_query($conn, $sql2)){
 window.location = "./upload_photo.php?email='.$doc_email.'";
 </script> ';
 } else {
-    echo '<script language="javascript">';
-    echo 'alert("Error")';
-    echo '</script>';
-    echo "ERROR: Could not able to execute $sql. "
-                            . mysqli_error($conn);
-}
+    $msg = '<div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Error!</strong> Error in saving details 
+  </div>';
+	echo '<script type="text/javascript">
+window.location = "./register-doctor3.php?email='.$doc_email.'";
+</script> ';
 mysqli_close($conn);
 
 
@@ -175,7 +173,7 @@ mysqli_close($conn);
 else {
 	$msg = '<div class="alert alert-success alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Error Please Fill the Registration Form
+    <strong>Alert!</strong> Error Please Fill the Registration Form
   </div>';
 	echo '<script language="javascript">';
 //	echo 'alert("Error Please Fill the Registration Form")';

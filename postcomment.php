@@ -4,8 +4,8 @@
 include("session.php");
 
 include("config.php");
-$doc_id = isset($_GET['doc_id'])?$_GET['doc_id']:null;
-$clinic_id = isset($_GET['clinic_id'])?$_GET['clinic_id']:null;
+$doc_id = isset($_GET['doc_id'])? mysqli_real_escape_string($conn,$_GET['doc_id']):null;
+$clinic_id = isset($_GET['clinic_id'])? mysqli_real_escape_string($conn,$_GET['clinic_id']):null;
 
 $pat_id = isset($_SESSION['id'])?$_SESSION['id']:null;
 if(isset($_SESSION['login_user']))

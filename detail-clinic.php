@@ -6,8 +6,8 @@ $bookerror = $_SESSION['var'];
 $msg = " ";
 
 $curr_date = date("Y-m-d"); // variable gets current date
-$clinic_id = isset($_GET['clinic_id'])?$_GET['clinic_id']:null;
-$pat_id = isset($_SESSION['id'])?$_SESSION['id']:null;
+$clinic_id = isset($_GET['clinic_id'])? mysqli_real_escape_string($conn,$_GET['clinic_id']):null;
+$pat_id = isset($_SESSION['id'])? mysqli_real_escape_string($conn,$_SESSION['id']):null;
 $doc_id = $clinic_id;
 if($clinic_id!=null){
   $query1="SELECT * FROM vw_clinic where clinic_id = $clinic_id";

@@ -1,8 +1,9 @@
 <?php
+
 include("header.php");
 include("config.php");
 include("session.php");
-$doc_email = $_GET['email'];
+$doc_email = mysqli_real_escape_string($conn,$_GET['email']);
 $msg = $_SESSION['msg'];
 
 
@@ -12,11 +13,11 @@ $_SESSION['email'] = $doc_email;
 if((isset($_POST['name']))&isset($_GET['email'])){
 	// Verify data
 
-	$doc_name = $_POST['name'];
-	$phone_no = $_POST['phone_no'];
-	$gender = $_POST['gender'];
-	$dob = $_POST['dob'];
-	$district = $_POST['district'];
+	$doc_name = mysqli_real_escape_string($conn,$_POST['name']);
+	$phone_no = mysqli_real_escape_string($conn,$_POST['phone_no']);
+	$gender = mysqli_real_escape_string($conn,$_POST['gender']);
+	$dob = mysqli_real_escape_string($conn,$_POST['dob']);
+	$district = mysqli_real_escape_string($conn,$_POST['district']);
 
 
 	$sql = "UPDATE tb_user SET user_name= '$doc_name',user_phone= '$phone_no', dob = '$dob',gender = '$gender',district = '$district' WHERE user_email='$doc_email'";

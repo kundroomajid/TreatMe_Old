@@ -19,6 +19,7 @@ if ( !empty($user_password) || !empty($user_email) )
 
      $hash = md5( rand(0,1000) );
      $SELECT = "SELECT user_email From tb_user Where user_email = ? Limit 1";
+     $user_password = md5($user_password);
      $INSERT = "INSERT Into tb_user (user_password,user_email,hash,user_type) values(?,?,?,?)";
      //Prepare statement
      $stmt = $conn->prepare($SELECT);

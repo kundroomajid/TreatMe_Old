@@ -6,14 +6,16 @@ include("session.php");
 include("config.php");
 if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION['user_type']=='p' ){
    $username = ($_SESSION['login_user']);
-  $doc_id = isset($_GET['doc_id'])?$_GET['doc_id']:null;
+  $doc_id = isset($_GET['doc_id'])? mysqli_real_escape_string($conn,$_GET['doc_id']):null;
   $date1 = isset($_GET['date'])?$_GET['date']:null;
   $date = (new DateTime($date1))->format('Y-m-d');
-  $shift = isset($_GET['shift'])?$_GET['shift']:null;
+  $shift = isset($_GET['shift'])? mysqli_real_escape_string($conn,$_GET['shift']):null;
   $pat_id = isset($_SESSION['id'])?$_SESSION['id']:null;
+  $patient_name = isset($_GET['pat_name'])? mysqli_real_escape_string($conn,$_GET['pat_name']):null;
+  
 
   if($doc_id!=null && $pat_id!=null && $shift!=null && $date!=null){
-    if(bookAppointment($doc_id,$pat_id,new DateTime($date),$shift)){
+    if(bookAppointment($doc_id,$pat_id,new DateTime($date),$shift,$patient_name)){
       $query = ("SELECT user_name from tb_user where user_id = $doc_id");
       $result1 = $conn->query($query) or die ("result not properltys") ;
       $row1  = $result1->fetch_array();
@@ -61,7 +63,7 @@ else{
   </script> ';
 }
 
-function bookAppointment($doc_id,$pat_id,$date,$shift){
+function bookAppointment($doc_id,$pat_id,$date,$shift,$patient_name){
   global $conn;
   if(isSlotAvaliable($doc_id,$date,$shift)){
     //$conn = mysqli_connect("localhost", "root","", "appointment") ;
@@ -69,9 +71,10 @@ function bookAppointment($doc_id,$pat_id,$date,$shift){
     //$queue_no = slotsFilled($doc_id,$date,$shift)+1;
     //echo "que no is $queue_no and slot filled ";
 
-    $str = "INSERT INTO tmp_appointment(doc_id,pat_id,appt_date,shift) VALUES ($doc_id,$pat_id,'".$date->format('Y-m-d')."',$shift)";
+    $str = "INSERT INTO tmp_appointment(doc_id,pat_id,name,appt_date,shift) VALUES
+    ($doc_id,$pat_id,'$patient_name','".$date->format('Y-m-d')."',$shift)";
     // echo "$str\n";
-    $result = $conn->query($str);
+    $result = $conn->query($str) or die ($str.'\n'.mysqli_error($conn));
     if(!$result)
       return false;
     return true;
@@ -133,7 +136,7 @@ function slotsFilled($doc_id,$date,$shift){
     <div class="container margin_60_35">
       <div id="login-2">
          
-        <h4 style="color:white" align = "center" >Thank You   <?= "<small><i>$username</i></small>";?>   For Booking Appointment <br /> </h4>
+        <h4 style="color:white" align = "center" >Thank You   <?= "<small><i>$patient_name</i></small>";?>   For Booking Appointment <br /> </h4>
 <!--         <h4 align ='center' style='color:white'><?= "$pat_name" ?></h4>-->
         <p><h4 style="color:white" align = "center"><i>A Mail will be sent upon the confirmation of your appointment</i></p></h4>
       

@@ -9,15 +9,15 @@ $hash=null;
 $password=null;
 
 if(isset($_REQUEST['token']) and isset($_REQUEST['email']) and isset($_REQUEST['user_password'])){
-  $email = $_REQUEST['email'];
-  $hash = $_REQUEST['token'];
-  $password = $_REQUEST['user_password'];
+  $email =  mysqli_real_escape_string($conn,$_REQUEST['email']);
+  $hash =  mysqli_real_escape_string($conn,$_REQUEST['token']);
+  $password =  mysqli_real_escape_string($conn,$_REQUEST['user_password']);
   $sql = "UPDATE tb_user SET user_password='$password' WHERE user_email = '$email' and hash='$hash'";
   $result = mysqli_query($conn,$sql);
   echo "here is it";
 }else if(isset($_REQUEST['token']) and isset($_REQUEST['email'])){
-  $email = $_REQUEST['email'];
-  $hash = $_REQUEST['token'];
+  $email =  mysqli_real_escape_string($conn,$_REQUEST['email']);
+  $hash =  mysqli_real_escape_string($conn,$_REQUEST['token']);
   $sql = "SELECT user_id FROM tb_user WHERE user_email = '$email' and hash='$hash'";
   $result = mysqli_query($conn,$sql);
   $count = mysqli_num_rows($result);

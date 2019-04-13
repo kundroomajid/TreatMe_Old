@@ -1,180 +1,68 @@
-<?php include("header.php");
-$radio_search = $_GET['radio_search'];
-if(isset($_GET['q']))
-{
-$q = $_GET['q'];
-}
-else {
-	$q=null;
-}
+<?php 
+include("header.php");
+include("config.php");
 
-if(isset($_GET["page"]))
-{
- $page = $_GET["page"];
-}
-else
-{
- $page = 1;
-}
+$q = isset($_REQUEST['q'])?$_REQUEST['q']:null;
+$district = isset($_REQUEST['dist'])?$_REQUEST['dist']:null;
+$specialization = isset($_REQUEST['spec'])?$_REQUEST['spec']:null;
+$page = isset($_REQUEST['page'])?$_REQUEST['page']:1;
+$radio_search = isset($_REQUEST['radio_search'])?$_REQUEST['radio_search']:"";
 
-$num_results_on_page = 10;// number of details displayed
+$num_results_on_page = 2;
 $offset = ($page-1) * $num_results_on_page;
 
-$rs_query = isset($_GET['radio_search'])?"&radio_search=".$_GET['radio_search']:"";
+$radio_query = ($radio_search=='doctor')?$radio_query="user_type='d'":(($radio_search=='clinic')?$radio_query="user_type='c'":"");
 
-$district = ' ';
-$spec = ' '; 
+$main_query = "SELECT vw_docs_clinics.*,tb_doctor.specialization FROM vw_docs_clinics LEFT JOIN tb_doctor on vw_docs_clinics.doc_id=tb_doctor.doc_id";
 
-if(isset($_GET['dist']))
-{
-$district = "&dist=".$_GET['dist'];
-$dist = $_GET['dist'];	
-	
-	//query to get count of doctors and clinics
-	$sql = "SELECT count(*) as c1 from vw_doctor where district = '$dist'";
-$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$c1 = mysqli_fetch_array($result)[0];
-	$sql2 = "SELECT count(*) as c2 from vw_clinic where district = '$dist'";
-	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$c2 = mysqli_fetch_array($result2)[0];
+$filters = array();
 
-	$total_rows = $c1 + $c2;
-	$total_records = $total_rows;
-	
-$total_pages = ceil($total_rows / $num_results_on_page);
-	
-  $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor where district ='$dist' UNION SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic where district ='$dist' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
-$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$count = mysqli_num_rows($result);
-	
-	
-	
+if($q!=null)
+	$filters[] = "user_name like '%$q%'";
+if($district!=null)
+	$filters[] = "district='$district'";
+if($specialization!=null)
+	$filters[] = "specialization='$specialization'";
+if($radio_query!="")
+	$filters[] = $radio_query;
+
+if(count($filters)>0){
+	$main_query .= " WHERE ";
+	for($i=0;$i<count($filters)-1;$i++)
+		$main_query .= $filters[$i]. " AND ";	
+	$main_query .= $filters[$i];
 }
-else if (isset($_GET['spec'])){
-$sp = "&spec=".$_GET['spec'];	
+//$main_query .= ($q!=null || $district!=null || $specialization!=null || $radio_search!="")?" WHERE ":"";	
+//$main_query .= ($q==null)?"":"user_name like '%$q%'";
+//$main_query .= ($q!=null && $district!=null)?" AND ":"";
+//$main_query .= ($district==null)?"":"district='$district'";
+//$main_query .= ($q!=null || $district!=null)?" AND ":"";
+//$main_query .= $radio_query;
+//$main_query .= ($q!=null || $district!=null || $radio_query!="")?" AND ":"";
+//$main_query .= ($specialization==null)?"":"specialization='$specialization'";
 
-$spec = $_GET['spec'];
-	
-$sql = "SELECT count(*) as total_records from vw_doctor WHERE `specialization` LIKE '%$spec%'";
-$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$total_rows = mysqli_fetch_array($result)[0];
-$total_records = $total_rows;
-$total_pages = ceil($total_rows / $num_results_on_page);
-	
-	
+//echo($main_query);
 
-$query="SELECT * FROM vw_doctor  WHERE `specialization` LIKE '%$spec%' ORDER BY avg_rating DESC LIMIT $offset, $num_results_on_page";
-$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$count = mysqli_num_rows($result);
-}
+$result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$total_results = mysqli_num_rows($result);
+$total_pages = ceil($total_results / $num_results_on_page);
 
-else if (isset($_GET['q']))
-{
- $que = "&q=".$_GET['q'];
-$q = $_GET['q'];
-	//	if user selcts clinic radio button on homepage
-	if($radio_search == 'clinic')
-	{
-	$sql2 = "SELECT count(*) as c2 from vw_clinic WHERE `clinic_name` LIKE '%$q%'";
-	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
-		$c2 = mysqli_fetch_array($result2)[0];
-	$total_rows = $c2;
-	$total_records = $total_rows;
-		
-		$total_pages = ceil($total_rows / $num_results_on_page);
-	
-  $query="SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic WHERE `clinic_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
-$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$count = mysqli_num_rows($result);	
-	}
-	
-	
-//	if user selcts doctor radio button on homepage
-	else if($radio_search =='doctor')
-	{
-	$sql = "SELECT count(*) as c1 from vw_doctor WHERE `user_name` LIKE '%$q%'";
-		$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-		$c1 = mysqli_fetch_array($result)[0];
+$main_query .= " LIMIT $offset,$num_results_on_page";
+$result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 
-	$total_rows = $c1;
-	$total_records = $total_rows;
-	
-		$total_pages = ceil($total_rows / $num_results_on_page);
-	
-  $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor WHERE `user_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
-$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$count = mysqli_num_rows($result);	
-	}
-	else
-	{
-		$sql = "SELECT count(*) as c1 from vw_doctor WHERE `user_name` LIKE '%$q%'";
-		$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-		$c1 = mysqli_fetch_array($result)[0];
-	$sql2 = "SELECT count(*) as c2 from vw_clinic WHERE `clinic_name` LIKE '%$q%'";
-	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
-		$c2 = mysqli_fetch_array($result2)[0];
-
-	$total_rows = $c1 + $c2;
-	$total_records = $total_rows;
-	
-		$total_pages = ceil($total_rows / $num_results_on_page);
-	
-  $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor WHERE `user_name` LIKE '%$q%' UNION SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic  WHERE `clinic_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
-$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$count = mysqli_num_rows($result);
-	}
-
-}
-
-else
-{
-//query to get count of doctors and clinics
-	$sql = "SELECT count(*) as c1 from vw_doctor";
-$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$c1 = mysqli_fetch_array($result)[0];
-	$sql2 = "SELECT count(*) as c2 from vw_clinic";
-	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$c2 = mysqli_fetch_array($result2)[0];
-
-	$total_rows = $c1 + $c2;
-	$total_records = $total_rows;
-	
-$total_pages = ceil($total_rows / $num_results_on_page);
-	
-	
-  
-	
-//$query="SELECT * FROM vw_doctor ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
-//$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
-//$count = mysqli_num_rows($result);
-  
-  $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor UNION SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
-$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$count = mysqli_num_rows($result);
-	
-	
-}
+?>
+				
 
 
-                
-
-include("config.php");?>
 
 <main>
 		<div id="results">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<?php // TO DO
-						if($count >=10)
-						{
-							$disp = 10;// number of coun displayed
-						}
-						else {
-							$disp = $count;
-						}
-						?>
-						<h4><strong>Showing <?= "$disp";?></strong> of <?= "$total_records";?> results</h4>
+						
+						<h4><strong>Showing <?= "$count";?></strong> results</h4>
+						
 					</div>
 
 					<div class="col-md-6">
@@ -208,19 +96,19 @@ include("config.php");?>
 						<script>			
     document.getElementById("doctors").onchange = function() {
         if (this.selectedIndex!==0) {
-            window.location.href = '?q=&radio_search='+ this.value;
+            window.location.href = '?&radio_search='+ this.value;
 			
 			
         }        
     };
 	document.getElementById("clinics").onchange = function() {
         if (this.selectedIndex!==0) {
-            window.location.href = '?q=&radio_search='+ this.value;
+            window.location.href = '?&radio_search='+ this.value;
         }        
     };
 							document.getElementById("all").onchange = function() {
         if (this.selectedIndex!==0) {
-            window.location.href = '?q=&radio_search='+ this.value;
+            window.location.href = '?&radio_search='+ this.value;
         }        
     };
 </script>	
@@ -256,7 +144,7 @@ include("config.php");?>
 					<script>
     document.getElementById("dist").onchange = function() {
         if (this.selectedIndex!==0) {
-            window.location.href = '?dist='+ this.value+'<?=$rs_query?>';
+            window.location.href = '?dist='+ this.value;
         }        
     };
 </script>	
@@ -305,19 +193,19 @@ include("config.php");?>
 							else
 							{
             while ($cdrow=mysqli_fetch_array($result)) {
-              $user_type = $cdrow["user_type"];
+              	$user_type = $cdrow["user_type"];
                 $user_name=$cdrow["user_name"];
 				$clinic_name = $cdrow["clinic_name"];
                 $doc_id=$cdrow["doc_id"];
 				$clinic_id = $cdrow["clinic_id"];
-              $doc_district = strtoupper($cdrow["district"]);
+              	$doc_district = strtoupper($cdrow["district"]);
 				$specialization = $cdrow["specialization"];
                 $image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' />";
                 $rate_times = $cdrow['rated_by'];
-                 $avg_rating = $cdrow['avg_rating'];
+                $avg_rating = $cdrow['avg_rating'];
             ?>
 					<div class="strip_list wow fadeIn" >
-						<a href="#0" class="wish_bt"></a>
+<!--						<a href="#0" class="wish_bt"></a>-->
 						<figure>
 <!--                          TODO make image clickable-->
 <!--							<a href="./detail-page.php"><img src="" alt="" /></a>-->
@@ -338,31 +226,21 @@ include("config.php");?>
 				{
 					echo ("<small>$specialization</small>");
 				}
-				?>
-
-                       <?php 
-               if ($user_type == 'd')
-                              {
-                                 $query1="SELECT * FROM tb_qualifications where doct_id = $doc_id";
-            $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
-            $cdrow1=mysqli_fetch_array($result1);
-              $degree = strtoupper($cdrow1['degree']);
-              $institute = strtoupper($cdrow1['institute']);
-              $experience = $cdrow1['experience'];
-                 echo( "<h3><font color='blue'><i >Dr</font></i> $user_name</h3>");
-                      echo("<p> $degree  (  $institute  ),  $experience  Years Experience</p>");
-                     echo("<p> Dist : $doc_district</p>");
-                 
-                 
-                              }
-                            else if($user_type == 'c')
-                            {
-								
-                              echo( "<h3><font color='blue'><i >Clinic</font></i> $clinic_name $user_name</h3>");
-                              echo("<p> Dist : $doc_district</p>");
-                            }
-              
-              
+				
+               if ($user_type == 'd'){
+					$query1="SELECT * FROM tb_qualifications where doct_id = $doc_id";
+					$result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
+					$cdrow1=mysqli_fetch_array($result1);
+					$degree = strtoupper($cdrow1['degree']);
+					$institute = strtoupper($cdrow1['institute']);
+					$experience = $cdrow1['experience'];
+					echo( "<h3><font color='blue'><i >Dr</font></i> $user_name</h3>");
+					echo("<p> $degree  (  $institute  ),  $experience  Years Experience</p>");
+					echo("<p> Dist : $doc_district</p>");
+			   } else if($user_type == 'c'){
+					echo( "<h3><font color='blue'><i >Clinic</font></i> $clinic_name $user_name</h3>");
+					echo("<p> Dist : $doc_district</p>");
+			   }
               
               ?>
                       
@@ -372,7 +250,7 @@ include("config.php");?>
 							
                            <?php  
 				  $avg_rating = substr($avg_rating,0,4);
-				  echo("<small>($avg_rating) </small>");
+				  
                                             $x = 0;
 											$avg_rating = round($avg_rating,0);
 											
@@ -404,8 +282,11 @@ include("config.php");?>
                           <small>(<?php echo $rate_times; ?>)</small></span>
 <!--						<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
 						<ul>
+							<li></li>
+<!--
 							<li><a href="#0" onclick="onHtmlClick('Doctors', 0)" class="btn_listing">View on Map</a></li>
 							<li><a href=" ">Directions</a></li>
+-->
 							
                           <?php
 
@@ -468,21 +349,7 @@ include("config.php");?>
 
 					
 
-<!--
-					 <nav aria-label="" class="add_top_20"> 
-						<ul class="pagination pagination-sm">
-							<li class="page-item disabled">
-								<a class="page-link" href="#" tabindex="-1">Previous</a>
-							</li>
-							<li class="page-item active"><a class="page-link" href="#">1</a></li>
-							<li class="page-item"><a class="page-link" href="list.php?page=2">2</a></li>
-							<li class="page-item"><a class="page-link" href="list.php?page=3">3</a></li>
-							<li class="page-item">
-								<a class="page-link" href="#">Next</a>
-							</li>
-						</ul>
-					</nav>
--->
+
 					<!-- /pagination 
 				</div>
 				<!-- /col -->

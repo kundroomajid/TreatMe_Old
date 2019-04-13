@@ -8,16 +8,16 @@ $blob = addslashes(file_get_contents('./img/user.png', true));
 if((isset($_POST['doc_name']))&& isset($_POST['doc_email']) && isset($_POST['doc_password']))
 {
 	// Verify data
-    $doc_email = $_POST['doc_email'];
-    $doc_phone = $_POST['doc_phone'];
-	$doc_name = $_POST['doc_name'];
-   $doc_password = $_POST['doc_password'];
-	$gender = $_POST['gender'];
-	$district = $_POST['doc_district'];
-    $specialization = $_POST['specialization'];
-	$degree = $_POST['doc_degree'];
-	$institution = $_POST['doc_institute'];
-	$experience = $_POST['doc_experience'];
+    $doc_email =  mysqli_real_escape_string($conn,$_POST['doc_email']);
+    $doc_phone =  mysqli_real_escape_string($conn,$_POST['doc_phone']);
+	$doc_name =  mysqli_real_escape_string($conn,$_POST['doc_name']);
+   $doc_password =  mysqli_real_escape_string($conn,$_POST['doc_password']);
+	$gender =  mysqli_real_escape_string($conn,$_POST['gender']);
+	$district =  mysqli_real_escape_string($conn,$_POST['doc_district']);
+    $specialization =  mysqli_real_escape_string($conn,$_POST['specialization']);
+	$degree =  mysqli_real_escape_string($conn,$_POST['doc_degree']);
+	$institution =  mysqli_real_escape_string($conn,$_POST['doc_institute']);
+	$experience =  mysqli_real_escape_string($conn,$_POST['doc_experience']);
     $morning_start_time = (new DateTime($_POST['morning_start_time']))->format("H:i");
      $morning_end_time = (new DateTime($_POST['morning_end_time']))->format("H:i");
      $evening_start_time = (new DateTime($_POST['evening_start_time']))->format("H:i");

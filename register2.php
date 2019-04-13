@@ -2,21 +2,21 @@
 include("header.php");
 include("config.php");
 
-$user_email = $_GET['email'];
+$user_email =  mysqli_real_escape_string($conn,$_GET['email']);
 
 $_SESSION['email'] = $user_email;
 if((isset($_POST['name']))&isset($_POST['phone_no'])&isset($_POST['gender'])){
   // Verify data
-  $name = $_POST['name'];
-  $phone_no = $_POST['phone_no'];
-  $gender = $_POST['gender'];
-  $dob = $_POST['dob'];
-  $address = $_POST['address'];
-  $district = $_POST['district'];
-  $pincode = $_POST['pincode'];
-  $bloodgroup = $_POST['bloodgroup'];
-  $height = $_POST['height'];
-  $weight = $_POST['weight'];
+  $name =  mysqli_real_escape_string($conn,$_POST['name']);
+  $phone_no =  mysqli_real_escape_string($conn,$_POST['phone_no']);
+  $gender =  mysqli_real_escape_string($conn,$_POST['gender']);
+  $dob =  mysqli_real_escape_string($conn,$_POST['dob']);
+  $address =  mysqli_real_escape_string($conn,$_POST['address']);
+  $district =  mysqli_real_escape_string($conn,$_POST['district']);
+  $pincode =  mysqli_real_escape_string($conn,$_POST['pincode']);
+  $bloodgroup =  mysqli_real_escape_string($conn,$_POST['bloodgroup']);
+  $height =  mysqli_real_escape_string($conn,$_POST['height']);
+  $weight =  mysqli_real_escape_string($conn,$_POST['weight']);
 
   $idquery = "SELECT user_id from tb_user WHERE user_email='$user_email'";
   $user_id = mysqli_query($conn,$idquery)->fetch_object()->user_id;

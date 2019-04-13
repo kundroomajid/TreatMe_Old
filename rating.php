@@ -3,8 +3,8 @@
 
 include_once('config.php');
 
-$doc_id = isset($_REQUEST['doc_id'])?$_REQUEST['doc_id']:null;
-$rating = isset($_REQUEST['rating'])?$_REQUEST['rating']:null;
+$doc_id = isset($_REQUEST['doc_id'])? mysqli_real_escape_string($conn,$_REQUEST['doc_id']):null;
+$rating = isset($_REQUEST['rating'])? mysqli_real_escape_string($conn,$_REQUEST['rating']):null;
 $ratingObj = new JsObj();
 if($doc_id!=null){
 

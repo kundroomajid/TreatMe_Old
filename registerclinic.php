@@ -2,7 +2,7 @@
 include("header.php");
 include("config.php");
 
-$user_email = $_GET['email'];
+$user_email =  mysqli_real_escape_string($conn,$_GET['email']);
 $_SESSION['email'] = $user_email;
 
 $idquery = "SELECT user_id from tb_user WHERE user_email='$user_email'";
@@ -14,10 +14,10 @@ $idquery = "SELECT user_id from tb_user WHERE user_email='$user_email'";
 
 if((isset($_POST['name']))&isset($_POST['phone_no'])&isset($_POST['address'])){
   // Verify data
-  $name = $_POST['name'];
-  $phone_no = $_POST['phone_no'];
-  $address = $_POST['address'];
-  $district = $_POST['district'];
+  $name =  mysqli_real_escape_string($conn,$_POST['name']);
+  $phone_no =  mysqli_real_escape_string($conn,$_POST['phone_no']);
+  $address =  mysqli_real_escape_string($conn,$_POST['address']);
+  $district =  mysqli_real_escape_string($conn,$_POST['district']);
 
 
   $sql = "UPDATE tb_user SET user_name= '$name',user_phone = '$phone_no',user_type = 'c',address = '$address',district ='$district' WHERE user_email='$user_email'";

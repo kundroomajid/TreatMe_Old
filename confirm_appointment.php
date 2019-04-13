@@ -6,8 +6,9 @@ include("config.php");
 if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION['user_type']=='d' || $_SESSION['user_type']=='c'){
 
   $tmp_id = isset($_GET['tmp_id'])?$_GET['tmp_id']:null;
-  $confirmed = isset($_GET['confirmed'])?$_GET['confirmed']:null;
+  $confirmed = isset($_GET['confirmed'])? mysqli_real_escape_string($conn,$_GET['confirmed']):null;
   $doc_id = isset($_SESSION['id'])?$_SESSION['id']:null;
+  
 
   if($doc_id!=null && $tmp_id!=null){
     
@@ -24,7 +25,6 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
     Reject Successfull
   </div>';
         echo '<script type="text/javascript">
-//        alert("Rejected Successfully"); 
 		window.location = "welcome.php";
         </script> ';
       }else{
@@ -33,7 +33,6 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
     Unsuccessfull operation
   </div>';
         echo '<script type="text/javascript">
-//        alert("Unsuccessfull operation");
 		window.location = "welcome.php";
         </script> ';
       };
@@ -45,8 +44,10 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
       $pat_id = $row['pat_id'];
       $date = $row['appt_date'];
       $shift = $row['shift'];
+      $patient_name = $row['name'];
+      
 
-      if(bookAppointment($doc_id,$pat_id,new DateTime($date),$shift) && ($result = $conn->query("DELETE FROM tmp_appointment WHERE tmp_id=$tmp_id")))
+      if(bookAppointment($doc_id,$pat_id,new DateTime($date),$shift,$patient_name) && ($result = $conn->query("DELETE FROM tmp_appointment WHERE tmp_id=$tmp_id")))
 	  {
         $patients = $patients + 1;
         $q = "update tb_doctor SET patients = '$patients'";
@@ -62,7 +63,7 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     Operation Unsuccessfull
   </div>';
-        echo '<script type="text/javascript">  window.location = "welcome.php"; </script> ';
+    //    echo '<script type="text/javascript">  window.location = "welcome.php"; </script> ';
 		  }
     }
   }
@@ -77,18 +78,19 @@ else{
   </script> ';
 }
 
-function bookAppointment($doc_id,$pat_id,$date,$shift){
+function bookAppointment($doc_id,$pat_id,$date,$shift,$patient_name){
   global $conn;
   if(isSlotAvaliable($doc_id,$date,$shift)){
     //$conn = mysqli_connect("localhost", "root","", "appointment") ;
 
     $queue_no = slotsFilled($doc_id,$date,$shift)+1;
-    $str = "INSERT INTO tb_appointment(doc_id,pat_id,appt_date,queue_no,shift) VALUES".
-    "($doc_id,$pat_id,'".$date->format('Y-m-d')."',$queue_no,$shift)";
-    // echo "$str\n";
+    $str = "INSERT INTO tb_appointment(doc_id,pat_id,appt_date,name,queue_no,shift) VALUES".
+    "($doc_id,$pat_id,'".$date->format('Y-m-d')."','$patient_name',$queue_no,$shift)";
+     
 
     $result = $conn->query($str);
     if(!$result){
+      echo $str;
       return false;
     }
     return true;

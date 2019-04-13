@@ -20,7 +20,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
   //echo($myemail_id);
   //echo($mypassword);
-
+  $mypassword = md5($mypassword);
   $sql = "SELECT user_id,user_type FROM tb_user WHERE user_email = '$myemail_id' and user_password = '$mypassword' and active='1'";
 
   $result = mysqli_query($conn,$sql);

@@ -1,7 +1,7 @@
 <?php
 include("header.php");
 include("config.php");
-$user_email = $_GET['email'];
+$user_email =  mysqli_real_escape_string($conn,$_GET['email']);
 
 $msg = $_SESSION['msg'];
 function fn_resize($image_resource_id,$width,$height)

@@ -15,7 +15,7 @@
 					<h1>Welcome to Healthcare</h1>
           <?php
             if(isset($_REQUEST['email_id'])){
-              $email = $_REQUEST['email_id'];
+              $email =  mysqli_real_escape_string($conn,$_REQUEST['email_id']);
               $sql = "SELECT user_id FROM tb_user WHERE user_email = '$email' and active='1'";
                $result = mysqli_query($conn,$sql);
                $count = mysqli_num_rows($result);

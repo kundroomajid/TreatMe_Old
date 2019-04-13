@@ -6,10 +6,8 @@ $bookerror = $_SESSION['var'];
 $msg = " ";
 
 $curr_date = date("Y-m-d"); // variable gets current date
-$doc_id = isset($_GET['doc_id'])?$_GET['doc_id']:null;
-$pat_id = isset($_SESSION['id'])?$_SESSION['id']:null;
-
-
+$doc_id = isset($_GET['doc_id'])? mysqli_real_escape_string($conn,$_GET['doc_id']):null;
+$pat_id = isset($_SESSION['id'])? $_SESSION['id']:null;
 
 if($doc_id!=null){
   $query1="SELECT * FROM vw_doctor where user_id = $doc_id";
@@ -114,6 +112,8 @@ $sql = "Update tb_doctor set rated_by = $rate_times,avg_rating = $rate_value,vie
   }
 }
 
+
+
 else die("doc id not found");
 if($_SERVER["REQUEST_METHOD"] == "POST") {
   $comment = mysqli_real_escape_string($conn,$_POST['comment']);
@@ -136,6 +136,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 
 }
+
+if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
+  $query1="SELECT user_name FROM tb_user where user_id = $pat_id ";
+  $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
+  $cdrow1=mysqli_fetch_array($result1);
+  $pat_name = $cdrow1["user_name"];
+
+  
+  
+}
+
 
 ?>
 
@@ -169,11 +180,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <!--								<div class="col-6">-->
             <div class="form-group">
               <div id=" " class="clearfix">  <?= "$bookerror";?> </div>
-
+              <div>
+                <label> <h5>Patient Name</h5></label> <br>
+                <input type="text" class="input-group-addon" style ="text-align:left" name="pat_name" value="<?=$pat_name;?>" >
+              </div>
+            <br>
               <div>
                 <label> <h5>Select Date</h5></label> <br>
                 <input type="date" class="input-group-addon "  name="date" placeholder="Select Date" required min= "<?= $curr_date ?>" >
-                <!--										<input class="input-group date" type="date" id="date" data-lang="en" data-min-year="2019" name="date"/>-->
               </div>
             </div>
             <!--								</div>-->

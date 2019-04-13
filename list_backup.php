@@ -1,7 +1,8 @@
 <?php include("header.php");
+$radio_search = $_GET['radio_search'];
 if(isset($_GET['q']))
 {
-$q = $_GET['q'];
+$q = mysqli_real_escape_string($_GET['q']);
 }
 else {
 	$q=null;
@@ -9,16 +10,17 @@ else {
 
 if(isset($_GET["page"]))
 {
- $page = $_GET["page"];
+ $page = mysqli_real_escape_string($_GET["page"]);
 }
 else
 {
  $page = 1;
 }
 
-$num_results_on_page = 3;// number of details displayed
+$num_results_on_page = 10;// number of details displayed
 $offset = ($page-1) * $num_results_on_page;
 
+$rs_query = isset($_GET['radio_search'])?"&radio_search=".mysqli_real_escape_string($_GET['radio_search']):"";
 
 $district = ' ';
 $spec = ' '; 
@@ -28,17 +30,25 @@ if(isset($_GET['dist']))
 $district = "&dist=".$_GET['dist'];
 $dist = $_GET['dist'];	
 	
-$sql = "SELECT count(*) as total_records from vw_doctor WHERE district = '$dist'";
+	//query to get count of doctors and clinics
+	$sql = "SELECT count(*) as c1 from vw_doctor where district = '$dist'";
 $result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$total_rows = mysqli_fetch_array($result)[0];
-$total_records = $total_rows;
-$total_pages = ceil($total_rows / $num_results_on_page);
+$c1 = mysqli_fetch_array($result)[0];
+	$sql2 = "SELECT count(*) as c2 from vw_clinic where district = '$dist'";
+	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$c2 = mysqli_fetch_array($result2)[0];
 
+	$total_rows = $c1 + $c2;
+	$total_records = $total_rows;
 	
-
-$query ="SELECT * FROM vw_doctor WHERE district = '$dist' ORDER BY avg_rating DESC LIMIT $offset, $num_results_on_page ";
+$total_pages = ceil($total_rows / $num_results_on_page);
+	
+  $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor where district ='$dist' UNION SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic where district ='$dist' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
+	
+	
+	
 }
 else if (isset($_GET['spec'])){
 $sp = "&spec=".$_GET['spec'];	
@@ -62,29 +72,77 @@ else if (isset($_GET['q']))
 {
  $que = "&q=".$_GET['q'];
 $q = $_GET['q'];
+	//	if user selcts clinic radio button on homepage
+	if($radio_search == 'clinic')
+	{
+	$sql2 = "SELECT count(*) as c2 from vw_clinic WHERE `clinic_name` LIKE '%$q%'";
+	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
+		$c2 = mysqli_fetch_array($result2)[0];
+	$total_rows = $c2;
+	$total_records = $total_rows;
+		
+		$total_pages = ceil($total_rows / $num_results_on_page);
 	
-	$sql = "SELECT count(*) as total_records from vw_doctor WHERE `user_name` LIKE '%$q%'";
-$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$total_rows = mysqli_fetch_array($result)[0];
-$total_records = $total_rows;
-$total_pages = ceil($total_rows / $num_results_on_page);
+  $query="SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic WHERE `clinic_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
+$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$count = mysqli_num_rows($result);	
+	}
+	
+	
+//	if user selcts doctor radio button on homepage
+	else if($radio_search =='doctor')
+	{
+	$sql = "SELECT count(*) as c1 from vw_doctor WHERE `user_name` LIKE '%$q%'";
+		$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+		$c1 = mysqli_fetch_array($result)[0];
 
+	$total_rows = $c1;
+	$total_records = $total_rows;
 	
+		$total_pages = ceil($total_rows / $num_results_on_page);
 	
-	$query="SELECT * FROM vw_doctor WHERE `user_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
+  $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor WHERE `user_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
+$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$count = mysqli_num_rows($result);	
+	}
+	else
+	{
+		$sql = "SELECT count(*) as c1 from vw_doctor WHERE `user_name` LIKE '%$q%'";
+		$result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+		$c1 = mysqli_fetch_array($result)[0];
+	$sql2 = "SELECT count(*) as c2 from vw_clinic WHERE `clinic_name` LIKE '%$q%'";
+	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
+		$c2 = mysqli_fetch_array($result2)[0];
+
+	$total_rows = $c1 + $c2;
+	$total_records = $total_rows;
+	
+		$total_pages = ceil($total_rows / $num_results_on_page);
+	
+  $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor WHERE `user_name` LIKE '%$q%' UNION SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic  WHERE `clinic_name` LIKE '%$q%' ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
+	}
+
 }
 
 else
 {
-	$sql = "SELECT count(*) as total_records from vw_doctor union select count(*) from vw_clinic";
+//query to get count of doctors and clinics
+	$sql = "SELECT count(*) as c1 from vw_doctor";
 $result=mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$total_rows = mysqli_fetch_array($result)[0];
-$total_records = $total_rows;
-$total_pages = ceil($total_rows / $num_results_on_page);
-  echo($total_pages);
+$c1 = mysqli_fetch_array($result)[0];
+	$sql2 = "SELECT count(*) as c2 from vw_clinic";
+	$result2=mysqli_query($conn,$sql2) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$c2 = mysqli_fetch_array($result2)[0];
 
+	$total_rows = $c1 + $c2;
+	$total_records = $total_rows;
+	
+$total_pages = ceil($total_rows / $num_results_on_page);
+	
+	
+  
 	
 //$query="SELECT * FROM vw_doctor ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
 //$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
@@ -93,6 +151,7 @@ $total_pages = ceil($total_rows / $num_results_on_page);
   $query="SELECT doc_id,user_name,photo,rated_by,avg_rating,user_type,district FROM vw_doctor UNION SELECT clinic_id,clinic_name,photo,rated_by,avg_rating,user_type,district FROM vw_clinic ORDER BY avg_rating DESC LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
+	
 	
 }
 
@@ -125,6 +184,7 @@ include("config.php");?>
 							<input type="submit" value="Search" />
 						</div>
 					</div>
+					</form>
 				</div>
 				<!-- /row -->
 			</div>
@@ -137,15 +197,33 @@ include("config.php");?>
 				<ul class="clearfix">
 					<li>
 						<h6>Type</h6>
-						<div class="switch-field">
-							<input type="radio" id="all" name="type_patient" value="all" checked="" />
+						<div class="switch-field" id="switch">
+							<input type="radio" id="all" name="type_patient" value="all"  />
 							<label for="all">All</label>
-							<input type="radio" id="doctors" name="type_patient" value="doctors" />
+							<input type="radio" id="doctors" name="type_patient" value="doctor" />
 							<label for="doctors">Doctors</label>
-							<input type="radio" id="clinics" name="type_patient" value="clinics" />
+							<input type="radio" id="clinics" name="type_patient" value="clinic"  />
 							<label for="clinics">Clinics</label>
 						</div>
-						
+						<script>			
+    document.getElementById("doctors").onchange = function() {
+        if (this.selectedIndex!==0) {
+            window.location.href = '?q=&radio_search='+ this.value;
+			
+			
+        }        
+    };
+	document.getElementById("clinics").onchange = function() {
+        if (this.selectedIndex!==0) {
+            window.location.href = '?q=&radio_search='+ this.value;
+        }        
+    };
+							document.getElementById("all").onchange = function() {
+        if (this.selectedIndex!==0) {
+            window.location.href = '?q=&radio_search='+ this.value;
+        }        
+    };
+</script>	
 					</li>
 					
 					<li>
@@ -178,7 +256,7 @@ include("config.php");?>
 					<script>
     document.getElementById("dist").onchange = function() {
         if (this.selectedIndex!==0) {
-            window.location.href = '?dist='+ this.value;
+            window.location.href = '?dist='+ this.value+'<?=$rs_query?>';
         }        
     };
 </script>	
@@ -229,7 +307,9 @@ include("config.php");?>
             while ($cdrow=mysqli_fetch_array($result)) {
               $user_type = $cdrow["user_type"];
                 $user_name=$cdrow["user_name"];
+				$clinic_name = $cdrow["clinic_name"];
                 $doc_id=$cdrow["doc_id"];
+				$clinic_id = $cdrow["clinic_id"];
               $doc_district = strtoupper($cdrow["district"]);
 				$specialization = $cdrow["specialization"];
                 $image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' />";
@@ -237,7 +317,7 @@ include("config.php");?>
                  $avg_rating = $cdrow['avg_rating'];
             ?>
 					<div class="strip_list wow fadeIn" >
-						<a href="#0" class="wish_bt"></a>
+<!--						<a href="#0" class="wish_bt"></a>-->
 						<figure>
 <!--                          TODO make image clickable-->
 <!--							<a href="./detail-page.php"><img src="" alt="" /></a>-->
@@ -277,7 +357,8 @@ include("config.php");?>
                               }
                             else if($user_type == 'c')
                             {
-                              echo( "<h3><font color='blue'><i >Clinic</font></i> $user_name</h3>");
+								
+                              echo( "<h3><font color='blue'><i >Clinic</font></i> $clinic_name $user_name</h3>");
                               echo("<p> Dist : $doc_district</p>");
                             }
               
@@ -291,7 +372,7 @@ include("config.php");?>
 							
                            <?php  
 				  $avg_rating = substr($avg_rating,0,4);
-				  echo("<small>($avg_rating) </small>");
+				  
                                             $x = 0;
 											$avg_rating = round($avg_rating,0);
 											
@@ -323,16 +404,22 @@ include("config.php");?>
                           <small>(<?php echo $rate_times; ?>)</small></span>
 <!--						<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
 						<ul>
+							<li></li>
+<!--
 							<li><a href="#0" onclick="onHtmlClick('Doctors', 0)" class="btn_listing">View on Map</a></li>
 							<li><a href=" ">Directions</a></li>
+-->
+							
                           <?php
+
                               if ($user_type == 'd')
                               {
                                 echo("<li><a href='./detail-page.php?doc_id=".$doc_id."' class='btn_listing'>View Profile</a></li>");
                               }
                             else if($user_type == 'c')
                             {
-                               echo("<li><a href='./detail-clinic.php?clinic_id=".$doc_id."' class='btn_listing'>View Profile</a></li>");
+								
+                               echo("<li><a href='./detail-clinic.php?clinic_id=".$doc_id.$clinic_id."' class='btn_listing'>View Profile</a></li>");
                             }
               
                           ?>
@@ -350,57 +437,41 @@ include("config.php");?>
 					
 <nav aria-label="" class="add_top_20"> 
 						<ul class="pagination pagination-sm">
-				<?php if (ceil($total_pages / $num_results_on_page) > 0): ?>
-				<?php if ($page > 1): ?>
-				<li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page-1 ?><?php echo $district ?><?php echo $sp ?><?php echo $que ?>">Prev</a></li>
-				<?php endif; ?>		
+										<?php 
+							if($total_pages > 1)
+							{
+								$curr_page = $_GET['page']?$_GET['page']:1;
+								if($curr_page >1)
+									{
+									$ppage = $page -1;
+										echo("<li class='page-item '><a class='page-link' href='list.php?page=$ppage$district$sp$que'> Prev </a></li>");
+									}
+								for ($page = 1; $page <= $total_pages; $page++) 
+								{
+									
+									
+									if($page == $curr_page)
+									{
+										echo("<li class='page-item active '><a class='page-link' href='list.php?page=$page$district$sp$que'> $page </a></li>");
+									}
+									else
+									{
+										echo("<li class='page-item '><a class='page-link' href='list.php?page=$page$district$sp$que'> $page </a></li>");
+									}
+    							
+								} 
+//								next page
+							$npage = $curr_page + 1;
+										echo("<li class='page-item '><a class='page-link' href='list.php?page=$npage$district$sp$que'> Next </a></li>");
+								
+							}
 							
-				
-<!--
-				<?php if ($page > 3): ?>
-				<li class="page-item "><a class="page-link" href="list.php?page=1">1</a></li>
-				<li class="page-item ">...</li>
-				<?php endif; ?>
--->
-
-				<?php if ($page-2 > 0): ?><li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page-2 ?><?php echo $district ?><?php echo $sp ?><?php echo $que ?>"><?php echo $page-2 ?></a></li><?php endif; ?>
-				<?php if ($page-1 > 0): ?><li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page-1 ?><?php echo $district ?><?php echo $sp?><?php echo $que ?>"><?php echo $page-1 ?></a></li><?php endif; ?>
-
-				<li class="page-item active"><a class="page-link" href="list.php?page=<?php echo $page ?><?php echo $district ?><?php echo $sp?><?php echo $que ?>"><?php echo $page ?></a></li>
-
-				<?php if ($page+1 < ceil($total_pages / $num_results_on_page)+1): ?><li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page+1 ?><?php echo $district ?><?php echo $sp?><?php echo $que ?>"><?php echo $page+1 ?></a></li><?php endif; ?>
-				<?php if ($page+2 < ceil($total_pages / $num_results_on_page)+1): ?><li class="page-item"><a class="page-link"  href="list.php?page=<?php echo $page+2 ?><?php echo $district ?><?php echo $sp?><?php echo $que ?>"><?php echo $page+2 ?></a></li><?php endif; ?>
-
-				<?php if ($page < ceil($total_pages / $num_results_on_page)-2): ?>
-				<li class="page-item">...</li>
-				<li class="page-item"><a class="page-link" href="list.php?page=<?php echo ceil($total_pages / $num_results_on_page) ?>"><?php echo ceil($total_pages / $num_results_on_page) ?></a></li>
-				<?php endif; ?>
-
-				<?php if ($page < ceil($total_pages / $num_results_on_page)): ?>
-				<li class="page-item"><a class="page-link" href="list.php?page=<?php echo $page+1 ?><?php echo $district ?><?php echo $sp?><?php echo $que ?>">Next</a></li>
-				<?php endif; ?>
-			</ul>
-			<?php endif; ?>
+							?>
 							
 
 					
-					
 
-<!--
-					 <nav aria-label="" class="add_top_20"> 
-						<ul class="pagination pagination-sm">
-							<li class="page-item disabled">
-								<a class="page-link" href="#" tabindex="-1">Previous</a>
-							</li>
-							<li class="page-item active"><a class="page-link" href="#">1</a></li>
-							<li class="page-item"><a class="page-link" href="list.php?page=2">2</a></li>
-							<li class="page-item"><a class="page-link" href="list.php?page=3">3</a></li>
-							<li class="page-item">
-								<a class="page-link" href="#">Next</a>
-							</li>
-						</ul>
-					</nav>
--->
+
 					<!-- /pagination 
 				</div>
 				<!-- /col -->

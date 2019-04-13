@@ -54,7 +54,7 @@ if($id!=null){
   $resulttmpappt = $conn->query("SELECT * FROM tmp_appointment WHERE doc_id = $id") ;
   $counttmpappt = mysqli_num_rows($resulttmpappt);
   //get education data
-  $resultedu = $conn->query("SELECT * FROM tb_doceducation where doc_id=$id");
+  $resultedu = $conn->query("SELECT * FROM tb_qualifications where doct_id=$id");
 }else{
   echo '<script type="text/javascript">
 //  alert("Please Login To Continue ")
@@ -259,7 +259,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
 
                 echo "<tr><td>$tmp_id</td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>unconfirmed</td>
                 <td>
-                  <a class='btn btn-sm btn-danger' href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=0'>X</a>
+                  <a class='btn btn-sm btn-danger' href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=0'><span class='icon_close_alt2'></span></a>
                   <a href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=1' class='btn btn-sm btn-success'><span class='icon_check_alt2'></span></a>
                 </td></tr>" ;
                 //<a href='#' class='btn btn-sm btn-success'><span class='icon_check_alt2'></span> </a>
@@ -346,10 +346,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
             <div class="form-group row">
               <label class="col-lg-3 col-form-label form-control-label">Specialization</label>
               <div class="col-lg-9">
-                <input class="form-control" type="text" name ="specialization" id = "specialization" value="<?= $specialization ?>"> </div>
-                <script type="text/javascript">
-                $('#specialization').tagsInput();
-                </script>
+                <input class="form-control" type="text" name ="specialization" value="<?= $specialization ?>"> </div>               
               </div>
               <div class="form-group row">
                 <label class="col-lg-3 col-form-label form-control-label">Registration Council</label>
@@ -400,7 +397,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 if($rowcount>0){
                   while(($r = mysqli_fetch_array($resultedu))!=null){
                     $degree = $r['degree'];
-                    $year = $r['year'];
+                    $year = $r['completion_year'];
                     $institute = $r['institute'];
                     ?>
                     <tr>
