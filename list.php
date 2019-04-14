@@ -1,4 +1,4 @@
-<?php 
+<?php
 include("header.php");
 include("config.php");
 
@@ -29,10 +29,12 @@ if($radio_query!="")
 if(count($filters)>0){
 	$main_query .= " WHERE ";
 	for($i=0;$i<count($filters)-1;$i++)
-		$main_query .= $filters[$i]. " AND ";	
+		$main_query .= $filters[$i]. " AND ";
 	$main_query .= $filters[$i];
 }
-//$main_query .= ($q!=null || $district!=null || $specialization!=null || $radio_search!="")?" WHERE ":"";	
+
+
+//$main_query .= ($q!=null || $district!=null || $specialization!=null || $radio_search!="")?" WHERE ":"";
 //$main_query .= ($q==null)?"":"user_name like '%$q%'";
 //$main_query .= ($q!=null && $district!=null)?" AND ":"";
 //$main_query .= ($district==null)?"":"district='$district'";
@@ -51,7 +53,7 @@ $main_query .= " LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 
 ?>
-				
+
 
 
 
@@ -60,16 +62,21 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						
+
 						<h4><strong>Showing <?= "$count";?></strong> results</h4>
-						
+
 					</div>
 
 					<div class="col-md-6">
 						<div class="search_bar_list">
-								<form method="GET" action="list.php"  id = "search"/>
-							<input type="text" id = "search" name="q" class="form-control" placeholder="Search doctors, clinics, hospitals etc." />
-							<input type="submit" value="Search" />
+
+
+							<form method="GET" action="list.php"  id = "search"/>
+								<input type="text" id = "search" name="q" class="form-control" placeholder="Search doctors, clinics, hospitals etc."  value = "<?= ($q!=null)?$q:'' ?>"/>
+								<?= ($specialization!=null)?"<input type='hidden' name='spec' value='$specialization' />":"" ?>
+								<?= ($district!=null)?"<input type='hidden' name='dist' value='$district' />":"" ?>
+								<?= ($radio_search!=null)?"<input type='hidden' name='radio_search' value='$radio_search' />":"" ?>
+								<input type="submit" value="Search" />
 						</div>
 					</div>
 					</form>
@@ -93,61 +100,74 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 							<input type="radio" id="clinics" name="type_patient" value="clinic"  />
 							<label for="clinics">Clinics</label>
 						</div>
-						<script>			
-    document.getElementById("doctors").onchange = function() {
-        if (this.selectedIndex!==0) {
-            window.location.href = '?&radio_search='+ this.value;
-			
-			
-        }        
-    };
-	document.getElementById("clinics").onchange = function() {
-        if (this.selectedIndex!==0) {
-            window.location.href = '?&radio_search='+ this.value;
-        }        
-    };
-							document.getElementById("all").onchange = function() {
-        if (this.selectedIndex!==0) {
-            window.location.href = '?&radio_search='+ this.value;
-        }        
-    };
-</script>	
+
+						<?php
+						$redirect = ($q!=null)?"&q=$q":"";
+						$redirect .= ($specialization!=null)?"&spec=$specialization":"";
+						$redirect .= ($district!=null)?"&dist=$district":"";
+						// $redirect .= ($radio_search!=null)?"&radio_search=$radio_search":"";
+
+
+						$redirect = "'$redirect'";
+						 ?>
+						<script>
+						    document.getElementById("doctors").onchange = function() {
+						        if (this.selectedIndex!==0)
+						            window.location.href = '?&radio_search='+ this.value + <?= $redirect; ?>;
+						    };
+								document.getElementById("clinics").onchange = function() {
+						        if (this.selectedIndex!==0)
+						            window.location.href = '?&radio_search='+ this.value + <?= $redirect; ?>;
+						    };
+								document.getElementById("all").onchange = function() {
+						        if (this.selectedIndex!==0)
+						            window.location.href = '?&radio_search='+ this.value + <?= $redirect; ?>;
+						    };
+						</script>
 					</li>
-					
+
+
+					<?php
+						$redirect = ($q!=null)?"&q=$q":"";
+						$redirect .= ($specialization!=null)?"&spec=$specialization":"";
+						// $redirect .= ($district!=null)?"&dist=$district":"";
+						$redirect .= ($radio_search!=null)?"&radio_search=$radio_search":"";
+						$redirect = "'$redirect'";
+					 ?>
+
 					<li>
 						<h6>Select By District</h6>
 						<select name="dist"  id = "dist" class="selectbox">
 							<option value = "">Select District</option>
-                		<option value = "Anantnag">Anantnag</option>
-                		<option value = "Bandipora">Bandipora</option>
+            	<option value = "Anantnag">Anantnag</option>
+              <option value = "Bandipora">Bandipora</option>
 							<option value = "Baramulla">Baramulla</option>
-                		<option value = "Budgam">Budgam</option>
-                			<option value = "Ganderbal">Ganderbal</option>
+              <option value = "Budgam">Budgam</option>
+              <option value = "Ganderbal">Ganderbal</option>
 							<option value = "Kulgam">Kulgam</option>
 							<option value = "Kupwara">Kupwara</option>
 							<option value = "Pulwama">Pulwama</option>
-                	<option value = "Shopain">Shopain</option>
-                	<option value = "Srinagar">Srinagar</option>
-                	<option value = "Doda">Doda</option>
-                	<option value = "Jammu">Jammu</option>
-                	<option value = "Kathua">Kathua</option>
-                	<option value = "Kishtwar">Kishtwar</option>
-                	<option value = "Poonch">Poonch</option>
-                	<option value = "Rajouri">Rajouri</option>
-                	<option value = "Reasi">Reasi</option>
-                	<option value = "Ramban">Ramban</option>
-                	<option value = "Samba">Samba</option>
-                	<option value = "Udhampur">Udhampur</option>
-                	<option value = "Kargil">Kargil</option>
-                	<option value = "Leh">Leh</option>
-              	</select>
+            	<option value = "Shopain">Shopain</option>
+            	<option value = "Srinagar">Srinagar</option>
+            	<option value = "Doda">Doda</option>
+            	<option value = "Jammu">Jammu</option>
+            	<option value = "Kathua">Kathua</option>
+            	<option value = "Kishtwar">Kishtwar</option>
+            	<option value = "Poonch">Poonch</option>
+            	<option value = "Rajouri">Rajouri</option>
+            	<option value = "Reasi">Reasi</option>
+            	<option value = "Ramban">Ramban</option>
+            	<option value = "Samba">Samba</option>
+            	<option value = "Udhampur">Udhampur</option>
+            	<option value = "Kargil">Kargil</option>
+            	<option value = "Leh">Leh</option>
+            </select>
 					<script>
-    document.getElementById("dist").onchange = function() {
-        if (this.selectedIndex!==0) {
-            window.location.href = '?dist='+ this.value;
-        }        
-    };
-</script>	
+    				document.getElementById("dist").onchange = function() {
+			        if (this.selectedIndex!==0)
+			            window.location.href = '?dist='+ this.value + <?= $redirect ?> ;
+    				};
+					</script>
 					</li>
 <!--
 					 <li>
@@ -157,7 +177,7 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 							<a href="#0" class="active"><i class="icon-th-list"></i></a>
 							<a href="./list-map.php"><i class="icon-map-1"></i></a>
 						</div>
-					</li> 
+					</li>
 -->
 					<li>
 						<h6>Sort by</h6>
@@ -220,13 +240,13 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 							$spec4 = $spec_Array[3];
 							echo ("<small>$spec1,$spec2</small>");
 							echo ("<small>$spec3,$spec4</small>");
-							
+
 						}
 				else
 				{
 					echo ("<small>$specialization</small>");
 				}
-				
+
                if ($user_type == 'd'){
 					$query1="SELECT * FROM tb_qualifications where doct_id = $doc_id";
 					$result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
@@ -241,34 +261,34 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 					echo( "<h3><font color='blue'><i >Clinic</font></i> $clinic_name $user_name</h3>");
 					echo("<p> Dist : $doc_district</p>");
 			   }
-              
+
               ?>
-                      
-						
+
+
 <!--						code to display stars from database-->
 						<span class="rating">
-							
-                           <?php  
+
+                           <?php
 				  $avg_rating = substr($avg_rating,0,4);
-				  
+
                                             $x = 0;
 											$avg_rating = round($avg_rating,0);
-											
+
                                             if($avg_rating <= 5)
                                             	{
-                                            		for ($x; $x < $avg_rating; $x++) 
+                                            		for ($x; $x < $avg_rating; $x++)
                                             			{
                                             				echo "<i class='icon_star voted'></i>";
                                             			}
                                               		$diff = 5-$x;
-                                              		for ($i = 0; $i < $diff; $i++) 
+                                              		for ($i = 0; $i < $diff; $i++)
                                             			{
                                             				echo "<i class='icon_star'></i>";
                                             			}
                                             	}
-                                            
-                                          
-                                              else 
+
+
+                                              else
                                               	{
 												  echo ('<i class="icon_star"></i>
 												<i class="icon_star"></i>
@@ -276,9 +296,9 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 												<i class="icon_star"></i>
 												<i class="icon_star "></i>');
 											  	}
-                                              
-                                               
-?>  
+
+
+?>
                           <small>(<?php echo $rate_times; ?>)</small></span>
 <!--						<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
 						<ul>
@@ -287,7 +307,7 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 							<li><a href="#0" onclick="onHtmlClick('Doctors', 0)" class="btn_listing">View on Map</a></li>
 							<li><a href=" ">Directions</a></li>
 -->
-							
+
                           <?php
 
                               if ($user_type == 'd')
@@ -296,26 +316,26 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
                               }
                             else if($user_type == 'c')
                             {
-								
+
                                echo("<li><a href='./detail-clinic.php?clinic_id=".$doc_id.$clinic_id."' class='btn_listing'>View Profile</a></li>");
                             }
-              
+
                           ?>
-							
+
 						</ul>
 					</div>
 
 
-            <?php  
+            <?php
             }
 }
 					?>
-					
-					
-					
-<nav aria-label="" class="add_top_20"> 
+
+
+
+<nav aria-label="" class="add_top_20">
 						<ul class="pagination pagination-sm">
-										<?php 
+										<?php
 							if($total_pages > 1)
 							{
 								$curr_page = $_GET['page']?$_GET['page']:1;
@@ -324,10 +344,10 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 									$ppage = $page -1;
 										echo("<li class='page-item '><a class='page-link' href='list.php?page=$ppage$district$sp$que'> Prev </a></li>");
 									}
-								for ($page = 1; $page <= $total_pages; $page++) 
+								for ($page = 1; $page <= $total_pages; $page++)
 								{
-									
-									
+
+
 									if($page == $curr_page)
 									{
 										echo("<li class='page-item active '><a class='page-link' href='list.php?page=$page$district$sp$que'> $page </a></li>");
@@ -336,21 +356,21 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 									{
 										echo("<li class='page-item '><a class='page-link' href='list.php?page=$page$district$sp$que'> $page </a></li>");
 									}
-    							
-								} 
+
+								}
 //								next page
 							$npage = $curr_page + 1;
 										echo("<li class='page-item '><a class='page-link' href='list.php?page=$npage$district$sp$que'> Next </a></li>");
-								
+
 							}
-							
+
 							?>
-							
-
-					
 
 
-					<!-- /pagination 
+
+
+
+					<!-- /pagination
 				</div>
 				<!-- /col -->
 
