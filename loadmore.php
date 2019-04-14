@@ -1,8 +1,9 @@
 <?php
+  sleep (5);
   include_once('config.php');
   $doc_id = isset($_REQUEST['doc_id'])? mysqli_real_escape_string($conn,$_REQUEST['doc_id']):null;
   $offset = isset($_REQUEST['offset'])? mysqli_real_escape_string($conn,$_REQUEST['offset']):0;
-  
+
 $rowperpage = 3;
   if($doc_id!=null)
   {
@@ -23,29 +24,29 @@ $rowperpage = 3;
           <div class ='rev-thumb'><?= $pic ?></div>
           <div class="rev-content">
             <div class="rating">
-             <?php 
+             <?php
           $query1 = "Select rate as rating from tb_rating where doc_id = $doc_id and pat_id = $pat_id ORDER BY timestamp DESC LIMIT 1";
         $result1=mysqli_query($conn,$query1) or die ("Query to get data from first table failed: ".mysqli_error());
         $cdrow1=mysqli_fetch_array($result1);
         $rating = $cdrow1['rating'];
                $x = 0;
 											$avg_rating = round($rating,0);
-											
+
                                             if($avg_rating <= 5)
                                             	{
-                                            		for ($x; $x < $avg_rating; $x++) 
+                                            		for ($x; $x < $avg_rating; $x++)
                                             			{
                                             				echo "<i class='icon_star voted'></i>";
                                             			}
                                               		$diff = 5-$x;
-                                              		for ($i = 0; $i < $diff; $i++) 
+                                              		for ($i = 0; $i < $diff; $i++)
                                             			{
                                             				echo "<i class='icon_star'></i>";
                                             			}
                                             	}
-                                            
-                                          
-                                              else 
+
+
+                                              else
                                               	{
 												  echo ('<i class="icon_star"></i>
 												<i class="icon_star"></i>
@@ -53,13 +54,13 @@ $rowperpage = 3;
 												<i class="icon_star"></i>
 												<i class="icon_star "></i>');
 											  	}
-              
-              
-              
+
+
+
               ?>
             </div>
             <div class="rev-info">
-              
+
               <h6><?= $pat_name ?></h6>  <small><?= $date; ?></small>
             </div>
             <div class="rev-text">
