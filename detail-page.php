@@ -17,53 +17,53 @@ if($doc_id!=null){
   $query2="SELECT * FROM tb_doctor where doc_id = $doc_id";
   $result2=mysqli_query($conn,$query2) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $cdrow=mysqli_fetch_array($result2);
-	
-//	queries to get number of 5,4,3,2,1, star ratiings from db
-	$sql = "SELECT count(*) as total from tb_rating where doc_id = $doc_id";
+
+  //	queries to get number of 5,4,3,2,1, star ratiings from db
+  $sql = "SELECT count(*) as total from tb_rating where doc_id = $doc_id";
   $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $row = mysqli_fetch_array($res);
   $total = $row['total'];
-	
+
   $sql = "SELECT count(*) as stars from tb_rating where rate = 5 and doc_id = $doc_id";
   $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $row = mysqli_fetch_array($res);
   $fivestars = $row['stars'];
-	$fivestars = ($fivestars / $total) *100;
-	
-	// get number of four stars
-   $sql = "SELECT count(*) as stars from tb_rating where rate = 4 and doc_id = $doc_id";
+  $fivestars = ($total>0)?($fivestars / $total) *100:0;
+
+  // get number of four stars
+  $sql = "SELECT count(*) as stars from tb_rating where rate = 4 and doc_id = $doc_id";
   $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $row = mysqli_fetch_array($res);
   $fourstars = $row['stars'];
-	$fourstars = ($fourstars / $total) *100;
-	
-	 $sql = "SELECT count(*) as stars from tb_rating where rate = 3 and doc_id = $doc_id";
+  $fourstars = ($total>0)?($fourstars / $total) *100:0;
+
+  $sql = "SELECT count(*) as stars from tb_rating where rate = 3 and doc_id = $doc_id";
   $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $row = mysqli_fetch_array($res);
   $threestars = $row['stars'];
-	$threestars = ($threestars / $total) *100;
-	
-	 $sql = "SELECT count(*) as stars from tb_rating where rate = 2 and doc_id = $doc_id";
+  $threestars = ($total>0)?($threestars / $total) *100:0;
+
+  $sql = "SELECT count(*) as stars from tb_rating where rate = 2 and doc_id = $doc_id";
   $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $row = mysqli_fetch_array($res);
   $twostars = $row['stars'];
-	$twostars = ($twostars / $total) *100;
-	
-	 $sql = "SELECT count(*) as stars from tb_rating where rate = 1 and doc_id = $doc_id";
+  $twostars = ($total>0)?($twostars / $total) *100:0;
+
+  $sql = "SELECT count(*) as stars from tb_rating where rate = 1 and doc_id = $doc_id";
   $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $row = mysqli_fetch_array($res);
   $onestars = $row['stars'];
-	$onestars = ($onestars / $total) *100;
-  
-  
-	 $sql = "SELECT count(*) as t_comments from comments where doc_id = $doc_id";
+  $onestars = ($total>0)?($onestars / $total) *100:0 ;
+
+
+  $sql = "SELECT count(*) as t_comments from comments where doc_id = $doc_id";
   $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $row = mysqli_fetch_array($res);
   $total_comments = $row['t_comments'];
-  
-	
-	
-	
+
+
+
+
   if($cdrow1!=null){
     $user_name = $cdrow1["user_name"];
     $district = $cdrow1['district'];
@@ -75,7 +75,8 @@ if($doc_id!=null){
     $specialization = $cdrow1["specialization"];
     $views = $cdrow1['views'];
     $patients = $cdrow1['patients'];
-	  $avg_rating = $cdrow1['avg_rating'];
+    $avg_rating = $cdrow1['avg_rating'];
+    $experience = $cdrow1['experience'];
     if(strlen($specialization) > 24)
     {
       $spec_Array =  explode (",", $specialization);
@@ -106,9 +107,9 @@ if($doc_id!=null){
       $rate_bg = 0;
     }
 
-$sql = "Update tb_doctor set rated_by = $rate_times,avg_rating = $rate_value,views = $views+1 where doc_id = $doc_id";
-  $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-  
+    $sql = "Update tb_doctor set rated_by = $rate_times,avg_rating = $rate_value,views = $views+1 where doc_id = $doc_id";
+    $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
+
   }
 }
 
@@ -143,8 +144,8 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
   $cdrow1=mysqli_fetch_array($result1);
   $pat_name = $cdrow1["user_name"];
 
-  
-  
+
+
 }
 
 
@@ -184,7 +185,7 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
                 <label> <h5>Patient Name</h5></label> <br>
                 <input type="text" class="input-group-addon" style ="text-align:left" name="pat_name" value="<?=$pat_name;?>" >
               </div>
-            <br>
+              <br>
               <div>
                 <label> <h5>Select Date</h5></label> <br>
                 <input type="date" class="input-group-addon "  name="date" placeholder="Select Date" required min= "<?= $curr_date ?>" >
@@ -250,42 +251,42 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
               <div class="col-lg-7 col-md-8">
                 <!--										<small>Primary care - Internist</small>-->
                 <h1><?= $user_name ?> </h1>
-				 <h6>Rated <?= substr($avg_rating,0,4) ?> on average by <?=$rate_times?>  users</h6>
+                <h6>Rated <?= substr($avg_rating,0,4) ?> on average by <?=$rate_times?>  users</h6>
                 <span class="rating">
                   <!--                                          TO DO GET STARS from databse-->
 
-                  <?php  
-				  
-                                            $x = 0;
-											$avg_rating = round($avg_rating,0);
-											
-                                            if($avg_rating <= 5)
-                                            	{
-                                            		for ($x; $x < $avg_rating; $x++) 
-                                            			{
-                                            				echo "<i class='icon_star voted'></i>";
-                                            			}
-                                              		$diff = 5-$x;
-                                              		for ($i = 0; $i < $diff; $i++) 
-                                            			{
-                                            				echo "<i class='icon_star'></i>";
-                                            			}
-                                            	}
-                                            
-                                          
-                                              else 
-                                              	{
-												  echo ('<i class="icon_star"></i>
-												<i class="icon_star"></i>
-												<i class="icon_star"></i>
-												<i class="icon_star"></i>
-												<i class="icon_star "></i>');
-											  	}
-                                              
-                                               
-?>  
+                  <?php
 
-                  
+                  $x = 0;
+                  $avg_rating = round($avg_rating,0);
+
+                  if($avg_rating <= 5)
+                  {
+                    for ($x; $x < $avg_rating; $x++)
+                    {
+                      echo "<i class='icon_star voted'></i>";
+                    }
+                    $diff = 5-$x;
+                    for ($i = 0; $i < $diff; $i++)
+                    {
+                      echo "<i class='icon_star'></i>";
+                    }
+                  }
+
+
+                  else
+                  {
+                    echo ('<i class="icon_star"></i>
+                    <i class="icon_star"></i>
+                    <i class="icon_star"></i>
+                    <i class="icon_star"></i>
+                    <i class="icon_star "></i>');
+                  }
+
+
+                  ?>
+
+
                   <!--											<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
                 </span>
                 <ul class="statistic">
@@ -313,91 +314,91 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
             <div class="indent_title_in">
               <i class="pe-7s-user"></i>
               <h3>Professional statement</h3>
-<!--               retrive details from table qualifications-->
+              <!--               retrive details from table qualifications-->
               <?php
-               $query1="SELECT * FROM tb_qualifications where doct_id = $doc_id";
-            $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
-            $cdrow1=mysqli_fetch_array($result1);
+              $query1="SELECT * FROM tb_qualifications where doct_id = $doc_id";
+              $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
+              $cdrow1=mysqli_fetch_array($result1);
               $degree = strtoupper($cdrow1['degree']);
               $institute = strtoupper($cdrow1['institute']);
-              $experience = $cdrow1['experience'];
+
 
               ?>
               <p><?= $degree ?> from ( <?= $institute ?> ), <?= $experience ?> Years Experience</p>
-              </div>
-              <div class="wrapper_indent">
-                <p>Dr. <?= $user_name ?> is a <?= $spec1,$spec2 ?> from <?= $district ?> and has an experience of  <?= $experience ?> years in this field. Dr. <?= $user_name ?> has done <?= $degree ?> from <?= $institute ?>.
-                </p>
-                  <!--TO DO add fields from database									She completed MBBS from All India Institute of Medical Sciences, Patna in 1962,MD - General Medicine from All India Institute of Medical Sciences, New Delhi in 1966 and DM - Cardiology from All India Institute of Medical Sciences, New Delhi in 1969.She is a member of Delhi Medical Council. Some of the services provided by the doctor are: Cardiography and Chest Pain Treatment etc.</p>-->
-                  <h6>Specializations</h6>
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <ul class="bullets">
-                        <li><?= $spec1 ?></li>
-<!--                        <li><?= $spec2 ?></li>-->
-
-                    </div>
-                    <!--
-                    <div class="col-lg-6">
-                    <ul class="bullets">
-                    <li>Abdominal Radiology</li>
-                    <li>Addiction Psychiatry</li>
-                    <li>Adolescent Medicine</li>
-                    <li>Cardiothoracic Radiology </li>
-                  </ul>
-                </div>
-              -->
             </div>
-            <!-- /row-->
-          </div>
-          <!-- /wrapper indent -->
+            <div class="wrapper_indent">
+              <p>Dr. <?= $user_name ?> is a <?= $spec1,$spec2 ?> from <?= $district ?> and has an experience of  <?= $experience ?> years in this field. Dr. <?= $user_name ?> has done <?= $degree ?> from <?= $institute ?>.
+              </p>
+              <!--TO DO add fields from database									She completed MBBS from All India Institute of Medical Sciences, Patna in 1962,MD - General Medicine from All India Institute of Medical Sciences, New Delhi in 1966 and DM - Cardiology from All India Institute of Medical Sciences, New Delhi in 1969.She is a member of Delhi Medical Council. Some of the services provided by the doctor are: Cardiography and Chest Pain Treatment etc.</p>-->
+              <h6>Specializations</h6>
+              <div class="row">
+                <div class="col-lg-6">
+                  <ul class="bullets">
+                    <li><?= $spec1 ?></li>
+                    <!--                        <li><?= $spec2 ?></li>-->
 
-          <hr />
+                  </div>
+                  <!--
+                  <div class="col-lg-6">
+                  <ul class="bullets">
+                  <li>Abdominal Radiology</li>
+                  <li>Addiction Psychiatry</li>
+                  <li>Adolescent Medicine</li>
+                  <li>Cardiothoracic Radiology </li>
+                </ul>
+              </div>
+            -->
+          </div>
+          <!-- /row-->
+        </div>
+        <!-- /wrapper indent -->
+
+        <hr />
+
+        <!--
+        <div class="indent_title_in">
+        <i class="pe-7s-news-paper"></i>
+        <h3>Education</h3>
+        <p> AIMS Delhi .</p>
+      </div>
+      <div class="wrapper_indent">
+      <p></p>
+      //	TO DO details from database
+      <h6>Curriculum</h6>
+      <ul class="list_edu">
+      <li><strong>AIMS PATNA </strong> - MBBS </li>
+      <li><strong>AIMS DELHI </strong> -  M.D</li>
+      <li><strong>AIMS </strong> - D.M</li>
+    </ul>
+  </div>
+-->
+<!--  End wrapper indent -->
+
+<hr />
 
 <!--
-          <div class="indent_title_in">
-            <i class="pe-7s-news-paper"></i>
-            <h3>Education</h3>
-            <p> AIMS Delhi .</p>
-          </div>
-          <div class="wrapper_indent">
-            <p></p>
-            							//	TO DO details from database
-            <h6>Curriculum</h6>
-            <ul class="list_edu">
-              <li><strong>AIMS PATNA </strong> - MBBS </li>
-              <li><strong>AIMS DELHI </strong> -  M.D</li>
-              <li><strong>AIMS </strong> - D.M</li>
-            </ul>
-          </div>
--->
-          <!--  End wrapper indent -->
+<div class="indent_title_in">
+<i class="pe-7s-cash"></i>
+<h3>Prices &amp; Payments</h3>
 
-          <hr />
+</div>
+<div class="wrapper_indent">
 
-          <!--
-          <div class="indent_title_in">
-          <i class="pe-7s-cash"></i>
-          <h3>Prices &amp; Payments</h3>
-
-        </div>
-        <div class="wrapper_indent">
-
-        <table class="table table-responsive table-striped">
-        <thead>
-        <tr>
-        <th>Service - Visit</th>
-        <th>Price</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-    <td>New patient visit</td>
-    <td>200 Rupees </td>
-  </tr>
-  <tr>
-  <td>General consultation</td>
-  <td>300 Rupees </td>
+<table class="table table-responsive table-striped">
+<thead>
+<tr>
+<th>Service - Visit</th>
+<th>Price</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New patient visit</td>
+<td>200 Rupees </td>
+</tr>
+<tr>
+<td>General consultation</td>
+<td>300 Rupees </td>
 </tr>
 <tr>
 <td>Back Pain</td>
@@ -471,224 +472,198 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
           });
         });
       });
-    </script>
+      </script>
 
 
 
 
-    <!--	end rating box					-->
-    <br/> <br />
-    <div class="row">
-      <div class="col-lg-3">
-        <div id="review_summary">
+      <!--	end rating box					-->
+      <br/> <br />
+      <div class="row">
+        <div class="col-lg-3">
+          <div id="review_summary">
 
-           <strong><?php echo substr($rate_value,0,3); ?></strong>
-
-
+            <strong><?php echo substr($rate_value,0,3); ?></strong>
 
 
 
-          <div class="rating">
 
-            <!--												<i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>-->
+
+            <div class="rating">
+
+              <!--												<i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>-->
+            </div>
+            <small>Based on <?php echo substr($rate_times,0,3); ?> reviews</small>
           </div>
-          <small>Based on <?php echo substr($rate_times,0,3); ?> reviews</small>
+        </div>
+        <div class="col-lg-9">
+          <div class="row">
+            <div class="col-lg-10 col-9">
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: <?= $fivestars ?>%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-3"><small><strong>5 stars</strong></small></div>
+          </div>
+          <!-- /row -->
+          <div class="row">
+            <div class="col-lg-10 col-9">
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width:<?= $fourstars ?>%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-3"><small><strong>4 stars</strong></small></div>
+          </div>
+          <!-- /row -->
+          <div class="row">
+            <div class="col-lg-10 col-9">
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: <?= $threestars ?>%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-3"><small><strong>3 stars</strong></small></div>
+          </div>
+          <!-- /row -->
+          <div class="row">
+            <div class="col-lg-10 col-9">
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: <?= $twostars ?>%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-3"><small><strong>2 stars</strong></small></div>
+          </div>
+          <!-- /row -->
+          <div class="row">
+            <div class="col-lg-10 col-9">
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: <?= $onestars ?>%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-3"><small><strong>1 stars</strong></small></div>
+          </div>
+          <!-- /row -->
         </div>
       </div>
-      <div class="col-lg-9">
-        <div class="row">
-          <div class="col-lg-10 col-9">
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: <?= $fivestars ?>%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-          <div class="col-lg-2 col-3"><small><strong>5 stars</strong></small></div>
+      <!-- /row -->
+
+      <hr />
+      <!-- commnet box -->
+
+
+      <!--						  will disabble comment box and button if user not logged in-->
+      <?php
+      if(isset($_SESSION['login_user']))
+      {
+        echo"<form action ='#section_2' method='post'>
+        <div class='form-group'>
+        <div id = msg>   $msg </div>
+
+        <label for='comment'><h6>Post Your Comment :</h6> </label>
+        <textarea class='form-control' rows='5' name='comment' id='comment' placeholder='Enter Your Comment Here' required> </textarea>
+        <br /> <br />
+        <div class='rev-text'>
+        <div>
+        <p align='right'>
+        <input type='submit' id='postcommnet' class='btn_1' value='Post Comment'><br>
+        </p>
         </div>
-        <!-- /row -->
-        <div class="row">
-          <div class="col-lg-10 col-9">
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width:<?= $fourstars ?>%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-          <div class="col-lg-2 col-3"><small><strong>4 stars</strong></small></div>
         </div>
-        <!-- /row -->
-        <div class="row">
-          <div class="col-lg-10 col-9">
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: <?= $threestars ?>%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-          <div class="col-lg-2 col-3"><small><strong>3 stars</strong></small></div>
         </div>
-        <!-- /row -->
-        <div class="row">
-          <div class="col-lg-10 col-9">
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: <?= $twostars ?>%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+        </form>";
+
+
+      }
+      else{
+        // disable display nothing
+        //							   echo "<input type='submit' id='postcommnet' class='btn_1' disabled = 'true'  title='Login to Post Comment' value='Post                          Comment'><br>";
+      }
+      ?>
+
+      <!--                </div>-->
+
+      <!-- - - - - - - - - - - - - - - - COMMENTS BEGIN HERE - - - - - - - - - - - -->
+      <div class="box_general_3">
+
+        <h4>Showing <i id="count"> 3 </i> of <i id="total_comments"><?=$total_comments?></i> Comments</h4>
+        <?php
+
+        $rowperpage = 3;
+        $query="SELECT * FROM vw_comments  WHERE doc_id= $doc_id ORDER BY date DESC LIMIT 0, $rowperpage";
+        $result=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
+        $count = mysqli_num_rows($result);
+        if($count>0)
+        {
+          while ($cdrow=mysqli_fetch_array($result)) {
+            $pat_name=$cdrow["pat_name"];
+            $comment = $cdrow["comment"];
+            $date = $cdrow["date"];
+            $pat_id = $cdrow['pat_id'];
+            $pic = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' width = '60px' height ='60px'/>";
+            ?>
+
+            <div class="review-box clearfix">
+              <div class ='rev-thumb'><?= $pic ?></div>
+              <div class="rev-content">
+                <div class="rating">
+                  <?php
+                  $query1 = "Select rate as rating from tb_rating where doc_id = $doc_id and pat_id = $pat_id ORDER BY timestamp DESC LIMIT 1";
+                  $result1=mysqli_query($conn,$query1) or die ("Query to get data from first table failed: ".mysqli_error());
+                  $cdrow1=mysqli_fetch_array($result1);
+                  $rating = $cdrow1['rating'];
+                  $x = 0;
+                  $avg_rating = round($rating,0);
+
+                  if($avg_rating <= 5)
+                  {
+                    for ($x; $x < $avg_rating; $x++){
+                      echo "<i class='icon_star voted'></i>";
+                    }
+                    $diff = 5-$x;
+                    for ($i = 0; $i < $diff; $i++){
+                      echo "<i class='icon_star'></i>";
+                    }
+                  }
+                  else{
+                    echo ('<i class="icon_star"></i>
+                    <i class="icon_star"></i>
+                    <i class="icon_star"></i>
+                    <i class="icon_star"></i>
+                    <i class="icon_star "></i>');
+                  }
+                  ?>
+
+                </div>
+                <div class="rev-info">
+                  <h6><?= $pat_name ?></h6>  <small><?= $date; ?></small>
+                </div>
+                <div class="rev-text">
+                  <p><?= $comment ?></p>
+                </div>
+              </div>
             </div>
+            <?php
+          }?>
+          <div class="" id="comments">
           </div>
-          <div class="col-lg-2 col-3"><small><strong>2 stars</strong></small></div>
+          <input type='hidden' value='3' id='offset' />
+          <input type='hidden' value='<?= $doc_id ?>' id='doc_id' />
+          <button id="loadmore" class="btn btn-primary" style="width:100%">Load More</button>
         </div>
-        <!-- /row -->
-        <div class="row">
-          <div class="col-lg-10 col-9">
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: <?= $onestars ?>%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-          <div class="col-lg-2 col-3"><small><strong>1 stars</strong></small></div>
-        </div>
-        <!-- /row -->
+
       </div>
-    </div>
-    <!-- /row -->
 
-    <hr />
-    <!-- commnet box -->
-
-
-    <!--						  will disabble comment box and button if user not logged in-->
-    <?php
-    if(isset($_SESSION['login_user']))
-    {
-      echo"<form action ='#section_2' method='post'>
-      <div class='form-group'>
-      <div id = msg>   $msg </div>
-
-      <label for='comment'><h6>Post Your Comment :</h6> </label>
-      <textarea class='form-control' rows='5' name='comment' id='comment' placeholder='Enter Your Comment Here' required> </textarea>
-      <br /> <br />
-      <div class='rev-text'>
-      <div>
-      <p align='right'>
-      <input type='submit' id='postcommnet' class='btn_1' value='Post Comment'><br>
-      </p>
-      </div>
-      </div>
-      </div>
-      </form>";
-
-
-    }
+    <?php }
     else
     {
-      // disable display nothing
-
-      //							   echo "<input type='submit' id='postcommnet' class='btn_1' disabled = 'true'  title='Login to Post Comment' value='Post                          Comment'><br>";
+      echo('<h4>No Comments Yet!</h4>');
     }
-
-
-
     ?>
 
 
+    <!-- End review-container -->
 
-
-
-
-
-    <!--                </div>-->
-
-
-    <!-- End Commnet box -->
-
-
-
-
-<!-- - - - - - - - - - - - - - - - COMMENTS BEGIN HERE - - - - - - - - - - - -->
-      <div class="box_general_3">
-    <h4>Showing <i id="count"> 3 </i> of <i><?=$total_comments?></i> Comments</h4>
-      <?php
-
-  
-$rowperpage = 3;    
-    $query="SELECT * FROM vw_comments  WHERE doc_id= $doc_id ORDER BY date DESC LIMIT 0, $rowperpage";
-    $result=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
-    $count = mysqli_num_rows($result);
-    if($count>0)
-    {
-      while ($cdrow=mysqli_fetch_array($result))
-      {
-        $pat_name=$cdrow["pat_name"];
-        $comment = $cdrow["comment"];
-        $date = $cdrow["date"];
-        $pat_id = $cdrow['pat_id'];
-        $pic = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' width = '60px' height ='60px'/>";
-?>
-
-        <div class="review-box clearfix">
-          <div class ='rev-thumb'><?= $pic ?></div>
-          <div class="rev-content">
-            <div class="rating">
-               <?php 
-          $query1 = "Select rate as rating from tb_rating where doc_id = $doc_id and pat_id = $pat_id ORDER BY timestamp DESC LIMIT 1";
-        $result1=mysqli_query($conn,$query1) or die ("Query to get data from first table failed: ".mysqli_error());
-        $cdrow1=mysqli_fetch_array($result1);
-        $rating = $cdrow1['rating'];
-               $x = 0;
-											$avg_rating = round($rating,0);
-											
-                                            if($avg_rating <= 5)
-                                            	{
-                                            		for ($x; $x < $avg_rating; $x++) 
-                                            			{
-                                            				echo "<i class='icon_star voted'></i>";
-                                            			}
-                                              		$diff = 5-$x;
-                                              		for ($i = 0; $i < $diff; $i++) 
-                                            			{
-                                            				echo "<i class='icon_star'></i>";
-                                            			}
-                                            	}
-                                            
-                                          
-                                              else 
-                                              	{
-												  echo ('<i class="icon_star"></i>
-												<i class="icon_star"></i>
-												<i class="icon_star"></i>
-												<i class="icon_star"></i>
-												<i class="icon_star "></i>');
-											  	}
-              
-              
-              
-              ?>
-            
-            </div>
-            <div class="rev-info">
-              <h6><?= $pat_name ?></h6>  <small><?= $date; ?></small>
-            </div>
-            <div class="rev-text">
-              <p><?= $comment ?></p>
-            </div>
-          </div>
-        </div>
-      <?php
-      }?>
-        <div class="" id="comments">
-    </div>
-    <input type='hidden' value='3' id='offset' />
-    <input type='hidden' value='<?= $doc_id ?>' id='doc_id' />
-    <button id="loadmore" class="btn btn-primary" style="width:100%">Load More</button>
   </div>
-      
-  </div>
-      
-   <?php }
-        else
-        {
-         echo('<h4>No Comments Yet!</h4>');
-        }
-          ?>
-
-    
-  <!-- End review-container -->
-
-</div>
-<!-- - - - - - - - - - - - - - - - COMMENTS END HERE - - - - - - - - - - - -->
+  <!-- - - - - - - - - - - - - - - - COMMENTS END HERE - - - - - - - - - - - -->
 
 </div>
 <!-- /section_2 -->
