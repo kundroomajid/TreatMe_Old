@@ -77,7 +77,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   <div class="bg_color_2">
     <div class="container margin_60_35">
       <div id="login-2">
-        <h1>Welcome to Healthcare</h1>
+        <h1>Welcome to TreatMe</h1>
         <form action=" " method="post">
           <div class="box_form clearfix">
             <!--	<div class="box_login">

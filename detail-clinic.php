@@ -1,4 +1,3 @@
-
 <?php
 include("header.php");
 include("config.php");
@@ -9,6 +8,9 @@ $curr_date = date("Y-m-d"); // variable gets current date
 $clinic_id = isset($_GET['clinic_id'])? mysqli_real_escape_string($conn,$_GET['clinic_id']):null;
 $pat_id = isset($_SESSION['id'])? mysqli_real_escape_string($conn,$_SESSION['id']):null;
 $doc_id = $clinic_id;
+$user_type = $_SESSION['user_type'];
+
+
 if($clinic_id!=null){
   $query1="SELECT * FROM vw_clinic where clinic_id = $clinic_id";
   $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
@@ -22,7 +24,7 @@ if($clinic_id!=null){
     $views = $cdrow1['views'];
     $avg_rating = $cdrow1['avg_rating'];
     $rated_by = $cdrow1['rated_by'];
-
+    
   }
 
   // TO GET DATA FROM RATING
@@ -84,17 +86,28 @@ if($clinic_id!=null){
   $onestars = $row['stars'];
   $onestars = ($total>0)?($onestars / $total) *100:0;
 
-
-  $sql = "SELECT count(*) as t_comments from comments where doc_id = $clinic_id";
+$sql = "SELECT count(*) as t_comments from comments where doc_id = $clinic_id";
   $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $row = mysqli_fetch_array($res);
   $total_comments = $row['t_comments'];
+  
+  if($total_comments > 3)
+  {
+    $comment_count = 3;
+  }
+  else
+  {
+    $comment_count = $total_comments;
+  }
+  
 }
 else die("Clinic id not found");
+
 if($_SERVER["REQUEST_METHOD"] == "POST") {
   $comment = mysqli_real_escape_string($conn,$_POST['comment']);
+  
   $sql = "INSERT into comments (pat_id,doc_id,comment) values ('$pat_id','$clinic_id','$comment')";
-
+  
   if(mysqli_query($conn, $sql)){
     $msg = '<div class= "alert alert-info alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -112,6 +125,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 
 }
+
 
 ?>
 <html>
@@ -166,65 +180,70 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
           </ul>
           <ul class="contacts">
-            <li><h6>Address</h6><?= $address ?></li>
-            <li><h6>Phone</h6><?= $phone ?></li>
+            <li>
+              <h6>Address</h6><?= $address ?>
+            </li>
+            <li>
+              <h6>Phone</h6><?= $phone ?>
+            </li>
           </ul>
-        </aside>
-        <!-- /asdide -->
+      </aside>
+      <!-- /asdide -->
 
-        <div class="col-xl-9 col-lg-8">
+      <div class="col-xl-9 col-lg-8">
 
-          <div class="tabs_styled_2">
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-expanded="true">General info</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link " id="book-tab" data-toggle="tab" href="#book" role="tab" aria-controls="book">Doctors Avalaible</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews">Reviews</a>
-              </li>
-            </ul>
-            <!--/nav-tabs -->
+        <div class="tabs_styled_2">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-expanded="true">General info</a>
+            </li>
+             <li class="nav-item">
+              <a class="nav-link active" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews">Reviews</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " id="book-tab" data-toggle="tab" href="#book" role="tab" aria-controls="book">Doctors Avalaible</a>
+            </li>
+           
+          </ul>
+          <!--/nav-tabs -->
 
-            <div class="tab-content">
+          <div class="tab-content">
 
-              <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
-                <p class="lead add_bottom_30"><?=$clinic_name?> is located at <?=$address?> in district <?=$district?>.</p>
-                <div class="indent_title_in">
-                  <i class="pe-7s-user"></i>
-                  <h3>Professional statement</h3>
-                  <!--									<p>Mussum ipsum cacilds, vidis litro abertis.</p>-->
-                </div>
-                <div class="wrapper_indent">
-                  <!--									<p>Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc tortor eu nibh. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel, dapibus id, mattis vel, nisi. Nullam mollis. Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel, dapi.</p>-->
-                  <h6>Specializations</h6>
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <ul class="bullets">
-                        <li>Abdominal Radiology</li>
-                        <li>Addiction Psychiatry</li>
-                        <li>Adolescent Medicine</li>
-                        <li>Cardiothoracic Radiology </li>
-                      </ul>
-                    </div>
-                    <div class="col-lg-6">
-                      <ul class="bullets">
-                        <li>Abdominal Radiology</li>
-                        <li>Addiction Psychiatry</li>
-                        <li>Adolescent Medicine</li>
-                        <li>Cardiothoracic Radiology </li>
-                      </ul>
-                    </div>
+            <div class="tab-pane fade" id="general" role="tabpanel" aria-labelledby="general-tab">
+              <p class="lead add_bottom_30"><?=$clinic_name?> is located at <?=$address?> in district <?=$district?>.</p>
+              <div class="indent_title_in">
+                <i class="pe-7s-user"></i>
+                <h3>Professional statement</h3>
+                <!--									<p>Mussum ipsum cacilds, vidis litro abertis.</p>-->
+              </div>
+              <div class="wrapper_indent">
+                <!--									<p>Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc tortor eu nibh. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel, dapibus id, mattis vel, nisi. Nullam mollis. Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel, dapi.</p>-->
+                <h6>Specializations</h6>
+                <div class="row">
+                  <div class="col-lg-6">
+                    <ul class="bullets">
+                      <li>Abdominal Radiology</li>
+                      <li>Addiction Psychiatry</li>
+                      <li>Adolescent Medicine</li>
+                      <li>Cardiothoracic Radiology </li>
+                    </ul>
                   </div>
-                  <!-- /row-->
+                  <div class="col-lg-6">
+                    <ul class="bullets">
+                      <li>Abdominal Radiology</li>
+                      <li>Addiction Psychiatry</li>
+                      <li>Adolescent Medicine</li>
+                      <li>Cardiothoracic Radiology </li>
+                    </ul>
+                  </div>
                 </div>
-                <!-- /wrapper indent -->
+                <!-- /row-->
+              </div>
+              <!-- /wrapper indent -->
 
-                <hr />
+              <hr />
 
-                <!--
+              <!--
                 <div class="indent_title_in">
                 <i class="pe-7s-news-paper"></i>
                 <h3>Education</h3>
@@ -241,11 +260,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
           </div>
         -->
-        <!--  End wrapper indent -->
+              <!--  End wrapper indent -->
 
-        <hr />
+              <hr />
 
-        <!--
+              <!--
         <div class="indent_title_in">
         <i class="pe-7s-cash"></i>
         <h3>Prices &amp; Payments</h3>
@@ -289,136 +308,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 </table>
 </div>
 -->
-<!--  End wrapper_indent -->
+              <!--  End wrapper_indent -->
 
-</div>
-<!-- /tab_2 -->
-
-<div class="tab-pane fade " id="book" role="tabpanel" aria-labelledby="book-tab">
-  <p class="lead add_bottom_30" align="center">List Of Doctors Avalaible Here</p>
-  <form />
-  <div class="container margin_60_35" >
-    <div class="row" >
-      <div class="col-lg-7" >
-        <?php
-        $q= "Select * from tb_clinic_docs where clinic_id = $clinic_id";
-        $result=mysqli_query($conn,$q) or die ("Query to get data from firsttable failed: ".mysqli_error());
-        $count = mysqli_num_rows($result);
-
-        while ($cdrow=mysqli_fetch_array($result))
-        {
-          $doc_id=$cdrow["doc_id"];
-          $query = "Select * from vw_doctor where doc_id = $doc_id";
-          $result1 = mysqli_query($conn,$query);
-          $cdrow1 = mysqli_fetch_array($result1);
-
-          $user_name=$cdrow1["user_name"];
-          $specialization = $cdrow1["specialization"];
-          $image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow1["photo"])."' />";
-          $rate_times = $cdrow1['rated_by'];
-          $avg_rating = $cdrow1['avg_rating'];
-          ?>
-          <div class="strip_list wow fadeIn" >
-            <a href="#0" class="wish_bt"></a>
-            <figure>
-              <a href="./detail-page.php"><img src="" alt="" /></a>
-              <?= "$image";?>
-            </figure>
-            <?php if(strlen($specialization) > 24)
-            {
-              $spec_Array =  explode (",", $specialization);
-              $spec1 = $spec_Array[0];
-              $spec2 = $spec_Array[1];
-              $spec3 = $spec_Array[2];
-              $spec4 = $spec_Array[3];
-              echo ("<small>$spec1,$spec2</small>");
-              echo ("<small>$spec3,$spec4</small>");
-
-            }
-            else
-            {
-              echo ("<small>$specialization</small>");
-            }
-            ?>
-            <?php
-            $query1="SELECT * FROM tb_qualifications where doct_id = $doc_id";
-            $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
-            $cdrow1=mysqli_fetch_array($result1);
-            $degree = strtoupper($cdrow1['degree']);
-            $institute = strtoupper($cdrow1['institute']);
-            $experience = $cdrow1['experience'];
-
-            ?>
-
-            <?= "<h3>$user_name</h3>";?>
-            <p><?= $degree ?> ( <?= $institute ?> ), <?= $experience ?> Years Experience</p>
-            <!--						code to display stars from database-->
-            <span class="rating">
-
-              <?php
-              $avg_rating = substr($avg_rating,0,4);
-              echo("<small>($avg_rating) </small>");
-              $x = 0;
-              $avg_rating = round($avg_rating,0);
-
-              if($avg_rating <= 5)
-              {
-                for ($x; $x < $avg_rating; $x++)
-                {
-                  echo "<i class='icon_star voted'></i>";
-                }
-                $diff = 5-$x;
-                for ($i = 0; $i < $diff; $i++)
-                {
-                  echo "<i class='icon_star'></i>";
-                }
-              }
-
-
-              else
-              {
-                echo ('<i class="icon_star"></i>
-                <i class="icon_star"></i>
-                <i class="icon_star"></i>
-                <i class="icon_star"></i>
-                <i class="icon_star "></i>');
-              }
-
-
-              ?>
-              <small>(<?php echo $rate_times; ?>)</small></span>
-              <!--						<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
-              <ul>
-                <li><a href="#0" onclick="onHtmlClick('Doctors', 0)" class="btn_listing">View on Map</a></li>
-                <li><a href=" ">Directions</a></li>
-                <li><a href="./detail-page.php?doc_id=<?= $doc_id ?>" class="btn_listing">View Profile</a></li>
-              </ul>
-            </div>
-
-
-            <!--                                here-->
-
-
-            <?php
-
-          }
-
-          ?>
-
-
-
-          <!-- /tab_1 -->
-
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-    <div class="reviews-container">
-      <!--			rating box from here-->
-      <!--						  will disabble 5 star rating box if user not logged in-->
-      <?php
-      if(isset($_SESSION['login_user']))
+           </div> <!-- general tab end -->
+            <!-- /tab_2 -->
+            <div class="tab-pane fade show active" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+              <div class="reviews-container">
+                <!--			rating box from here-->
+                <!--						  will disabble 5 star rating box if user not logged in-->
+                <?php
+      if(isset($_SESSION['login_user']) && $user_type == 'p')
       {
 
         echo ('<p align = "center"> <h5 align ="center">Rate Clinic</h5></p>
@@ -434,133 +333,138 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       }
       ?>
 
-      <script>
-      $(function(){
-        $('.rate-btn').hover(function(){
-          $('.rate-btn').removeClass('rate-btn-hover');
-          var therate = $(this).attr('id');
-          for (var i = therate; i >= 0; i--) {
-            $('.btn-'+i).addClass('rate-btn-hover');
-          };
-        });
+                <script>
+                  $(function() {
+                    $('.rate-btn').hover(function() {
+                      $('.rate-btn').removeClass('rate-btn-hover');
+                      var therate = $(this).attr('id');
+                      for (var i = therate; i >= 0; i--) {
+                        $('.btn-' + i).addClass('rate-btn-hover');
+                      };
+                    });
 
-        $('.rate-btn').click(function(){
-          var therate = $(this).attr('id');
-          var dataRate = 'act=rate&post_id=<?php echo $clinic_id; ?>&rate='+therate; //
-          $('.rate-btn').removeClass('rate-btn-active');
-          for (var i = therate; i >= 0; i--) {
-            $('.btn-'+i).addClass('rate-btn-active');
-          };
-          $.ajax({
-            type : "POST",
-            url : "ajax.php",
-            data: dataRate,
-            success:function(){document.location.reload();}
-          });
-        });
-      });
-      </script>
+                    $('.rate-btn').click(function() {
+                      var therate = $(this).attr('id');
+                      var dataRate = 'act=rate&post_id=<?php echo $clinic_id; ?>&rate=' + therate; //
+                      $('.rate-btn').removeClass('rate-btn-active');
+                      for (var i = therate; i >= 0; i--) {
+                        $('.btn-' + i).addClass('rate-btn-active');
+                      };
+                      $.ajax({
+                        type: "POST",
+                        url: "ajax.php",
+                        data: dataRate,
+                        success: function() {
+                          document.location.reload();
+                        }
+                      });
+                    });
+                  });
+                </script>
 
-      <!--	end rating box					-->
-      <br/> <br />
-      <div class="row">
-        <div class="col-lg-3">
-          <div id="review_summary">
+                <!--	end rating box					-->
+                <br /> <br />
+                <div class="row">
+                  <div class="col-lg-3">
+                    <div id="review_summary">
 
-            <strong><?php echo substr($rate_value,0,3); ?></strong>
-
-
-
-
-
-            <div class="rating">
-
-            </div>
-            <small>Based on <?php echo substr($rate_times,0,3); ?> reviews</small>
-          </div>
-        </div>
-        <div class="col-lg-9">
-          <div class="row">
-            <div class="col-lg-10 col-9">
-              <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: <?= $fivestars ?>%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-            <div class="col-lg-2 col-3"><small><strong>5 stars</strong></small></div>
-          </div>
-          <!-- /row -->
-          <div class="row">
-            <div class="col-lg-10 col-9">
-              <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width:<?= $fourstars ?>%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-            <div class="col-lg-2 col-3"><small><strong>4 stars</strong></small></div>
-          </div>
-          <!-- /row -->
-          <div class="row">
-            <div class="col-lg-10 col-9">
-              <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: <?= $threestars ?>%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-            <div class="col-lg-2 col-3"><small><strong>3 stars</strong></small></div>
-          </div>
-          <!-- /row -->
-          <div class="row">
-            <div class="col-lg-10 col-9">
-              <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: <?= $twostars ?>%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-            <div class="col-lg-2 col-3"><small><strong>2 stars</strong></small></div>
-          </div>
-          <!-- /row -->
-          <div class="row">
-            <div class="col-lg-10 col-9">
-              <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: <?= $onestars ?>%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-            <div class="col-lg-2 col-3"><small><strong>1 stars</strong></small></div>
-          </div>
-          <!-- /row -->
-        </div>
-      </div>
-      <!-- /row -->
-
-      <hr />
-      <!-- commnet box -->
+                      <strong><?php echo substr($rate_value,0,3); ?></strong>
 
 
-      <!--						  will disabble comment box and button if user not logged in-->
-      <?php
-      if(isset($_SESSION['login_user']))
+
+
+
+                      <div class="rating">
+
+                      </div>
+                      <small>Based on <?php echo substr($rated_by,0,3); ?> reviews</small>
+                    </div>
+                  </div>
+                  <div class="col-lg-9">
+                    <div class="row">
+                      <div class="col-lg-10 col-9">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" style="width: <?= $fivestars ?>%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-lg-2 col-3"><small><strong>5 stars</strong></small></div>
+                    </div>
+                    <!-- /row -->
+                    <div class="row">
+                      <div class="col-lg-10 col-9">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" style="width:<?= $fourstars ?>%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-lg-2 col-3"><small><strong>4 stars</strong></small></div>
+                    </div>
+                    <!-- /row -->
+                    <div class="row">
+                      <div class="col-lg-10 col-9">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" style="width: <?= $threestars ?>%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-lg-2 col-3"><small><strong>3 stars</strong></small></div>
+                    </div>
+                    <!-- /row -->
+                    <div class="row">
+                      <div class="col-lg-10 col-9">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" style="width: <?= $twostars ?>%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-lg-2 col-3"><small><strong>2 stars</strong></small></div>
+                    </div>
+                    <!-- /row -->
+                    <div class="row">
+                      <div class="col-lg-10 col-9">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" style="width: <?= $onestars ?>%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-lg-2 col-3"><small><strong>1 stars</strong></small></div>
+                    </div>
+                    <!-- /row -->
+                  </div>
+                </div>
+                <!-- /row -->
+
+                <hr />
+                <!-- commnet box -->
+
+
+                <!--						  will disabble comment box and button if user not logged in-->
+                <?php
+      if(isset($_SESSION['login_user']) && $user_type == 'p')
       {
-        echo"<form action ='#reviews' method='post'>
+        echo"<form action='#reviews' method='POST'>
         <div class='form-group'>
-        <div id = msg>   $msg </div>
+                <div id=msg> $msg </div>
 
-        <label for='comment'><h6>Post Your Comment :</h6> </label>
-        <textarea class='form-control' rows='5' name='comment' id='comment' placeholder='Enter Your Comment Here' required> </textarea>
-        <br /> <br />
-        <div class='rev-text'>
-        <div>
-        <p align='right'>
-        <input type='submit' id='postcommnet' class='btn_1' value='Post Comment'><br>
-        </p>
+                <label for='comment'>
+                        <h6>Post Your Comment :</h6>
+                </label>
+                <textarea class='form-control' rows='5' name='comment' id='comment' placeholder='Enter Your Comment Here' required> </textarea>
+                <br /> <br />
+                <div class='rev-text'>
+                        <div>
+                                <p align='right'>
+                                        <input type='submit' id='postcomment' class='btn_1' value='Post Comment'>
+                                        <br>
+                                </p>
+                        </div>
+                </div>
         </div>
-        </div>
-        </div>
-        </form>";
-
+</form>";
+        
 
       }
       else
       {
         // disable display nothing
 
-        //							   echo "<input type='submit' id='postcommnet' class='btn_1' disabled = 'true'  title='Login to Post Comment' value='Post                          Comment'><br>";
+      
       }
 
 
@@ -573,15 +477,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-      <!--                </div>-->
+                <!--                </div>-->
 
 
-      <!-- End Commnet box -->
+                <!-- End Commnet box -->
 
-      <!-- - - - - - - - - - - - - - - - COMMENTS BEGIN HERE - - - - - - - - - - - -->
-      <div class="box_general_3">
-        <h4>Showing <i id="count"> 3 </i> of <i><?=$total_comments?></i> Comments</h4>
-        <?php
+                <!-- - - - - - - - - - - - - - - - COMMENTS BEGIN HERE - - - - - - - - - - - -->
+                <div class="box_general_3">
+                  <h4>Showing <i id="count"> <?=$comment_count?> </i> of <i id="total_comments"><?=$total_comments?></i> Comments</h4>
+                  <?php
         $rowperpage = 3;
         $query="SELECT * FROM vw_comments  WHERE doc_id= $clinic_id ORDER BY date DESC LIMIT 0, $rowperpage";
         $result=mysqli_query($conn,$query) or die ("Query to get data from first table failed: ".mysqli_error());
@@ -598,11 +502,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             $pic = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' width = '60px' height ='60px'/>";
             ?>
 
-            <div class="review-box clearfix">
-              <div class ='rev-thumb'><?= $pic ?></div>
-              <div class="rev-content">
-                <div class="rating">
-                  <?php
+                  <div class="review-box clearfix">
+                    <div class='rev-thumb'><?= $pic ?></div>
+                    <div class="rev-content">
+                      <div class="rating">
+                        <?php
                   $query1 = "Select rate as rating from tb_rating where doc_id = $clinic_id and pat_id = $pat_id ORDER BY timestamp DESC LIMIT 1";
                   $result1=mysqli_query($conn,$query1) or die ("Query to get data from first table failed: ".mysqli_error());
                   $cdrow1=mysqli_fetch_array($result1);
@@ -637,27 +541,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
                   ?>
 
-                </div>
-                <div class="rev-info">
-                  <h6><?= $pat_name ?></h6>  <small><?= $date; ?></small>
-                </div>
-                <div class="rev-text">
-                  <p><?= $comment ?></p>
-                </div>
-              </div>
-            </div>
-            <?php
+                      </div>
+                      <div class="rev-info">
+                        <h6><?= $pat_name ?></h6> <small><?= $date; ?></small>
+                      </div>
+                      <div class="rev-text">
+                        <p><?= $comment ?></p>
+                      </div>
+                    </div>
+                  </div>
+                  <?php
           }?>
-          <div class="" id="comments">
-          </div>
-          <input type='hidden' value='3' id='offset' />
-          <input type='hidden' value='<?= $clinic_id ?>' id='doc_id' />
-          <button id="loadmore" class="btn btn-primary" style="width:100%">Load More</button>
-        </div>
+                  <div class="" id="comments">
+                  </div>
+                  <input type='hidden' value='3' id='offset' />
+                  <input type='hidden' value='<?= $doc_id ?>' id='doc_id' />
+                  <button id="loadmore" class="btn btn-primary" style="width:100%">Load More</button>
+                </div>
 
-      </div>
+              </div>
 
-    <?php }
+              <?php }
     else
     {
       echo('<h4>No Comments Yet!</h4>');
@@ -665,26 +569,148 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     ?>
 
 
-    <!-- End review-container -->
+              <!-- End review-container -->
 
+            </div>
+            <!-- - - - - - - - - - - - - - - - COMMENTS END HERE - - - - - - - - - - - -->
+
+            <div class="tab-pane fade " id="book" role="tabpanel" aria-labelledby="book-tab">
+              <p class="lead add_bottom_30" align="center">List Of Doctors Avalaible Here</p>
+              <form />
+              <div class="container margin_60_35">
+                <div class="row">
+                  <div class="col-lg-7">
+                    <?php
+        $q= "Select * from tb_clinic_docs where clinic_id = $clinic_id";
+        $result=mysqli_query($conn,$q) or die ("Query to get data from firsttable failed: ".mysqli_error());
+        $count = mysqli_num_rows($result);
+
+        while ($cdrow=mysqli_fetch_array($result))
+        {
+          $doc_id=$cdrow["doc_id"];
+          $query = "Select * from vw_doctor where doc_id = $doc_id";
+          $result1 = mysqli_query($conn,$query);
+          $cdrow1 = mysqli_fetch_array($result1);
+
+          $user_name=$cdrow1["user_name"];
+          $specialization = $cdrow1["specialization"];
+          $image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow1["photo"])."' />";
+          $rate_times = $cdrow1['rated_by'];
+          $avg_rating = $cdrow1['avg_rating'];
+          $experience = $cdrow1['experience'];
+
+          ?>
+                    <div class="strip_list wow fadeIn">
+                      <a href="#0" class="wish_bt"></a>
+                      <figure>
+                        <a href="./detail-page.php"><img src="" alt="" /></a>
+                        <?= "$image";?>
+                      </figure>
+                      <?php if(strlen($specialization) > 24)
+            {
+              $spec_Array =  explode (",", $specialization);
+              $spec1 = $spec_Array[0];
+              $spec2 = $spec_Array[1];
+              $spec3 = $spec_Array[2];
+              $spec4 = $spec_Array[3];
+              echo ("<small>$spec1,$spec2</small>");
+              echo ("<small>$spec3,$spec4</small>");
+
+            }
+            else
+            {
+              echo ("<small>$specialization</small>");
+            }
+            ?>
+                      <?php
+            $query1="SELECT * FROM tb_qualifications where doct_id = $doc_id";
+            $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
+            $cdrow1=mysqli_fetch_array($result1);
+            $degree = strtoupper($cdrow1['degree']);
+            $institute = strtoupper($cdrow1['institute']);
+           
+            ?>
+
+                      <?= "<h3>$user_name</h3>";?>
+                      <p><?= $degree ?> ( <?= $institute ?> ) <?= $experience ?> Years Experience</p>
+                      <!--						code to display stars from database-->
+                      <span class="rating">
+
+                        <?php
+              $avg_rating = substr($avg_rating,0,4);
+              echo("<small>($avg_rating) </small>");
+              $x = 0;
+              $avg_rating = round($avg_rating,0);
+
+              if($avg_rating <= 5)
+              {
+                for ($x; $x < $avg_rating; $x++)
+                {
+                  echo "<i class='icon_star voted'></i>";
+                }
+                $diff = 5-$x;
+                for ($i = 0; $i < $diff; $i++)
+                {
+                  echo "<i class='icon_star'></i>";
+                }
+              }
+
+
+              else
+              {
+                echo ('<i class="icon_star"></i>
+                <i class="icon_star"></i>
+                <i class="icon_star"></i>
+                <i class="icon_star"></i>
+                <i class="icon_star "></i>');
+              }
+
+
+              ?>
+                        <small>(<?php echo $rate_times; ?>)</small></span>
+                      <!--						<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
+                      <ul>
+                        <li><a href="#0" onclick="onHtmlClick('Doctors', 0)" class="btn_listing">View on Map</a></li>
+                        <li><a href=" ">Directions</a></li>
+                        <li><a href="./detail-page.php?doc_id=<?= $doc_id ?>" class="btn_listing">View Profile</a></li>
+                      </ul>
+                    </div>
+
+
+                    <!--                                here-->
+
+
+                    <?php
+
+          }
+
+          ?>
+
+
+
+                    <!-- /tab_1 -->
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- End review-container -->
+          </div>
+          <!-- /tab_3 -->
+        </div>
+        <!-- /tab-content -->
+      </div>
+      <!-- /tabs_styled -->
+    </div>
+    <!-- /col -->
   </div>
-  <!-- - - - - - - - - - - - - - - - COMMENTS END HERE - - - - - - - - - - - -->
-
-  <!-- End review-container -->
-</div>
-<!-- /tab_3 -->
-</div>
-<!-- /tab-content -->
-</div>
-<!-- /tabs_styled -->
-</div>
-<!-- /col -->
-</div>
-<!-- /row -->
-</div>
-<!-- /container -->
+  <!-- /row -->
+  </div>
+  <!-- /container -->
 </main>
 <!-- /main -->
+
 </html>
 
 <script src="js/loadmore.js" charset="utf-8"></script>

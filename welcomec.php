@@ -233,9 +233,9 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 $docquery = $conn->query("select user_name from vw_patient where pat_id = $pat_id");
                 $cdrow3=mysqli_fetch_array($docquery);
                 $pat_name = $cdrow3["user_name"];
-                echo "<tr><td colspan='6'><i><b>$doc_name</b> <i/> (confirmed Appointments) </td></tr>";
+                echo "<tr><td colspan='6'><i><b>$doc_name</b> <i/> (Confirmed Appointments) </td></tr>";
                 echo "<tr><td>$appt_id <span class=''></span> </td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>$queue_no</td>
-                <td>confirmed</td>
+                <td>Confirmed</td>
                 </tr>" ;
 
                 //<a href='#' class='btn btn-sm btn-success'><span class='icon_check_alt2'></span> </a>

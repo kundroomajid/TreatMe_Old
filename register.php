@@ -103,7 +103,7 @@ include("header.php");
 		<div class="bg_color_2">
 			<div class="container margin_60_35">
 				<div id="register">
-					<h1>Join Healthcare</h1>
+					<h1>Join TreatMe</h1>
 					<div class="row justify-content-center">
 						<div class="col-md-5">
 							<form action="register.php" method="POST">

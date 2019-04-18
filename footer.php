@@ -5,7 +5,7 @@
 			<div class="row">
 				<div class="col-lg-3 col-md-12">
 					<p>
-						<a href="index.php" title=" J&K Healthcare">
+						<a href="index.php" title=" J&K TreatMe">
 							<img src="./img/logo.png" data-retina="true" alt="" width="163" height="36" class="img-fluid" />
 						</a>
 					</p>
@@ -59,7 +59,7 @@
 					</ul>
 				</div>
 				<div class="col-md-4">
-					<div id="copy">© 2019 Healthcare</div>
+					<div id="copy">© 2019 TreatMe</div>
 				</div>
 			</div>
 		</div>

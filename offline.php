@@ -2,7 +2,7 @@
 <main>
 	<div class="hero_home version_2">
 		<div class="content">
-		 <font size="10">Healthcare </font>
+		 <font size="10">TreatMe </font>
 			<p><b><font color="red" size="6">Sorry you are offline at the moment!</font></b></p>
 	    </div>
 	</div>

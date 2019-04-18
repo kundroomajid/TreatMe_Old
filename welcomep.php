@@ -37,6 +37,11 @@ if($id!=null) {
   $apptquery = "Select * from tb_appointment where pat_id = $id";
   $resultappt = $conn->query($apptquery);
   $count = mysqli_num_rows($resultappt);
+  
+  //get data from temp appointment tablet
+  $resulttmpappt = $conn->query("SELECT * FROM tmp_appointment WHERE pat_id = $id") ;
+  $counttmpappt = mysqli_num_rows($resulttmpappt);
+  
 } else {
   echo '<script type="text/javascript">
 //  alert("Please Login To Continue ")
@@ -183,11 +188,12 @@ this.value = "";
               </thead>
               <tbody>
                 <?php
-                // if($count == "0") {
-                //   echo "No Appointments Booked yet";
-                // } else {
-                // if($resultappt->num_rows > 0)          {
-                if($count > 0)          {
+                
+                if($count > 0 || $counttmpappt >0)
+                {
+                  if($count > 0)
+                {
+                    echo "<tr><td colspan='6'>Confirmed</td></tr>";
                   while ($cdrow2=mysqli_fetch_array($resultappt)) {
                     //getting result from database
                     $appt_id = $cdrow2["apptt_id"];
@@ -203,8 +209,23 @@ this.value = "";
                     echo "<tr><td>$appt_id</td><td>$appt_date</td><td>$doc_name</td><td>$shift_type</td><td>$queue_no</td>
                     <td><a href='delete_appointment.php?appt_id=$appt_id'>Delete</td></td></tr>" ;
                   }
-                  // }
-                }else {
+                  
+                }
+                  if($counttmpappt >0)
+                  {
+                    echo "<tr><td colspan='6'>Un Confirmed</td></tr>";
+            while ($cdrow2=mysqli_fetch_array($resulttmpappt)) {
+                //getting result from database
+                $tmp_id = $cdrow2["tmp_id"];
+                $pat_id = $cdrow2["pat_id"];
+                $appt_date = $cdrow2["appt_date"];
+                $shift = $cdrow2["shift"];
+                $shift_type = ($shift==0)?'Morning':'Evening';
+              echo ("<tr><td>$appt_id</td><td>$appt_date</td><td>$doc_name</td><td>$shift_type</td><td>$queue_no</td>");
+                  }
+                }
+                }
+                  else {
                   echo("<tr><td colspan='5'><h5>No Appointments booked Yet</td></tr>");
                 }
                 ?>

@@ -7,7 +7,7 @@ include("header.php");
 	<main>
 		<div class="hero_home version_1">
 			<div class="content">
-			 <font size="10">Healthcare </font>
+			 <font size="10">TreatMe </font>
 				<p>Find trusted medical advice from Kashmir's top doctors<br>
 
 				</p>
@@ -179,12 +179,12 @@ include("header.php");
 					</div>
 					<div class="col-md-6">
 
-						<h3>Download <strong> Healthcare app</strong> </h3>
+						<h3>Download <strong> TreatMe app</strong> </h3>
 
 
 						<p class="lead">
 
-Like millions of Healthcare users, book your appointments anytime, anywhere.
+Like millions of TreatMe users, book your appointments anytime, anywhere.
   </p>
 						<div class="app_buttons wow" data-wow-offset="100">
 							<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 43.1 85.9" style="enable-background:new 0 0 43.1 85.9;" xml:space="preserve">

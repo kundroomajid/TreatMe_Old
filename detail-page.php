@@ -8,6 +8,7 @@ $msg = " ";
 $curr_date = date("Y-m-d"); // variable gets current date
 $doc_id = isset($_GET['doc_id'])? mysqli_real_escape_string($conn,$_GET['doc_id']):null;
 $pat_id = isset($_SESSION['id'])? $_SESSION['id']:null;
+$user_type = $_SESSION['user_type'];
 
 if($doc_id!=null){
   $query1="SELECT * FROM vw_doctor where user_id = $doc_id";
@@ -55,11 +56,22 @@ if($doc_id!=null){
   $onestars = $row['stars'];
   $onestars = ($total>0)?($onestars / $total) *100:0 ;
 
-
   $sql = "SELECT count(*) as t_comments from comments where doc_id = $doc_id";
   $res = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $row = mysqli_fetch_array($res);
   $total_comments = $row['t_comments'];
+  
+  if($total_comments > 3)
+  {
+    $comment_count = 3;
+  }
+  else
+  {
+    $comment_count = $total_comments;
+  }
+  
+  
+  
 
 
 
@@ -119,6 +131,7 @@ else die("doc id not found");
 if($_SERVER["REQUEST_METHOD"] == "POST") {
   $comment = mysqli_real_escape_string($conn,$_POST['comment']);
   $sql = "INSERT into comments (pat_id,doc_id,comment) values ('$pat_id','$doc_id','$comment')";
+ 
 
   if(mysqli_query($conn, $sql)){
     $msg = '<div class= "alert alert-info alert-dismissible">
@@ -135,10 +148,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>';
 
   }
-
+unset($comment);
 }
 
-if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
+if(isset($_SESSION['login_user'])  ){
   $query1="SELECT user_name FROM tb_user where user_id = $pat_id ";
   $result1=mysqli_query($conn,$query1) or die ("Query to get data from firsttable failed: ".mysqli_error());
   $cdrow1=mysqli_fetch_array($result1);
@@ -432,9 +445,9 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
       <!--			rating box from here-->
       <!--						  will disabble 5 star rating box if user not logged in-->
       <?php
-      if(isset($_SESSION['login_user']))
+      if(isset($_SESSION['login_user']) && ($user_type == 'p'))
       {
-        echo ('<p align = "center"> <h5 align ="center">Rate Doctor</h5></p>
+      echo ('<p align = "center"> <h5 align ="center">Rate Clinic</h5></p>
 
         <div class="rate">
         <div id="1" class="btn-1 rate-btn"></div>
@@ -552,7 +565,7 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
 
       <!--						  will disabble comment box and button if user not logged in-->
       <?php
-      if(isset($_SESSION['login_user']))
+      if(isset($_SESSION['login_user']) && $user_type == 'p' )
       {
         echo"<form action ='#section_2' method='post'>
         <div class='form-group'>
@@ -584,7 +597,7 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
       <!-- - - - - - - - - - - - - - - - COMMENTS BEGIN HERE - - - - - - - - - - - -->
       <div class="box_general_3">
 
-        <h4>Showing <i id="count"> 3 </i> of <i id="total_comments"><?=$total_comments?></i> Comments</h4>
+        <h4>Showing <i id="count"> <?=$comment_count?> </i> of <i id="total_comments"><?=$total_comments?></i> Comments</h4>
         <?php
 
         $rowperpage = 3;
