@@ -118,7 +118,13 @@ if($doc_id!=null){
 else die("doc id not found");
 if($_SERVER["REQUEST_METHOD"] == "POST") {
   $comment = mysqli_real_escape_string($conn,$_POST['comment']);
-  $sql = "INSERT into comments (pat_id,doc_id,comment) values ('$pat_id','$doc_id','$comment')";
+  $comment_query = mysqli_query($conn,"SELECT * FROM comments WHERE doc_id = $doc_id and pat_id=$pat_id");
+  $comment_rows = mysqli_num_rows($comment_query);
+
+  if($comment_rows==0)
+    $sql = "INSERT into comments (pat_id,doc_id,comment) values ('$pat_id','$doc_id','$comment')";
+  else
+    $sql = "UPDATE comments SET comment = '$comment' WHERE doc_id = $doc_id and pat_id = $pat_id";
 
   if(mysqli_query($conn, $sql)){
     $msg = '<div class= "alert alert-info alert-dismissible">
@@ -559,7 +565,7 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
         <div id = msg>   $msg </div>
 
         <label for='comment'><h6>Post Your Comment :</h6> </label>
-        <textarea class='form-control' rows='5' name='comment' id='comment' placeholder='Enter Your Comment Here' required> </textarea>
+        <textarea class='form-control' rows='5' name='comment' id='comment' placeholder='Enter Your Comment Here! (Your previous comment will be replaced by the current)' required> </textarea>
         <br /> <br />
         <div class='rev-text'>
         <div>
@@ -583,8 +589,8 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) ){
 
       <!-- - - - - - - - - - - - - - - - COMMENTS BEGIN HERE - - - - - - - - - - - -->
       <div class="box_general_3">
-
-        <h4>Showing <i id="count"> 3 </i> of <i id="total_comments"><?=$total_comments?></i> Comments</h4>
+        <?php  $no_comments = ($total_comments<3)?$total_comments:3; ?>
+        <h4>Showing <i id="count"> <?= $no_comments ?></i> of <i id="total_comments"><?=$total_comments?></i> Comments</h4>
         <?php
 
         $rowperpage = 3;

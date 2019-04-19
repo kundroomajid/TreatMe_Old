@@ -1,5 +1,4 @@
 <?php
-  sleep (5);
   include_once('config.php');
   $doc_id = isset($_REQUEST['doc_id'])? mysqli_real_escape_string($conn,$_REQUEST['doc_id']):null;
   $offset = isset($_REQUEST['offset'])? mysqli_real_escape_string($conn,$_REQUEST['offset']):0;
