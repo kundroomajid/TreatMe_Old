@@ -12,7 +12,7 @@
 		<div class="bg_color_2">
 			<div class="container margin_60_35">
 				<div id="login-2">
-					<h1>Welcome to Healthcare</h1>
+					<h1>Welcome to TreatMe</h1>
           <?php
             if(isset($_REQUEST['email_id'])){
               $email =  mysqli_real_escape_string($conn,$_REQUEST['email_id']);

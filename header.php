@@ -9,7 +9,7 @@ include('session.php');?>
 			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 			<meta name="description" content="Find trusted medical advice from Kashmir's top doctors" />
 			<meta name="author" content="" />
-			<title> Healthcare- Reviews  | Find trusted medical advice from Kashmir's top doctors</title>
+			<title> TreatMe- Reviews  | Find trusted medical advice from Kashmir's top doctors</title>
 
 			<!-- Favicons-->
 			<link rel="shortcut icon" href="img/apple-touch-icon-57x57-precomposed.png" type="image/x-icon" />
@@ -59,7 +59,7 @@ include('session.php');?>
 					<div class="row">
 						<div class="col-lg-3 col-6">
 							<div id="logo_home">
-								<h1><a href="index.php" title="Healthcare"> Healthcare</a></h1>
+								<h1><a href="index.php" title="TreatMe"> TreatMe</a></h1>
 							</div>
 						</div>
 						<nav class="col-lg-9 col-6">

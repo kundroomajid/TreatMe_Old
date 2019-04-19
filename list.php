@@ -8,17 +8,17 @@ $specialization = isset($_REQUEST['spec'])?$_REQUEST['spec']:null;
 $page = isset($_REQUEST['page'])?$_REQUEST['page']:1;
 $radio_search = isset($_REQUEST['radio_search'])?$_REQUEST['radio_search']:"";
 
-$num_results_on_page = 2;
+$num_results_on_page = 10;
 $offset = ($page-1) * $num_results_on_page;
 
 $radio_query = ($radio_search=='doctor')?$radio_query="user_type='d'":(($radio_search=='clinic')?$radio_query="user_type='c'":"");
 
-$main_query = "SELECT vw_docs_clinics.*,tb_doctor.specialization FROM vw_docs_clinics LEFT JOIN tb_doctor on vw_docs_clinics.doc_id=tb_doctor.doc_id";
+$main_query = "SELECT vw_docs_clinics.*,tb_doctor.specialization,tb_doctor.experience FROM vw_docs_clinics LEFT JOIN tb_doctor on vw_docs_clinics.doc_id=tb_doctor.doc_id";
 
 $filters = array();
 
 if($q!=null)
-	$filters[] = "user_name like '%$q%'";
+	$filters[] = "user_name like '%$q%' or specialization like '%$q%'";
 if($district!=null)
 	$filters[] = "district='$district'";
 if($specialization!=null)
@@ -34,6 +34,7 @@ if(count($filters)>0){
 }
 
 
+
 //$main_query .= ($q!=null || $district!=null || $specialization!=null || $radio_search!="")?" WHERE ":"";
 //$main_query .= ($q==null)?"":"user_name like '%$q%'";
 //$main_query .= ($q!=null && $district!=null)?" AND ":"";
@@ -45,12 +46,13 @@ if(count($filters)>0){
 
 //echo($main_query);
 
-$result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttable failed: ".mysqli_error());
-$total_results = mysqli_num_rows($result);
+$result1=mysqli_query($conn,$main_query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$total_results = mysqli_num_rows($result1);
 $total_pages = ceil($total_results / $num_results_on_page);
 
 $main_query .= " LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+$count = mysqli_num_rows($result);
 
 ?>
 
@@ -63,7 +65,7 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 				<div class="row">
 					<div class="col-md-6">
 
-						<h4><strong>Showing <?= "$count";?></strong> results</h4>
+						<h4><strong>Showing <?= "$count";?> of <?= "$total_results";?></strong> results</h4>
 
 					</div>
 
@@ -137,37 +139,37 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 
 					<li>
 						<h6>Select By District</h6>
-						<select name="dist"  id = "dist" class="selectbox">
-							<option value = "">Select District</option>
-            	<option value = "Anantnag">Anantnag</option>
-              <option value = "Bandipora">Bandipora</option>
-							<option value = "Baramulla">Baramulla</option>
-              <option value = "Budgam">Budgam</option>
-              <option value = "Ganderbal">Ganderbal</option>
-							<option value = "Kulgam">Kulgam</option>
-							<option value = "Kupwara">Kupwara</option>
-							<option value = "Pulwama">Pulwama</option>
-            	<option value = "Shopain">Shopain</option>
-            	<option value = "Srinagar">Srinagar</option>
-            	<option value = "Doda">Doda</option>
-            	<option value = "Jammu">Jammu</option>
-            	<option value = "Kathua">Kathua</option>
-            	<option value = "Kishtwar">Kishtwar</option>
-            	<option value = "Poonch">Poonch</option>
-            	<option value = "Rajouri">Rajouri</option>
-            	<option value = "Reasi">Reasi</option>
-            	<option value = "Ramban">Ramban</option>
-            	<option value = "Samba">Samba</option>
-            	<option value = "Udhampur">Udhampur</option>
-            	<option value = "Kargil">Kargil</option>
-            	<option value = "Leh">Leh</option>
-            </select>
-					<script>
-    				document.getElementById("dist").onchange = function() {
-			        if (this.selectedIndex!==0)
-			            window.location.href = '?dist='+ this.value + <?= $redirect ?> ;
-    				};
-					</script>
+						<select name="dist" id="dist" class="selectbox">
+							<option value="">Select District</option>
+							<option value="Anantnag">Anantnag</option>
+							<option value="Bandipora">Bandipora</option>
+							<option value="Baramulla">Baramulla</option>
+							<option value="Budgam">Budgam</option>
+							<option value="Ganderbal">Ganderbal</option>
+							<option value="Kulgam">Kulgam</option>
+							<option value="Kupwara">Kupwara</option>
+							<option value="Pulwama">Pulwama</option>
+							<option value="Shopain">Shopain</option>
+							<option value="Srinagar">Srinagar</option>
+							<option value="Doda">Doda</option>
+							<option value="Jammu">Jammu</option>
+							<option value="Kathua">Kathua</option>
+							<option value="Kishtwar">Kishtwar</option>
+							<option value="Poonch">Poonch</option>
+							<option value="Rajouri">Rajouri</option>
+							<option value="Reasi">Reasi</option>
+							<option value="Ramban">Ramban</option>
+							<option value="Samba">Samba</option>
+							<option value="Udhampur">Udhampur</option>
+							<option value="Kargil">Kargil</option>
+							<option value="Leh">Leh</option>
+						</select>
+						<script>
+							document.getElementById("dist").onchange = function() {
+								if (this.selectedIndex !== 0)
+									window.location.href = '?dist=' + this.value + <?= $redirect ?>;
+							};
+						</script>
 					</li>
 <!--
 					 <li>
@@ -179,6 +181,7 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 						</div>
 					</li>
 -->
+<!--
 					<li>
 						<h6>Sort by</h6>
 						<select name="orderby" class="selectbox">
@@ -188,6 +191,7 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 						<option value="Women" />Women
 						</select>
 					</li>
+-->
 				</ul>
 			</div>
 			<!-- /container -->
@@ -218,20 +222,21 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 				$clinic_name = $cdrow["clinic_name"];
                 $doc_id=$cdrow["doc_id"];
 				$clinic_id = $cdrow["clinic_id"];
+				$experience = $cdrow['experience'];
               	$doc_district = strtoupper($cdrow["district"]);
 				$specialization = $cdrow["specialization"];
                 $image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' />";
                 $rate_times = $cdrow['rated_by'];
                 $avg_rating = $cdrow['avg_rating'];
             ?>
-					<div class="strip_list wow fadeIn" >
-<!--						<a href="#0" class="wish_bt"></a>-->
-						<figure>
-<!--                          TODO make image clickable-->
-<!--							<a href="./detail-page.php"><img src="" alt="" /></a>-->
-							<?= "$image";?>
-						</figure>
-						<?php if(strlen($specialization) > 24)
+<div class="strip_list wow fadeIn">
+	<!--						<a href="#0" class="wish_bt"></a>-->
+	<figure>
+		<!--                          TODO make image clickable-->
+		<!--							<a href="./detail-page.php"><img src="" alt="" /></a>-->
+		<?= "$image";?>
+	</figure>
+	<?php if(strlen($specialization) > 24)
 						{
 							$spec_Array =  explode (",", $specialization);
 							$spec1 = $spec_Array[0];
@@ -253,9 +258,8 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 					$cdrow1=mysqli_fetch_array($result1);
 					$degree = strtoupper($cdrow1['degree']);
 					$institute = strtoupper($cdrow1['institute']);
-					$experience = $cdrow1['experience'];
 					echo( "<h3><font color='blue'><i >Dr</font></i> $user_name</h3>");
-					echo("<p> $degree  (  $institute  ),  $experience  Years Experience</p>");
+					echo("<p> $degree  (  $institute  )  $experience  Years Experience</p>");
 					echo("<p> Dist : $doc_district</p>");
 			   } else if($user_type == 'c'){
 					echo( "<h3><font color='blue'><i >Clinic</font></i> $clinic_name $user_name</h3>");
@@ -263,7 +267,6 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 			   }
 
               ?>
-
 
 <!--						code to display stars from database-->
 						<span class="rating">
@@ -344,20 +347,33 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 									$ppage = $page -1;
 										echo("<li class='page-item '><a class='page-link' href='list.php?page=$ppage$district$sp$que'> Prev </a></li>");
 									}
-								for ($page = 1; $page <= $total_pages; $page++)
+								for ($page = $curr_page -3 ; $page < $total_pages; $page++)
 								{
 
-
+                                  if($page > 0)
+                                  {
 									if($page == $curr_page)
 									{
 										echo("<li class='page-item active '><a class='page-link' href='list.php?page=$page$district$sp$que'> $page </a></li>");
 									}
 									else
 									{
+                                      if($page > $curr_page +3 )
+                                      {
+                                        echo("<li class='page-item '><a class='page-link' > ... </a></li>");
+                                        break;
+                                      }
+                                      else
+                                      {
 										echo("<li class='page-item '><a class='page-link' href='list.php?page=$page$district$sp$que'> $page </a></li>");
+                                      }
 									}
+                                    
+                                  }
 
 								}
+                             
+                              echo("<li class='page-item '><a class='page-link' href='list.php?page=$total_pages$district$sp$que'> $total_pages </a></li>");
 //								next page
 							$npage = $curr_page + 1;
 										echo("<li class='page-item '><a class='page-link' href='list.php?page=$npage$district$sp$que'> Next </a></li>");
@@ -365,7 +381,6 @@ $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttab
 							}
 
 							?>
-
 
 
 
