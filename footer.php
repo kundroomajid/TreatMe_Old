@@ -6,7 +6,7 @@
 				<div class="col-lg-3 col-md-12">
 					<p>
 						<a href="index.php" title=" J&K TreatMe">
-							<img src="./img/logo.png" data-retina="true" alt="" width="163" height="36" class="img-fluid" />
+							<img src="./img/logo.png" data-retina="true" alt="" width="250" height="80"  />
 						</a>
 					</p>
 				</div>

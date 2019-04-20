@@ -12,12 +12,26 @@ include('session.php');?>
 			<title> TreatMe- Reviews  | Find trusted medical advice from Kashmir's top doctors</title>
 
 			<!-- Favicons-->
-			<link rel="shortcut icon" href="img/apple-touch-icon-57x57-precomposed.png" type="image/x-icon" />
-			<link rel="apple-touch-icon" type="image/x-icon" href="./img/apple-touch-icon-57x57-precomposed.png" />
-			<link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="./img/apple-touch-icon-72x72-precomposed.png" />
-			<link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="./img/apple-touch-icon-114x114-precomposed.png" />
-			<link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="./img/apple-touch-icon-144x144-precomposed.png" />
+			<link rel="shortcut icon" href="./img/favicon-16x16.png" type="image/x-icon" sizes="16x16" />
+			<link rel="shortcut icon" href="./img/favicon-32x32.png" type="image/x-icon" sizes="32x32" />
 
+			<!-- iOS 7 or prior (legacy) -->
+			<link rel="apple-touch-icon" sizes="144x144" href="./img/apple-touch-icon-144x144.png">
+			<link rel="apple-touch-icon" sizes="114x114" href="./img/apple-touch-icon-114x114.png">
+			<link rel="apple-touch-icon" sizes="72x72" href="./img/apple-touch-icon-72x72.png"> 
+			<link rel="apple-touch-icon" sizes="57x57" href="./img/apple-touch-icon-57x57.png">
+
+   
+			<!-- iOS 8 and later -->
+			<link rel="apple-touch-icon" sizes="180x180" href="./img/apple-touch-icon-180x180.png">
+			<link rel="apple-touch-icon" sizes="152x152" href="./img/apple-touch-icon-152x152.png">
+			<link rel="apple-touch-icon" sizes="120x120" href="./img/apple-touch-icon-120x120.png">
+			<link rel="apple-touch-icon" sizes="76x76" href="./img/apple-touch-icon-76x76.png">
+			<link rel="apple-touch-icon" sizes="60x60" href="./img/apple-touch-icon-60x60.png">
+
+			<!-- launcher (Android/Chrome) -->
+			<link rel="manifest" href="./img/manifest.json">
+			
 			<!-- BASE CSS -->
 			<link href="./css/bootstrap.min.css" rel="stylesheet" />
 			<link href="./css/style.css" rel="stylesheet" />
@@ -28,17 +42,11 @@ include('session.php');?>
 
 			<!-- YOUR CUSTOM CSS -->
 
-	<!--
-			<link rel="stylesheet" type="text/css" href="./css/custom.css">
-
-	-->
-
 			<!-- COMMON SCRIPTS -->
-			<script src="./cdn-cgi/scripts/84a23a00/cloudflare-static/email-decode.min.js"></script>
+			
 			<script src="./js/jquery-2.2.4.min.js"></script>
 			<script src="./js/common_scripts.min.js"></script>
 			<script src="./js/functions.js"></script>
-
 			<script src="./js/app.js"></script>
 
 
@@ -71,10 +79,7 @@ include('session.php');?>
 								{
 									echo "<a href='welcome.php'> <figure> $imagepic </figure> <sub>$user</sub> </a>";
 									$username = ($_SESSION['login_user']);
-//									echo "<li><a href='logout.php' >&nbsp;&nbsp;&nbsp; Logout</a></li>";
 									echo "<li class='show-submenu'><a href='logout.php' tabindex='0'  class='show-submenu'><span class='glyphicon glyphicon-user'></span>Logout</a></li>";
-//									echo "<a href='logout.php'><img src='img/logout.png' alt='Logout' /> </a>";
-//									echo '<li><a href="./logout.php" onclick="restack(currentStack)" title="Logout"><i class="icon-logout"></i></a></li>';
 
 
 
@@ -104,13 +109,6 @@ include('session.php');?>
 
 									</li>
 
-<!--
-									<li class="menu">
-										<a href="#0" class="show-submenu">Appoinments<i class="menu"></i></a>
-
-									</li>
--->
-
 									<li class="menu">
 										<a href="./about.php" class="show-submenu">About<i class="menu"></i></a>
 
@@ -124,7 +122,6 @@ include('session.php');?>
 				<!-- /container -->
 
 			</header>
-<!--			<div id="info" class="clearfix">  <?= "$error";?> </div>-->
 
 			<!-- /header -->
 
