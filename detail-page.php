@@ -89,6 +89,10 @@ if($doc_id!=null){
     $patients = $cdrow1['patients'];
     $avg_rating = $cdrow1['avg_rating'];
     $experience = $cdrow1['experience'];
+    $clinic_name = $cdrow1['clinic_name'];
+    $clinic_address = $cdrow1['clinic_address'];
+    $fee = $cdrow1['fee'];
+    $c_validity = $cdrow1['c_validity'];
     if(strlen($specialization) > 24)
     {
       $spec_Array =  explode (",", $specialization);
@@ -194,6 +198,7 @@ if(isset($_SESSION['login_user'])  ){
         <form action ="book_appointment.php">
           <div class="title">
             <h3>Book a Visit</h3>
+            <h3><small>Fee (Rs <?= "$fee";?>) for (<?= "$c_validity";?> days)</small></h3>
             <br><small><b>Morning Shift:</b> <?= $morning_start_time." to ".$morning_end_time?></small>
             <br> <small><b>Evening Shift:</b> <?= $evening_start_time ." to ".$evening_end_time?></small></br>
           </div>
@@ -210,9 +215,10 @@ if(isset($_SESSION['login_user'])  ){
                 <label> <h5>Select Date</h5></label> <br>
                 <input type="date" class="input-group-addon "  name="date" placeholder="Select Date" required min= "<?= $curr_date ?>" >
               </div>
-            </div>
-            <!--								</div>-->
+           
+            
             <div>
+              <br>
               <label> <h5>Select Shift</h5></label> <br>
               <input type = "radio" required name = "shift" value = "0" />
               <label for = "shift">Morning Shift</label>
@@ -221,6 +227,7 @@ if(isset($_SESSION['login_user'])  ){
 
               <input type="hidden" name="doc_id" value="<?=$doc_id?>">
             </div>
+               </div>
           </div>
           <!--						disable book now button if user is not logged in-->
           <?php
@@ -314,8 +321,15 @@ if(isset($_SESSION['login_user'])  ){
                   <li><?= $patients ?>  Patients</li>
                 </ul>
                 <ul class="contacts">
+                   <li>
+                    <h6>Clinic</h6>
+                     <?= "$clinic_name";?>
+                   
+
+                  </li>
                   <li>
                     <h6>Address</h6>
+                     <?= "$clinic_address";?>
                     <?= "$district";?>
                     <!--												<a href=""> <strong>View on map</strong></a>-->
 
@@ -396,7 +410,6 @@ if(isset($_SESSION['login_user'])  ){
 
 <hr />
 
-<!--
 <div class="indent_title_in">
 <i class="pe-7s-cash"></i>
 <h3>Prices &amp; Payments</h3>
@@ -414,34 +427,14 @@ if(isset($_SESSION['login_user'])  ){
 <tbody>
 <tr>
 <td>New patient visit</td>
-<td>200 Rupees </td>
+<td><?="$fee"?> Rupees </td>
 </tr>
-<tr>
-<td>General consultation</td>
-<td>300 Rupees </td>
-</tr>
-<tr>
-<td>Back Pain</td>
-<td>100 Rupees </td>
-</tr>
-<tr>
-<td>Diabetes Consultation</td>
-<td>400 Rupees </td>
-</tr>
-<tr>
-<td>Eating disorder</td>
-<td>350 Rupees </td>
-</tr>
-<tr>
-<td>Foot Pain</td>
-<td>250 Rupees </td>
-</tr>
+
 </tbody>
 </table>
 </div>
-/wrapper_indent
+
 </div>
--->
 <!-- /section_1 -->
 </div>
 <!-- /box_general -->
@@ -606,7 +599,6 @@ if(isset($_SESSION['login_user'])  ){
         <?php  $no_comments = ($total_comments<3)?$total_comments:3; ?>
         <h4>Showing <i id="count"> <?= $no_comments ?></i> of <i id="total_comments"><?=$total_comments?></i> Comments</h4>
 
-        <h4>Showing <i id="count"> <?=$comment_count?> </i> of <i id="total_comments"><?=$total_comments?></i> Comments</h4>
         <?php
 
         $rowperpage = 3;

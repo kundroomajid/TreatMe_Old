@@ -7,7 +7,7 @@ doc_id = doc.value;
 
 
 $(document).ajaxStart(function() {
-  alert('loading');
+//  alert('loading');
 });
 
 $(document).ajaxComplete(function() {

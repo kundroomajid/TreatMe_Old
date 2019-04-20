@@ -19,6 +19,7 @@ $filters = array();
 
 if($q!=null)
 	$filters[] = "user_name like '%$q%' or specialization like '%$q%'";
+
 if($district!=null)
 	$filters[] = "district='$district'";
 if($specialization!=null)
@@ -34,7 +35,6 @@ if(count($filters)>0){
 }
 
 
-
 //$main_query .= ($q!=null || $district!=null || $specialization!=null || $radio_search!="")?" WHERE ":"";
 //$main_query .= ($q==null)?"":"user_name like '%$q%'";
 //$main_query .= ($q!=null && $district!=null)?" AND ":"";
@@ -43,8 +43,6 @@ if(count($filters)>0){
 //$main_query .= $radio_query;
 //$main_query .= ($q!=null || $district!=null || $radio_query!="")?" AND ":"";
 //$main_query .= ($specialization==null)?"":"specialization='$specialization'";
-
-//echo($main_query);
 
 $result1=mysqli_query($conn,$main_query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $total_results = mysqli_num_rows($result1);
@@ -107,7 +105,7 @@ $count = mysqli_num_rows($result);
 						$redirect = ($q!=null)?"&q=$q":"";
 						$redirect .= ($specialization!=null)?"&spec=$specialization":"";
 						$redirect .= ($district!=null)?"&dist=$district":"";
-						// $redirect .= ($radio_search!=null)?"&radio_search=$radio_search":"";
+						 $redirect .= ($radio_search!=null)?"&radio_search=$radio_search":"";
 
 
 						$redirect = "'$redirect'";
@@ -135,6 +133,7 @@ $count = mysqli_num_rows($result);
 						// $redirect .= ($district!=null)?"&dist=$district":"";
 						$redirect .= ($radio_search!=null)?"&radio_search=$radio_search":"";
 						$redirect = "'$redirect'";
+					
 					 ?>
 
 					<li>
@@ -302,28 +301,25 @@ $count = mysqli_num_rows($result);
 
 
 ?>
-                          <small>(<?php echo $rate_times; ?>)</small></span>
-<!--						<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
+                          <small>(<?php echo $rate_times; ?>)</small></span>					
 						<ul>
 							<li></li>
-<!--
-							<li><a href="#0" onclick="onHtmlClick('Doctors', 0)" class="btn_listing">View on Map</a></li>
-							<li><a href=" ">Directions</a></li>
--->
-
+							<li></li>
+							<li>
                           <?php
 
                               if ($user_type == 'd')
                               {
-                                echo("<li><a href='./detail-page.php?doc_id=".$doc_id."' class='btn_listing'>View Profile</a></li>");
+                                echo("<a href='./detail-page.php?doc_id=".$doc_id."' class='btn_listing'>View Profile</a>");
                               }
                             else if($user_type == 'c')
                             {
 
-                               echo("<li><a href='./detail-clinic.php?clinic_id=".$doc_id.$clinic_id."' class='btn_listing'>View Profile</a></li>");
+                               echo("<a href='./detail-clinic.php?clinic_id=".$doc_id.$clinic_id."' class='btn_listing'>View Profile</a>");
                             }
 
                           ?>
+								</li>
 
 						</ul>
 					</div>
@@ -345,7 +341,7 @@ $count = mysqli_num_rows($result);
 								if($curr_page >1)
 									{
 									$ppage = $page -1;
-										echo("<li class='page-item '><a class='page-link' href='list.php?page=$ppage$district$sp$que'> Prev </a></li>");
+										echo("<li class='page-item '><a class='page-link' href='list.php?page=$ppage$redirect'> Prev </a></li>");
 									}
 								for ($page = $curr_page -3 ; $page < $total_pages; $page++)
 								{
@@ -354,7 +350,7 @@ $count = mysqli_num_rows($result);
                                   {
 									if($page == $curr_page)
 									{
-										echo("<li class='page-item active '><a class='page-link' href='list.php?page=$page$district$sp$que'> $page </a></li>");
+										echo("<li class='page-item active '><a class='page-link' href='list.php?page=$page$redirect'> $page </a></li>");
 									}
 									else
 									{
@@ -365,7 +361,7 @@ $count = mysqli_num_rows($result);
                                       }
                                       else
                                       {
-										echo("<li class='page-item '><a class='page-link' href='list.php?page=$page$district$sp$que'> $page </a></li>");
+										echo("<li class='page-item '><a class='page-link' href='list.php?page=$page$redirect'> $page </a></li>");
                                       }
 									}
                                     
@@ -373,10 +369,10 @@ $count = mysqli_num_rows($result);
 
 								}
                              
-                              echo("<li class='page-item '><a class='page-link' href='list.php?page=$total_pages$district$sp$que'> $total_pages </a></li>");
+                              echo("<li class='page-item '><a class='page-link' href='list.php?page=$total_pages$redirect'> $total_pages </a></li>");
 //								next page
 							$npage = $curr_page + 1;
-										echo("<li class='page-item '><a class='page-link' href='list.php?page=$npage$district$sp$que'> Next </a></li>");
+										echo("<li class='page-item '><a class='page-link' href='list.php?page=$npage$redirect'> Next </a></li>");
 
 							}
 
