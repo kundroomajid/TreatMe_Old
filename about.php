@@ -21,7 +21,7 @@ include("header.php");?>
 					</div>
 				</aside>
 				<div class=" col-lg-8 col-md-8 ml-auto">
-					<div align = "center"><img src="img/logo_2x.png" alt="logo" /></div>
+					<div align = "center"><img src="img/logo_2x.png" alt="logo" width="50%" /></div>
 					<h6> About TreatMe</h6>
 					<p> TreatMe is the source for appropriate doctor search, appointment booking of doctors and up-to-date doctor ratings and reviews. </p>
 					<p>Online appointment booking system save time and money and also provide patients and doctors much information about upcoming appointments. It helps to provide better healthcare experience by providing high satisfaction, continuing patient engagement remotely. From anywhere you can make your appointment from your busy schedule.Booking an appointment online can make the process strees free. You can see when the doctor is available and which facility around the clock. You can book an appointment at your convenience and make the time to plan out your visit well ahead.you can also be sure that your slot is confirmed.</p>

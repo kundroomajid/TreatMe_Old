@@ -2,24 +2,24 @@
   session_start();
   include("config.php");
   include("header.php");
-  $type = isset($_GET['type'])? mysqli_real_escape_string($conn,$_GET['type']):null;
-
 ?>
-
 
 <main>
 		<div class="bg_color_2">
 			<div class="container margin_60_35">
 				<div id="login-2">
-					<h1>Welcome to Password reset Page</h1>
-<?php
-
-  if($type == 1) // verification code
-  {
-    
-    echo'<form action="forgot.php?type=1" method="post">
+					<h1>Welcome to TreatMe</h1>
+          <?php
+            if(isset($_REQUEST['email_id'])){
+              $email =  mysqli_real_escape_string($conn,$_REQUEST['email_id']);
+              $sql = "SELECT user_id FROM tb_user WHERE user_email = '$email' and active='1'";
+               $result = mysqli_query($conn,$sql);
+               $count = mysqli_num_rows($result);
+               if($count == 1) {
+                 send_email($email);
+                 echo "<p class='text-center link_bright'>A mail has been set to your email address: <b>$email</b> to recover your account</p>";
+                 echo'<form action="forgot.php" method="post">
 						<div class="box_form clearfix">
-                        <h6 align="center">Enter the Verification code</h6>
 							<div class="box_login last">
 								<div class="form-group">
 									<input type="number_format" name="hash" class="form-control" placeholder="Verification code" />
@@ -30,43 +30,15 @@
 							</div>
 						</div>
 					</form>';
-     if(isset($_REQUEST['hash']))
-          {
-            $code = $_REQUEST['hash'];
-           $sql = "SELECT user_id,user_email FROM tb_user WHERE hash = '$code' and active='1'";
-               $result = mysqli_query($conn,$sql) or die ("Query to get data from firsttable failed: ".mysqli_error());
-               $count = mysqli_num_rows($result);
-          $cdrow1=mysqli_fetch_array($result);
-               if($count == 1) 
-               {
-                 $email = $cdrow1['user_email'];
-                  echo '<script type="text/javascript">
-//                  alert("password reset")
-                  window.location = "./reset.php?email='.$email.'&token='.$code.'";
-                    </script> ';
-                 
+               }else{
+                 echo "<p class='text-center link_bright'>The email <b>$email</b> doesn't exist in our database</p>";
                }
-       else
-         
-       {
-          echo "<p class='text-center link_bright' style:color='red'>The verification code does not match</p>";
-       }
-     }
-    
-    
-    
-    
-    
-    
-    
-  }
-else
-{
-//  echo("<h5 align='center'>Enter email address to recieve Verification code</h5>");
-  echo('<form action="forgot.php" method="post">
-  
+            }else
+            {
+              
+          ?>
+					<form action="forgot.php" method="post">
 						<div class="box_form clearfix">
-                        <h6 align="center">Enter email address to recieve Verification code</h6>
 							<div class="box_login last">
 								<div class="form-group">
 									<input type="email" name="email_id" class="form-control" placeholder="Your email address" />
@@ -75,33 +47,48 @@ else
 									<input class="btn_1" name ="submit" type="submit" value="Next" />
 								</div>
 							</div>
+                      </div>
+            </form>
 						</div>
-					</form>');
-  
-          if(isset($_REQUEST['email_id']))
-            {
-                      global $email;
-                      $email =  mysqli_real_escape_string($conn,$_REQUEST['email_id']);
-                      $sql = "SELECT user_id FROM tb_user WHERE user_email = '$email' and active='1'";
-                       $result = mysqli_query($conn,$sql);
-                       $count = mysqli_num_rows($result);
-                       if($count == 1) {
-                         send_email($email);
-                         echo "<p class='text-center link_bright'>A mail has been set to your email address: <b>$email</b> to recover your account</p>";
-                         echo '<script type="text/javascript">
-//                  alert("password reset")
-                  window.location = "./forgot.php?type=1";
+          <?php
+        }
+                  
+                  
+                  
+          if(isset($_REQUEST['hash']))
+          {
+            $code = $_REQUEST['hash'];
+           $sql = "SELECT user_id FROM tb_user WHERE hash = '$code' and active='1'";
+               $result = mysqli_query($conn,$sql);
+               $count = mysqli_num_rows($result);
+               if($count == 1) 
+               {
+                $hash = md5(rand(0,1000));
+                $update = "UPDATE tb_user SET hash='$hash' WHERE user_email='$email'";
+                $x = $conn->prepare($update);
+                  $x->execute();
+                 echo '<script type="text/javascript">
+                  alert("password reset")
+//                  window.location = "./reset.php?token='.$hash.'&email='.$email.'";
                     </script> ';
-                       }else{
-                         echo "<p class='text-center link_bright'>The email <b>$email</b> doesn't exist in our database</p>";
-                       }
-                    }
-
-
-
- }
-
-?>
+                
+               }
+           else
+           {
+             echo "<p class='text-center link_bright'>failed</p>";
+           }
+           
+            
+          }
+            
+           ?>
+				</div>
+				<!-- /login -->
+			</div>
+		</div>
+    <?php include("footer.php"); ?>
+	</main>
+	<!-- /main -->
 
 <?php
 

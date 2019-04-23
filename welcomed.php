@@ -33,6 +33,10 @@ if($id!=null){
   $gender = $cdrow1["gender"];
   $address = $cdrow1['address'];
   $district = $cdrow1["district"];
+  $clinic_name = $cdrow1["clinic_name"];
+  $fee = $cdrow1["fee"];
+  $c_validity = $cdrow1['c_validity'];
+  $clinic_address = $cdrow1["clinic_address"];
   $pin = $cdrow1['pincode'];
   $specialization = $cdrow1['specialization'];
   $registration_council = $cdrow1['registration_council'];
@@ -195,6 +199,10 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 <tr> <td>Address</td>  <td> <?= $address."<br/>".$district." - ".$pin ?> </td> </tr>
 
                 <tr> <td>Specialization</td>  <td>  <?= $specialization ?> </td> </tr>
+                 <tr> <td>Clinic Name</td>  <td>  <?= $clinic_name ?> </td> </tr>
+                 <tr> <td>Clinic Address</td>  <td>  <?= $clinic_address ?> </td> </tr>
+                 <tr> <td>Fee</td>  <td>  <?= $fee ?> </td> </tr>
+                 <tr> <td>Consultation Validity</td>  <td>  <?= $c_validity ?> </td> </tr>
                 <tr> <td>Registration</td>  <td>  <?= $registration_council."(".$registration_year.") [Reg. No: ".$registration_no."]" ?> </td> </tr>
 
                 <tr>  <td>Morning Timing</td> <td>  <?= "$morning_start_time to $morning_end_time" ?></td></tr>
@@ -302,12 +310,25 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
               <label class="col-lg-3 col-form-label form-control-label">D.O.B</label>
               <div class="col-lg-3"> <input class="form-control" type="date" name ="dob" value="<?php echo $dob; ?>"> </div>
             </div>
-            <div class="form-group row">
-              <label class="col-lg-3 col-form-label form-control-label">Address</label>
+             <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Clinic Name</label>
+              <div class="col-lg-9"> <input class="form-control" type="text" name ="clinic_name" value="<?php echo $clinic_name; ?>"> </div>
+            </div>
+             <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Clinic Address</label>
               <div class="col-lg-9">
-                <textarea name="address" rows="3" class="col-lg-12" ><?= $address ?></textarea>
+                <textarea name="clinic_address" rows="3" class="col-lg-12" ><?= $clinic_address ?></textarea>
               </div>
             </div>
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Fee</label>
+              <div class="col-lg-9"> <input class="form-control" type="number" name ="fee" value="<?php echo $fee; ?>"> </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Validity</label>
+              <div class="col-lg-9"> <input class="form-control" type="text" name ="c_validity" value="<?php echo $c_validity; ?>"> </div>
+            </div>
+           
             <div class="form-group row">
               <label class="col-lg-3 col-form-label form-control-label">District</label>
               <div class="col-lg-3">

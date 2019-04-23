@@ -40,7 +40,7 @@ include("header.php");
 
 		<div class="container margin_120_95">
 			<div class="main_title">
-				<h2>Discover the <strong>online</strong> appointment!</h2>
+				<h2>Discover the power of <strong>online</strong> appointment!</h2>
 
 			</div>
 			<div class="row add_bottom_30">

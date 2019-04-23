@@ -64,7 +64,7 @@ $count = mysqli_num_rows($result);
 			<div class="row">
 				<div class="col-md-6">
 
-					<h4><strong>Showing <?= "$count";?> of <?= "$total_results";?></strong> results</h4>
+<!--					<h4><strong>Showing <?= "$count";?> of <?= "$total_results";?></strong> results</h4>-->
 
 				</div>
 
@@ -79,17 +79,21 @@ $count = mysqli_num_rows($result);
 						<?= ($radio_search!=null)?"<input type='hidden' name='radio_search' value='$radio_search' />":"" ?>
 						<input type="submit" value="Search" />
 					</div>
+                  
 				</div>
 			</form>
 		</div>
+      
 		<!-- /row -->
 	</div>
 	<!-- /container -->
 </div>
 <!-- /results -->
 
+
 <div class="filters_listing">
 	<div class="container">
+      <h6><strong>Showing <?= "$count";?> of <?= "$total_results";?></strong> results</h6>
 		<ul class="clearfix">
 			<li>
 				<h6>Type</h6>

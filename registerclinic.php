@@ -9,7 +9,7 @@ $idquery = "SELECT user_id from tb_user WHERE user_email='$user_email'";
    $result1=mysqli_query($conn,$idquery) or die ("Query to get data from firsttable failed: ".mysqli_error());
     $cdrow1=mysqli_fetch_array($result1);
     $clinic_id = $cdrow1['user_id'];
-  echo($clinic_id);
+  
 
 
 if((isset($_POST['name']))&isset($_POST['phone_no'])&isset($_POST['address'])){

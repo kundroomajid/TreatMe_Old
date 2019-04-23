@@ -33,6 +33,7 @@ if($id!=null) {
   $gender_symbol = ($gender=='Male')?"&#9794;":($gender=='Female')?"&#9792;":"&#9893;";
   $district = $cdrow1["district"];
   $pin = $cdrow1['pincode'];
+  
   //get data from appointment table
   $apptquery = "Select * from tb_appointment where pat_id = $id";
   $resultappt = $conn->query($apptquery);
@@ -169,6 +170,7 @@ this.value = "";
 
             <div class="col-md-12">
               <table class="table table-bordered">
+                
                 <tr>  <td>Email </td>       <td><?=$email ?> </td> </tr>
                 <tr>  <td>Phone </td>       <td><?= $phone ?></td> </tr>
                 <tr>  <td>D.O.B </td>       <td><?= $dob ?></td> </tr>
@@ -220,8 +222,13 @@ this.value = "";
                 $pat_id = $cdrow2["pat_id"];
                 $appt_date = $cdrow2["appt_date"];
                 $shift = $cdrow2["shift"];
+              $doc_id = $cdrow2["doc_id"];
+              
                 $shift_type = ($shift==0)?'Morning':'Evening';
-              echo ("<tr><td>$appt_id</td><td>$appt_date</td><td>$doc_name</td><td>$shift_type</td><td>$queue_no</td>");
+               $docquery = $conn->query("select user_name from vw_doctor where doc_id = $doc_id");
+                    $cdrow3=mysqli_fetch_array($docquery);
+                    $doc_name = $cdrow3["user_name"];
+              echo ("<tr><td>$tmp_id</td><td>$appt_date</td><td>$doc_name</td><td>$shift_type</td><td>$queue_no</td><td><a href='delete_appointment.php?t_appt_id=$tmp_id'>Delete</td></td></tr>");
                   }
                 }
                 }

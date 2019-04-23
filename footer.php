@@ -40,8 +40,8 @@
 					<div class="follow_us">
 						<h5>Follow us</h5>
 						<ul>
-							<li><a href="https://www.facebook.com/treatme247"><i class="social_facebook"></i></a></li>
-							<li><a href="https://www.twitter.com/treatme247"><i class="social_twitter"></i></a></li>
+							<li><a href="https://www.facebook.com/treatme247" target="_blank"><i class="social_facebook"></i></a></li>
+							<li><a href="https://www.twitter.com/treatme247" target="_blank"><i class="social_twitter"></i></a></li>
 						</ul>
 					</div>
 				</div>

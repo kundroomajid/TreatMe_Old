@@ -670,8 +670,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                         <small>(<?php echo $rate_times; ?>)</small></span>
                       <!--						<a href="./badges.php" data-toggle="tooltip" data-placement="top" data-original-title="Badge Level" class="badge_list_1"><img src="./img/badges/badge_1.svg" width="15" height="15" alt="" /></a>-->
                       <ul>
-                        <li><a href="#0" onclick="onHtmlClick('Doctors', 0)" class="btn_listing">View on Map</a></li>
-                        <li><a href=" ">Directions</a></li>
+                        <li></li>
+                        <li></li>
                         <li><a href="./detail-page.php?doc_id=<?= $doc_id ?>" class="btn_listing">View Profile</a></li>
                       </ul>
                     </div>

@@ -208,12 +208,15 @@ if(isset($_SESSION['login_user'])  ){
               <div id=" " class="clearfix">  <?= "$bookerror";?> </div>
               <div>
                 <label> <h5>Patient Name</h5></label> <br>
-                <input type="text" class="input-group-addon" style ="text-align:left" name="pat_name" value="<?=$pat_name;?>" >
+                <div class="form-group row">
+              <div class="col-lg-9"> <input class="form-control"  name ="pat_name" type="text" value="<?=$pat_name;?>" > </div>
               </div>
-              <br>
+                 </div>
               <div>
                 <label> <h5>Select Date</h5></label> <br>
-                <input type="date" class="input-group-addon "  name="date" placeholder="Select Date" required min= "<?= $curr_date ?>" >
+                <div class="form-group row">
+                <div class="col-lg-9"> <input class="form-control" type ="date" name="date" placeholder="Select Date" required min= "<?= $curr_date ?>">  </div>
+                </div>
               </div>
            
             

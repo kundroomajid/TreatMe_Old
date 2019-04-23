@@ -439,6 +439,16 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
             </div>
             
             <div class="form-group row">
+                <label class="col-lg-3 col-form-label form-control-label">Fee </label>
+                <div class="col-lg-9"> <input class="form-control" type="number" name ="fee" placeholder="Consultation fee" > </div>
+              </div>
+            <div class="form-group row">
+                <label class="col-lg-3 col-form-label form-control-label">Consultation Validity </label>
+                <div class="col-lg-9"> <input class="form-control" type="number" name ="c_validity" placeholder="Consultation Validity" > </div>
+              </div>
+            
+            
+            <div class="form-group row">
                 <label class="col-lg-3 col-form-label form-control-label">Doc Degree</label>
                 <div class="col-lg-9"> <input class="form-control" type="text" name ="doc_degree" placeholder="Degree" > </div>
               </div>
