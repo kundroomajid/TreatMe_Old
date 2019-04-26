@@ -2,16 +2,17 @@
 session_start();
 include("config.php");
 include("header.php");
-$show_form=false;
-$invalid_link=false;
-$email=null;
-$hash=null;
-$password=null;
+//$show_form=false;
+//$invalid_link=false;
+//$email=null;
+//$hash=null;
+//$password=null;
+$email =  mysqli_real_escape_string($conn,$_GET['email']);
+  $hash =  mysqli_real_escape_string($conn,$_GET['token']);
 
-if(isset($_REQUEST['token']) and isset($_REQUEST['email']) and isset($_REQUEST['user_password']))
+if(isset($_GET['token']) && isset($_GET['email']) && $_SERVER["REQUEST_METHOD"] == "POST")
 {
-  $email =  mysqli_real_escape_string($conn,$_REQUEST['email']);
-  $hash =  mysqli_real_escape_string($conn,$_REQUEST['token']);
+  
   $password =  mysqli_real_escape_string($conn,$_REQUEST['user_password']);
   $password = md5($password);
   $sql = "UPDATE tb_user SET user_password='$password' WHERE user_email = '$email' and hash='$hash'";
@@ -19,9 +20,9 @@ if(isset($_REQUEST['token']) and isset($_REQUEST['email']) and isset($_REQUEST['
   {
     $msg = '<div class= "alert alert-info alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    Password changed Sucessfully</div>';
+    Password changed Sucessfully Login Here</div>';
     echo '<script type="text/javascript">
-    //    alert("comment Sucessfully")
+//        alert("password changed")
     window.location = "./login.php";
     </script> ';
   } else 
@@ -33,6 +34,7 @@ if(isset($_REQUEST['token']) and isset($_REQUEST['email']) and isset($_REQUEST['
     </div>';
 
   }
+  $_SESSION['msg'] = $msg;
   
 }
 
@@ -45,7 +47,7 @@ if(isset($_REQUEST['token']) and isset($_REQUEST['email']) and isset($_REQUEST['
         <h1>Reset Password</h1>
         <div class="row justify-content-center">
           <div class="col-md-5">
-              <form action="reset.php" method="POST">
+              <form action="" method="POST">
                 <div class="box_form">
                   <div class="form-group">
                     <input type="hidden" name="email" value="<?= $email ?>" />

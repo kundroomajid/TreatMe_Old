@@ -9,15 +9,20 @@ $t_appt_id = isset($_GET['t_appt_id'])? mysqli_real_escape_string($conn,$_GET['t
 if($id!=null && $appt_id!=null){
   $query ="DELETE FROM tb_appointment WHERE apptt_id = $appt_id";
   $result=mysqli_query($conn,$query) or die ('<script type="text/javascript"> alert("Deleteion Failed ") window.location = "./welcomep.php"; </script> ');
-	if($result != null)
+  
+	if($result != null )
 	{
 		$_SESSION['msg'] = '<div class= "alert alert-success alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     Appointment Deleted Sucessfully </div>';
+      
+      
 	}
-  header("Location:welcomep.php");
+  echo '<script type="text/javascript"> window.location = "./welcomep.php"; </script> ';
+//  header("Location:welcomep.php");
 }else{
-  echo '<script type="text/javascript"> alert("Illegal entry ") window.location = "./welcomep.php"; </script> ';
+  echo '<script type="text/javascript"> window.location = "./welcomep.php"; </script> ';
+ 
 }
 
 if($id!=null && $t_appt_id!=null){
@@ -29,7 +34,8 @@ if($id!=null && $t_appt_id!=null){
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     Appointment Deleted Sucessfully </div>';
 	}
-  header("Location:welcomep.php");
+  echo '<script type="text/javascript"> window.location = "./welcomep.php"; </script> ';
+//  header("Location:welcomep.php");
 }else{
   echo '<script type="text/javascript"> alert("Illegal entry ") window.location = "./welcomep.php"; </script> ';
 }

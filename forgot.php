@@ -116,7 +116,6 @@ else
 
 
    $to      = $user_email; // Send email to our user
-$subject = 'Shifa | Signup | Verification'; // Give the email a subject
 $message = '<div style="margin:0;padding:0;width:100%!important">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#DDDDDD" style="width:100%;background:#dddddd">
     <tbody>
@@ -142,7 +141,7 @@ $message = '<div style="margin:0;padding:0;width:100%!important">
                               <tbody>
                                 <tr>
                                   <td>
-                                    <h2 style="padding:0;margin:5px 20px;font-size:16px;line-height:1.4em;font-weight:normal;color:#464646;font-family:&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif">Please confirm your Email Address for <strong>TreatMe.co.in</strong></a></h2>
+                                    <h2 style="padding:0;margin:5px 20px;font-size:16px;line-height:1.4em;font-weight:normal;color:#464646;font-family:&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif">Please copy the below verification code <strong>TreatMe.co.in</strong></a></h2>
                                   </td>
 
                                 </tr>
@@ -209,7 +208,7 @@ $mail->SMTPOptions = array(
 
 
 //From email address and name
-$mail->From = "acountactivation@treatme.co.in";
+$mail->From = "passwordassistance@treatme.co.in";
 $mail->FromName = "TreatMe.co.in";
 
 //To address and name
@@ -217,13 +216,13 @@ $mail->addAddress($to);
 
 
 //Address to which recipient will reply
-$mail->addReplyTo("noreply@yourdomain.com", "Reply");
+$mail->addReplyTo("noreply@treatme.co.in", "Reply");
 
 
 //Send HTML or Plain Text email
 $mail->isHTML(true);
 
-$mail->Subject = "Account Activation";
+$mail->Subject = "Password Reset Assistance";
 $mail->Body = $message;
 $mail->AltBody = "";
 

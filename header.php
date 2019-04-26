@@ -48,6 +48,7 @@ include('session.php');?>
 			<script src="./js/common_scripts.min.js"></script>
 			<script src="./js/functions.js"></script>
 			<script src="./js/app.js"></script>
+			
 
 
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>

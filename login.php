@@ -2,6 +2,7 @@
 session_start();
 include("header.php");
 include("config.php");
+$error = $_SESSION['msg'];
 // if(isset($_SESSION['login_user']))
 $log_status = isset($_SESSION['login_user'])?$_SESSION['login_user']:null;
   if($log_status !=null){

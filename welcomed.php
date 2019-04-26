@@ -238,10 +238,11 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 $shift = $cdrow2["shift"];
                 $shift_type = ($shift==0)?'Morning':'Evening';
                 $queue_no = $cdrow2["queue_no"];
-                //query to get doc name from view doctor
-                $docquery = $conn->query("select user_name from vw_patient where pat_id = $pat_id");
-                $cdrow3=mysqli_fetch_array($docquery);
-                $pat_name = $cdrow3["user_name"];
+                //query to get patient name from tb_appointment
+                $patnamequery = $conn->query("select name from tb_appointment where pat_id = $pat_id and apptt_id = $appt_id");
+                $cdrow3=mysqli_fetch_array($patnamequery);
+                $pat_name = $cdrow3["name"];
+              
                 echo "<tr><td>$appt_id <span class=''></span> </td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>$queue_no</td>
                 <td>confirmed</td>
                 </tr>" ;
@@ -252,7 +253,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           }
 
           if ($counttmpappt > 0){
-            echo "<tr><td colspan='6'>Unfconfirmed</td></tr>";
+            echo "<tr><td colspan='6'>Un Confirmed</td></tr>";
             while ($cdrow2=mysqli_fetch_array($resulttmpappt)) {
                 //getting result from database
                 $tmp_id = $cdrow2["tmp_id"];
@@ -260,11 +261,13 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 $appt_date = $cdrow2["appt_date"];
                 $shift = $cdrow2["shift"];
                 $shift_type = ($shift==0)?'Morning':'Evening';
-                //query to get doc name from view doctor
-                $docquery = $conn->query("select user_name from vw_patient where pat_id = $pat_id");
-                $cdrow3=mysqli_fetch_array($docquery);
-                $pat_name = $cdrow3["user_name"];
-
+                //query to get patient name from tb_appointment
+                $patnamequery = $conn->query("select name from tmp_appointment where pat_id = $pat_id and tmp_id = $tmp_id");
+                $cdrow3=mysqli_fetch_array($patnamequery);
+                $pat_name = $cdrow3["name"];
+              
+            
+                
                 echo "<tr><td>$tmp_id</td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>unconfirmed</td>
                 <td>
                   <a class='btn btn-sm btn-danger' href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=0'><span class='icon_close_alt2'></span></a>

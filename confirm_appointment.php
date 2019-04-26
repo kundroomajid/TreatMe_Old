@@ -15,7 +15,7 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
     $result = $conn->query("select patients FROM vw_doctor WHERE doc_id=$doc_id");
     $row = mysqli_fetch_assoc($result);
       $patients = $row['patients'];
-    
+      
     
     
     if($confirmed==0){
@@ -46,12 +46,20 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
       $shift = $row['shift'];
       $patient_name = $row['name'];
       
+      // get patient details
+          $result = $conn->query("select user_email FROM vw_patient WHERE user_id=$pat_id");
+    $row = mysqli_fetch_assoc($result);
+      $email = $row['user_email'];
+      
+      
 
       if(bookAppointment($doc_id,$pat_id,new DateTime($date),$shift,$patient_name) && ($result = $conn->query("DELETE FROM tmp_appointment WHERE tmp_id=$tmp_id")))
 	  {
+        echo "<script> alert($email) </script>";
         $patients = $patients + 1;
         $q = "update tb_doctor SET patients = '$patients'";
       mysqli_query($conn,$q);
+        send_email($email);
 		  $_SESSION['msg'] = '<div class= "alert alert-info alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     Appointment Confirmed Sucessfully</div>';
@@ -74,7 +82,7 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
 else{
   echo '<script type="text/javascript">
 //  alert("Please Login To Book an Appontmnet")
-  window.location = "/shifa/login.php?doc_id='.$doc_id.'";
+  window.location = "./login.php";
   </script> ';
 }
 
@@ -137,29 +145,84 @@ function slotsFilled($doc_id,$date,$shift){
   //  $conn->close();
 }
 
-?>
+//  /TODO: change to acutal address from localhost
+  function send_email($user_email){
+    global $conn;
+    
+   $to      = $user_email; // Send email to our user
+$message = ' Appointmet has been confirmed please visit the dashboard for details';
+  require './phpmailer/PHPMailerAutoload.php';
 
-<!--main>
-  <div class="bg_color_2">
-    <div class="container margin_60_35">
-      <div id="login-2">
-        <h1>Thank You For Booking Appointment <?= "$pat_name" ?> </h1>
-        <div class="box_form clearfix">
-          <div class="wrapper_indent">
-            <?= "<h2>Appointment id        :   $appt_id</h2>";?>
-            <?= "<h2>Dr Name               :   $doc_name</h2>";?>
-            <?= "<h2>Date                  :   $appt_date</h2>";?>
-            <?= "<h2>Shift                 :   $shift_name</h2>";?>
-            <?= "<h2>Queue No              :   $queue_no</h2>";?>
+//PHPMailer Object
+$mail = new PHPMailer;
 
-          </div>
-          <div class="box_login last">
-          </div>
-        </div>
-      </div>
 
-    </div>
-  </div>
-  <?php include("footer.php"); ?>
+//Enable SMTP debugging. 
+$mail->SMTPDebug = 0;                               
+//Set PHPMailer to use SMTP.
+$mail->isSMTP();            
+//Set SMTP host name                          
+$mail->Host = "smtp.gmail.com";
+//Set this to true if SMTP host requires authentication to send email
+$mail->SMTPAuth = true;                          
+//Provide username and password     
+$mail->Username = "treatme247@gmail.com";                 
+$mail->Password = "Startup@2019"; 
+//If SMTP requires TLS encryption then set it
+$mail->SMTPSecure = "tls";                           
+//Set TCP port to connect to 
+$mail->Port = 587;    
+$mail->SMTPOptions = array(
+    'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+    )
+);
+                               
+
+
+//From email address and name
+$mail->From = "Appointment@treatme.co.in";
+$mail->FromName = "TreatMe.co.in";
+
+//To address and name
+$mail->addAddress($to);
+
+
+//Address to which recipient will reply
+$mail->addReplyTo("noreply@treatme.co.in", "Reply");
+
+
+//Send HTML or Plain Text email
+$mail->isHTML(true);
+
+$mail->Subject = "Appointment Confirmed";
+$mail->Body = $message;
+$mail->AltBody = "";
+
+if(!$mail->send()) 
+{
+//    echo "Mailer Error: " . $mail->ErrorInfo;
+   $_SESSION['msg'] .= '<div class= "alert alert-info alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Email Sent</div>';
+  
+  
+} 
+else 
+{
+//    echo "Message has been sent successfully";
+$_SESSION['msg'] .= '<div class= "alert alert-info alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Email Sent</div>';
+}
+
+  }
+  
+  
+  
+  
+include("footer.php");?>
 </main>
-</html-->
+</html

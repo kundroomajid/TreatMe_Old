@@ -4,7 +4,7 @@ $bookerror = " ";
 //	unset($bookerror);
 include("session.php");
 include("config.php");
-if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION['user_type']=='p' ){
+if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION['user_type'] !='d' ){
    $username = ($_SESSION['login_user']);
   $doc_id = isset($_GET['doc_id'])? mysqli_real_escape_string($conn,$_GET['doc_id']):null;
   $date1 = isset($_GET['date'])?$_GET['date']:null;
@@ -59,7 +59,7 @@ else{
   
   echo '<script type="text/javascript">
 //  alert("Please Login To Book an Appontmnet")
-  window.location = "/shifa/login.php?doc_id='.$doc_id.'";
+//  window.location = "./login.php";
   </script> ';
 }
 
@@ -137,7 +137,6 @@ function slotsFilled($doc_id,$date,$shift){
       <div id="login-2">
          
         <h4 style="color:white" align = "center" >Thank You   <?= "<small><i>$patient_name</i></small>";?>   For Booking Appointment <br /> </h4>
-<!--         <h4 align ='center' style='color:white'><?= "$pat_name" ?></h4>-->
         <p><h4 style="color:white" align = "center"><i>A Mail will be sent upon the confirmation of your appointment</i></p></h4>
       
          <table class="table table-bordered">
@@ -157,21 +156,15 @@ function slotsFilled($doc_id,$date,$shift){
     </tbody>
   </table>
          
-         
-<!--
-        <div class="box_form clearfix">
-          <div class="wrapper_indent">
-            <?= "<h2>Appointment id        :   $appt_id</h2>";?>
-            <?= "<h2>Dr Name               :   $doc_name</h2>";?>
-            <?= "<h2>Date                  :   $appt_date</h2>";?>
-            <?= "<h2>Shift                 :   $shift_name</h2>";?>
-          </div>
-        </div>
--->
       </div>
 
     </div>
   </div>
-  <?php include("footer.php"); ?>
+  <?php include("footer.php"); 
+
+
+
+
+?>
 </main>
 </html>
