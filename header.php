@@ -74,16 +74,13 @@ include('session.php');?>
 						<nav class="col-lg-9 col-6">
 					<a class="cmn-toggle-switch cmn-toggle-switch__htx open_close" href="#0"><span>Menu mobile</span></a>
 							<ul id="top_access">
-								<li id="user">
 										<?php
 								if(isset($_SESSION['login_user']))
 								{
-									echo "<a href='welcome.php'> <figure> $imagepic </figure> <sub>$user</sub> </a>";
-									$username = ($_SESSION['login_user']);
-									echo "<li class='show-submenu'><a href='logout.php' tabindex='0'  class='show-submenu'><span class='glyphicon glyphicon-user'></span>Logout</a></li>";
-
-
-
+                                  $username = ($_SESSION['login_user']);
+									echo "<li id='user'><a href='welcome.php'> <figure> $imagepic </figure> $user </a></li>";
+									
+//                                  echo "<li> </li>";
 								}
 								else
 								{
@@ -92,7 +89,7 @@ include('session.php');?>
 
 								}
 							?>
-								</li>
+								
 
 							</ul>
 							<div class="main-menu">
@@ -114,6 +111,16 @@ include('session.php');?>
 										<a href="./about.php" class="show-submenu">About<i class="menu"></i></a>
 
 									</li>
+                                  <?php
+								if(isset($_SESSION['login_user']))
+								{
+									echo '<li class="menu">
+										<a href="./logout.php" class="show-submenu">Logout<i class="menu"></i></a>
+
+									</li>';
+								}
+                                  ?>
+                                  
 								</ul>
 							</div>
 							<!-- /main-menu -->
