@@ -138,7 +138,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <?= "$image";?>
           </figure>
           <!--						<small>Primary care - Internist</small>-->
-          <h1><?= $clinic_name ?> </h1>
+          <?php
+							// get verification satus from tb_verification
+  								$verify = $conn->query("Select status from tb_verification where doc_id = $clinic_id");
+  								$cdrow4=mysqli_fetch_array($verify);
+  								$verification_status = $cdrow4['status'];
+							if($verification_status == 2)
+							{
+								echo ("<h1> $clinic_name  <img src='img/verified.png' align='right' width='25px' height='25px' alt ='Verified'/></h1>");
+							}
+                else
+                {
+                  echo ("<h1> $clinic_name  </h1>");
+                }
+							?>
+          
           <span class="rating">
 
             <!--                                          TO DO GET STARS from databse-->

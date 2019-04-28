@@ -70,6 +70,8 @@ if($doc_id!=null){
     $comment_count = $total_comments;
   }
 
+  
+  
 
 
 
@@ -280,7 +282,20 @@ if(isset($_SESSION['login_user'])  ){
               </div>
               <div class="col-lg-7 col-md-8">
                 <!--										<small>Primary care - Internist</small>-->
-                <h1><?= $user_name ?> </h1>
+                <?php
+							// get verification satus from tb_verification
+  								$verify = $conn->query("Select status from tb_verification where doc_id = $doc_id");
+  								$cdrow4=mysqli_fetch_array($verify);
+  								$verification_status = $cdrow4['status'];
+							if($verification_status == 2)
+							{
+								echo ("<h1> $user_name  <img src='img/verified.png' align='right' width='25px' height='25px' alt ='Verified'/></h1>");
+							}
+                else
+                {
+                  echo ("<h1> $user_name  </h1>");
+                }
+							?>
                 <h6>Rated <?= substr($avg_rating,0,4) ?> on average by <?=$rate_times?>  users</h6>
                 <span class="rating">
                   <!--                                          TO DO GET STARS from databse-->

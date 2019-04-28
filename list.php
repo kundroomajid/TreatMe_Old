@@ -235,7 +235,17 @@ $count = mysqli_num_rows($result);
 					$avg_rating = $cdrow['avg_rating'];
 					?>
 					<div class="strip_list wow fadeIn">
-						<!--						<a href="#0" class="wish_bt"></a>-->
+						<?php
+							// get verification satus from tb_verification
+  								$verify = $conn->query("Select status from tb_verification where doc_id = $doc_id");
+  								$cdrow4=mysqli_fetch_array($verify);
+  								$verification_status = $cdrow4['status'];
+							if($verification_status == 2)
+							{
+								echo ('<div align="right"><img src="img/verified.png" width="25px" height="25px"/></div>');
+							}
+							?>
+						
 						<figure>
 							<!--                          TODO make image clickable-->
 							<!--							<a href="./detail-page.php"><img src="" alt="" /></a>-->

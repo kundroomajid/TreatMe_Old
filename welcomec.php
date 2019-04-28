@@ -594,7 +594,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
     <div class="row my-2">
       <div class="form-group">
           
-        <h6 class="mt-2">Upload Letter of authourity or Degree Certificate</h6>
+        <h6 class="mt-2">Upload Registration Certificate</h6>
         <label class="custom-file">
           <input type="file" class="custom-file-input" id="uploadImage" name="image" id="image" accept=".jpg, .jpeg, .png" required />
           <span class="custom-file-control">Choose file</span>
