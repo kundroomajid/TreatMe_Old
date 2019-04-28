@@ -1,7 +1,7 @@
 <?php
 include("header.php");
 $msg = $_SESSION['msg'];
-unset($_SESSION['msg']);
+
 $id = isset($_SESSION['id'])?$_SESSION['id']:null;
 
 
@@ -48,6 +48,32 @@ if($id!=null){
   $evening_end_time = $cdrow1['evening_end_time'];
 
   $gender_symbol = ($gender=='Male')?"&#9794;":($gender=='Female')?"&#9792;":"&#9893;";
+  
+  // get verification satus from tb_verification
+  $verify = $conn->query("Select status from tb_verification where doc_id = $id");
+  $cdrow4=mysqli_fetch_array($verify);
+  $verification_status = $cdrow4['status'];
+  
+  
+  if($verification_status == 0) // has not uploaded documnets yet
+  {
+  $msgverification = '<div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Please Verify your Degree By uploading documents From Dashboard
+  </div>';
+  }
+  else if($verification_status == 1)
+  {
+  $msgverification = '<div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Thanks for Uploading Documents Your account is pending for verification .
+  </div>';
+  }
+  else
+  {
+    
+  }
+  
 
 
   //get data from appointment table
@@ -165,6 +191,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
     <!---------------------TABS--------------------->
     <div class="col-lg-8 order-lg-2">
 		<div id="info" class="clearfix">  <?= "$msg";?> </div>
+      <div id="info" class="clearfix">  <?= "$msgverification";?> </div>
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a href="" data-target="#profile" data-toggle="tab" class="nav-link active">Profile</a>
@@ -178,6 +205,9 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
         <li class="nav-item">
           <a href="" data-target="#addinfo" data-toggle="tab" class="nav-link">Additional Info</a>
         </li>
+        <li class="nav-item">
+          <a href="" data-target="#verification" data-toggle="tab" class="nav-link">Upload Documents</a>
+        </li>
       </ul>
 
       <div class="tab-content py-4">
@@ -187,9 +217,31 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           <div class="tab-pane" id="profile">
           <div class="row">
             <div class="col-md-8 ">
-              <h4> <?= $user."(".getAge($dob).")".$gender_symbol  ?></h4>
+              
+              <h4> <?= $user."(".getAge($dob).")".$gender_symbol  ?>
+              <?php
+                  if($verification_status == 0)
+                    {   
+                    echo('<h5><b style="color:red">(Not Verified)</b></h5>');
+                      
+                  
+                    }
+                    else if($verification_status == 1)
+                      {
+                         echo('<h5><i style="color:blue">(Pending for Verification)</i></h5>');
+                    
+                        }
+                else
+                {
+                  echo('<h5>(Verified)</h5>');
+                }
+                  ?>
+              
+              
+              
+              
+              </h4>
             </div>
-
             <div class="col-md-12">
               <h5 class="mt-2"> User Details</h5>
               <table class="table">
@@ -472,18 +524,42 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
           });
           </script>
         </div>
+         <!---------------------verification upload documnets--------------------->
+        <div class="tab-pane" id="verification">
+           
+  <form method="POST" enctype="multipart/form-data" action="upload_docs.php">
+    <div class="row my-2">
+      <div class="form-group">
+          
+        <h6 class="mt-2">Upload Letter of authourity or Degree Certificate</h6>
+        <label class="custom-file">
+          <input type="file" class="custom-file-input" id="uploadImage" name="image" id="image" accept=".jpg, .jpeg, .png" required />
+          <span class="custom-file-control">Choose file</span>
+          <br><br> <br>
+        </label>
+        <input type="submit" class = "btn_1" value = "Upload"/>
+      </div>
+
+
+
+
+            </div>
+
+
+          </form>
+
 
         </div>
-      </div>
-   
+
    
   </div>
+    </div>
+ 
+</div>
 
-
-
-
-</body>
 <?php include("footer.php");
+  
+  unset($_SESSION['msg']);
 
 function getAge($date){
   $dob = new DateTime($date);

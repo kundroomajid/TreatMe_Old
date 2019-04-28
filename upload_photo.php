@@ -125,15 +125,6 @@ uploadImage.onchange = function() {
                 </div>
               </div>
             </div>
-
-
-
-
-
-
-
-
-<!-- </pre> -->
 </main>
 <?php
 include("footer.php");
