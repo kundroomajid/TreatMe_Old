@@ -9,28 +9,13 @@ include('session.php');?>
 			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 			<meta name="description" content="Find trusted medical advice from Kashmir's top doctors" />
 			<meta name="author" content="" />
-			<title> TreatMe- Reviews  | Find trusted medical advice from Kashmir's top doctors</title>
+			<title> TreatMe | Appointments | Reviews Find trusted medical advice from Kashmir's top doctors</title>
 
 			<!-- Favicons-->
-			<link rel="shortcut icon" href="./img/favicon-16x16.png" type="image/x-icon" sizes="16x16" />
-			<link rel="shortcut icon" href="./img/favicon-32x32.png" type="image/x-icon" sizes="32x32" />
+			<link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon" sizes="16x16" />
+			<link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon" sizes="32x32" />
+          <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon" sizes="64x64" />
 
-			<!-- iOS 7 or prior (legacy) -->
-			<link rel="apple-touch-icon" sizes="144x144" href="./img/apple-touch-icon-144x144.png">
-			<link rel="apple-touch-icon" sizes="114x114" href="./img/apple-touch-icon-114x114.png">
-			<link rel="apple-touch-icon" sizes="72x72" href="./img/apple-touch-icon-72x72.png"> 
-			<link rel="apple-touch-icon" sizes="57x57" href="./img/apple-touch-icon-57x57.png">
-
-   
-			<!-- iOS 8 and later -->
-			<link rel="apple-touch-icon" sizes="180x180" href="./img/apple-touch-icon-180x180.png">
-			<link rel="apple-touch-icon" sizes="152x152" href="./img/apple-touch-icon-152x152.png">
-			<link rel="apple-touch-icon" sizes="120x120" href="./img/apple-touch-icon-120x120.png">
-			<link rel="apple-touch-icon" sizes="76x76" href="./img/apple-touch-icon-76x76.png">
-			<link rel="apple-touch-icon" sizes="60x60" href="./img/apple-touch-icon-60x60.png">
-
-			<!-- launcher (Android/Chrome) -->
-			<link rel="manifest" href="./img/manifest.json">
 			
 			<!-- BASE CSS -->
 			<link href="./css/bootstrap.min.css" rel="stylesheet" />
@@ -45,6 +30,8 @@ include('session.php');?>
 			<!-- COMMON SCRIPTS -->
 			
 			<script src="./js/jquery-2.2.4.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+          
 			<script src="./js/common_scripts.min.js"></script>
 			<script src="./js/functions.js"></script>
 			<script src="./js/app.js"></script>
@@ -67,9 +54,16 @@ include('session.php');?>
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-3 col-6">
+                          <div id="logo_home">
+                          <a href="./index.php">
+                            <img border="0" alt="TreatMe.co.in" src="./img/logo.png" width="80%" height="80%">
+                          </a>
+                          </div>
+<!--
 							<div id="logo_home">
 								<h1><a href="index.php" title="TreatMe"> TreatMe</a></h1>
 							</div>
+-->
 						</div>
 						<nav class="col-lg-9 col-6">
 					<a class="cmn-toggle-switch cmn-toggle-switch__htx open_close" href="#0"><span>Menu mobile</span></a>

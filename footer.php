@@ -5,8 +5,8 @@
 			<div class="row">
 				<div class="col-lg-3 col-md-12">
 					<p>
-						<a href="index.php" title=" J&K TreatMe">
-							<img src="./img/logo.png" data-retina="true" alt="" width="250" height="80"  />
+						<a href="./index.php" title=" J&K TreatMe">
+							<img src="./img/logo.png" data-retina="true" alt="TreatMe" width="70%" height="70%"  />
 						</a>
 					</p>
 				</div>
