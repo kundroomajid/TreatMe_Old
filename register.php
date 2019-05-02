@@ -88,12 +88,12 @@ $message = '<div style="margin:0;padding:0;width:100%!important">
                                       <tbody>
                                         <tr>
                                           <td valign="top">
-                                            <p style="direction:ltr;font-size:14px;line-height:1.4em;color:#444444;font-family:&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif;margin:0 0 1em 0">Welcome .<br><br>
-                                              To activate your account please click confirm below. If you believe this is an error, ignore this message and we"ll never bother you again.</p>
+                                            <p style="direction:ltr;font-size:14px;line-height:1.4em;color:#444444;font-family:&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif;margin:0 0 1em 0">Welcome to TreatMe.<br><br>
+                                              To activate your account please Copy the below verification Code If you believe this is an error, ignore this message and we"ll never bother you again.</p>
 
                                             <p style="direction:ltr;font-size:14px;line-height:1.4em;color:#444444;font-family:&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif;margin:0 0 1em 0;font-size:14px;padding:0;color:#666;padding-top:1em;padding-bottom:0em;margin-bottom:0;margin-left:0;padding-left:0">
-                                            <p>zcopy the below verification code to verify your account</p>
-                                              <div align="center"><h4>'.$hash.'</h4></div>
+                                            <p>Copy the below verification code to verify your account</p>
+                                              <div align="center"><h4><b>'.$hash.'</b></h4></div>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -235,26 +235,26 @@ include("header.php");
                 </select>
                 <div class="form-group">
                   <label>Email</label>
-                  <input type="email" name="user_email" class="form-control" placeholder="Your Email Address" required= "true"/>
+                  <input type="email" name="user_email" class="form-control" placeholder="Your Email Address"/>
                 </div>
                 <div class="form-group">
                   <label>Password</label>
-                  <input type="password" name="user_password" class="form-control" id="password1" required= "true" placeholder="Your Password" />
+                  <input type="password" name="user_password" class="form-control" id="password1" placeholder="Your Password" />
                 </div>
                 <div class="form-group">
                   <label>Confirm password</label>
-                  <input type="password" class="form-control" id="password2" placeholder="Confirm Password" required= "true"/>
+                  <input type="password" class="form-control" id="password2" name = "password2" placeholder="Confirm Password"/>
                 </div>
                 <div id="pass-info" class="clearfix"></div>
                 <div class="checkbox-holder text-left">
                   <div class="checkbox_2">
-                    <input type="checkbox" value="false" id="check_2" name="check_2" required= "true"/>
+                    <input type="checkbox" value="false" id="check_2" name="check_2" required/>
                     <label for="check_2"><span>I Agree to the <strong>Terms &amp; Conditions</strong></span></label>
                   </div>
                 </div>
 
                 <div class="form-group text-center add_top_30">
-                  <input class="btn_1" type="submit" value="Submit" onclick="submitForm();/>
+                  <input class="btn_1" type="submit" value="Submit"/>
 
                 </div>
               </div>
@@ -268,34 +268,13 @@ include("header.php");
       <!-- /register -->
     </div>
   </div>
-<script>
-   
-   function submitForm() {
-    var validator = $("#myForm").validate({
-        rules: {
-            name: "required",
-            email: "required",
-            contactnumber: "required",
-            city: "required",
-            desc: "required"
-        },
-        errorElement: "span",
-        messages: {
-            name: " Enter Name",
-            email: " Enter Email",
-            contactnumber: " Enter Contact No",
-            city: " Enter City",
-            desc: " Enter Description"
-        }
-    });
-    if (validator.form()) { // validation perform
-        $('form#myForm').attr({
-            action: 'mycontroller'
-        });
-        $('form#myForm').submit();
-    }
-}
-</script>
+
+<!--jquery validator-->
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+ <script src="./js/formvalidator.js"></script>
+
+
+<!--validator ends-->
 
   <?php include("footer.php"); ?>
   <script src="./js/pw_strenght.js"></script>

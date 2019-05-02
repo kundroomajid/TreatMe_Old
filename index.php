@@ -12,10 +12,10 @@ include("header.php");
 
 				</p>
 
-			<form method="GET" action="list.php"  id = "search"/>
+			<form method="GET" action="list.php"  id = "searchForm"/>
 					<div id="custom-search-input">
 						<div class="input-group">
-							<input type="text" id = "search" name="q" class=" search-query" placeholder="Search doctors, clinics, hospitals etc." />
+							<input type="search" id = "search" name="q" class=" search-query" placeholder="Search doctors, clinics, hospitals etc." />
             	<input type="submit" class="btn_search" value="Search" />
 						</div>
 						<ul>
@@ -36,6 +36,12 @@ include("header.php");
 				</form>
 			</div>
 		</div>
+<!--jquery validator-->
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+ <script src="./js/formvalidator.js"></script>
+
+
+<!--validator ends-->
 		<!-- /Hero -->
 
 		<div class="container margin_120_95">

@@ -79,7 +79,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container margin_60_35">
       <div id="login-2">
         <h1>Welcome to TreatMe</h1>
-        <form action=" " method="post">
+        <form action=" " method="post" id="loginForm">
           <div class="box_form clearfix">
             <!--	<div class="box_login">
             <a href="#0" class="social_bt facebook">Login with Facebook</a>
@@ -91,10 +91,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             
             <div id="info" class="clearfix">  <?= "$error";?> </div>
             <div class="form-group">
-              <input type="email" name="email_id" class="form-control" placeholder="Your email address" />
+              <input type="email" name="email_id" class="form-control" placeholder="Your email address" required/>
             </div>
             <div class="form-group">
-              <input type="password" name="password" class="form-control" placeholder="Your password" />
+              <input type="password" name="password" class="form-control" placeholder="Your password"  required/>
               <a href="forgot.php" class="forgot"><small>Forgot password?</small></a>
             </div>
             
@@ -110,6 +110,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- /login -->
   </div>
 </div>
+  <!--jquery validator-->
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+ <script src="./js/formvalidator.js"></script>
+
+
+<!--validator ends-->
 <?php include("footer.php"); ?>
 </main>
 <!-- /main -->

@@ -1,4 +1,4 @@
-<html>
+
 <?php
 include("header.php");
 $msg = $_SESSION['msg'];
@@ -135,7 +135,7 @@ if($result==null) echo "nonos";
 if(($r = mysqli_fetch_array($result))!=null)
 $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width='200' height='200' /><br/>";
 ?>
-
+<html>
 <link rel="stylesheet" href="./css/tagsinput.css">
 <script type="text/javascript" src="./js/tagsinput.js"></script>
 

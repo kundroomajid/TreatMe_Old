@@ -22,7 +22,7 @@ $file_size = $_FILES['image']['size'];
     if (($file_size > 655000))
     {
         $message = 'File too large. File must be less than 640 kb.';
-        echo '<script type="text/javascript">alert("'.$message.'");</script>';
+//        echo '<script type="text/javascript">alert("'.$message.'");</script>';
     }
 
 if($file!=null && $file!="")
@@ -102,7 +102,7 @@ uploadImage.onchange = function() {
 
 									<div class="form-group">
                     <!-- <input type ="text" name = "hola" /> -->
-  	                 <input type="file" class = "form-control" id="uploadImage" name="image" id="image" accept=".jpg, .jpeg, .png" />
+  	                 <input type="file" class = "form-control" id="uploadImage" name="image" id="image" accept=".jpg, .jpeg, .png" required />
                      	</div>
 
   	                  <input type="submit" class = "btn_1" value = "Upload" />

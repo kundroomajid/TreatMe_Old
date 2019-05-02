@@ -59,7 +59,7 @@ $_SESSION['msg'] = $msg;
       <h1>Please details of Clinic to complete Your profile</h1>
       <div class="row justify-content-center">
         <div class="col-md-5">
-          <form action="" method="POST">
+          <form action="" method="POST" id="registerClinic">
             <div class="box_form">
               <div class="form-group">
                 <label>Clinic Name </label>
@@ -108,6 +108,10 @@ $_SESSION['msg'] = $msg;
               </form>
             </div>
           </div>
+        <!--jquery validator-->
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+ <script src="./js/formvalidator.js"></script>
+<!--validator ends-->
           <!-- /row -->
         </div>
         <!-- /register -->

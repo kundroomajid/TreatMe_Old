@@ -59,15 +59,15 @@ $_SESSION['msg'] = $msg;
       <h1>Please Enter Your details to complete Your profile</h1>
       <div class="row justify-content-center">
         <div class="col-md-5">
-          <form action="" method="POST">
+          <form action="" method="POST" id="registerForm">
             <div class="box_form">
               <div class="form-group">
                 <label>Name</label>
-                <input type="name" name ="name"class="form-control" placeholder="Enter Your Name" />
+                <input type="name" name ="name"class="form-control" placeholder="Enter Your Name" required/>
               </div>
               <div class="form-group">
                 <label>PhoneNo</label>
-                <input type="phone_no" name ="phone_no" class="form-control" id="phone_no" placeholder="Phone No" />
+                <input type="number" name ="phone_no" class="form-control" id="phone_no" placeholder="Phone No" minlength="10" maxlength="10"  required/>
               </div>
               <p>
                 <label>Gender</label>
@@ -89,14 +89,14 @@ $_SESSION['msg'] = $msg;
               </p>
               <div class="form-group">
                 <label>Date Of Birth</label>
-                <input type="date" name ="dob" class="form-control"/>
+                <input type="date" name ="dob" class="form-control" required/>
               </div>
               <div class="form-group">
                 <label>Address</label>
-                <input type="address" name ="address" class="form-control" id="address" placeholder="Enter Full Address" />
+                <input type="address" name ="address" class="form-control" id="address" placeholder="Enter Full Address" required/>
               </div>
               <label>Select District</label>
-              <select id = "district" class="form-control" name ="district">
+              <select id = "district" class="form-control" name ="district" required>
                 <option value = "Anantnag">Anantnag</option>
                 <option value = "Bandipora">Bandipora</option>
                 <option value = "Baramulla">Baramulla</option>
@@ -123,7 +123,7 @@ $_SESSION['msg'] = $msg;
 
               <div class="form-group">
                 <label>Pincode</label>
-                <input type="pincode" name ="pincode" class="form-control" id="pincode" placeholder="Enter Your pincode" />
+                <input type="pincode" name ="pincode" class="form-control" id="pincode" placeholder="Enter Your pincode" required/>
               </div>
               <div  <label>Select Blood Group</label>
                 <select id = "bloodgroup" class="form-control" name ="bloodgroup">
@@ -140,11 +140,11 @@ $_SESSION['msg'] = $msg;
                 </select> </div>
                 <div class="form-group">
                   <label>Height</label>
-                  <input type="height" name ="height" class="form-control" id="height" placeholder="Enter Height in Inches" />
+                  <input type="height" name ="height" class="form-control" id="height" placeholder="Enter Height in Inches" required/>
                 </div>
                 <div class="form-group">
                   <label>Weight</label>
-                  <input type="weight" name ="weight" class="form-control" id="weight" placeholder="Enter Your Weight in Kgs" />
+                  <input type="weight" name ="weight" class="form-control" id="weight" placeholder="Enter Your Weight in Kgs"required />
                 </div>
                 <div class="form-group text-center add_top_30">
                   <input class="btn_1" type="submit" value="Submit" />
@@ -155,6 +155,11 @@ $_SESSION['msg'] = $msg;
           </div>
           <!-- /row -->
         </div>
+  <!--jquery validator-->
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+  <script src="./js/formvalidator.js"></script>
+
+<!--validator ends-->
         <!-- /register -->
       </div>
     </div>

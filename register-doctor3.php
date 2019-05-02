@@ -40,72 +40,72 @@ $_SESSION['msg'] = ' ';
 					</div>
 					<br />
 
-					<form method="POST" action="">
+					<form method="POST" action="" id="registerDoctor3">
 						<div class="box_form">
 							<div class="form-group">
 								<label>Specializations</label>
-								<input type="text" name="specialization" class="form-control" placeholder="What is Your specialization" />
+								<input type="text" name="specialization" class="form-control" placeholder="What is Your specialization"required />
 							</div>
 							<div class="form-group">
 								<label>Degree</label>
-								<input type="degree" name="degree" class="form-control" id="degree" placeholder="Degrees" />
+								<input type="text" name="degree" class="form-control" id="degree" placeholder="Degrees" required/>
 							</div>
 							<div class="form-group">
 								<label>Institution</label>
-								<input type="institution" name="institution" class="form-control" placeholder="Colleage or Institution" />
+								<input type="text" name="institution" class="form-control" placeholder="Colleage or Institution" required/>
 							</div>
 							<div class="form-group">
 								<label>Experience</label>
-								<input type="experience" name="experience" class="form-control" placeholder="Years Of Experience" />
+								<input type="number" name="experience" class="form-control" placeholder="Years Of Experience" required/>
 							</div>
 
 							<div class="form-group">
 								<label>Registration_no</label>
-								<input type="registration_no" name="registration_no" class="form-control" placeholder="Enter Your registration_no Number" />
+								<input type="text" name="registration_no" class="form-control" placeholder="Enter Your registration_no Number" required/>
 							</div>
 							<div class="form-group">
 								<label>Registration Year</label>
-								<input type="registration_year" name="registration_year" class="form-control" placeholder="Enter Year of registration." />
+								<input type="number" name="registration_year" class="form-control" placeholder="Enter Year of registration." required/>
 							</div>
 							<div class="form-group">
 								<label>Registration Council</label>
-								<input type="registration_council" name="registration_council" class="form-control" placeholder="Enter registration Council." />
+								<input type="text" name="registration_council" class="form-control" placeholder="Enter registration Council." required/>
 							</div>
 
 							<div class="form-group">
 								<label>Clinic Name</label>
-								<input type="clinic" name="clinic" class="form-control" placeholder="Enter Name of clinic " />
+								<input type="text" name="clinic" class="form-control" placeholder="Enter Name of clinic "required />
 							</div>
 							<div class="form-group">
 								<label>Address of clinic</label>
-								<input type="address" name="address" class="form-control" placeholder="Enter the address of clinic" />
+								<input type="text" name="address" class="form-control" placeholder="Enter the address of clinic"required />
 							</div>
 							<div class="form-group">
 								<label>Consultation  Fee</label>
-								<input type="number_format" name="fee" class="form-control" placeholder="What is  Your Consultation fee? " />
+								<input type="number_format" name="fee" class="form-control" placeholder="What is  Your Consultation fee? " required/>
 							</div>
 							<div class="form-group">
 								<label>Consultation Validity(In Days)</label>
-								<input type="number_format" name="c_validity" class="form-control" placeholder="Consultation Valid for days" />
+								<input type="number" name="c_validity" class="form-control" placeholder="Consultation Valid for days"required />
 							</div>
 							<div class="form-group">
 
 								Morning Shift Start Time
-								<input type="time" name="morning_start_time" />
+								<input type="time" name="morning_start_time" id ="mst" required/>
 							</div>
 
 							<div class="form-group">
 								Morning Shift End Time
-								<input type="time" name="morning_end_time" />
+								<input type="time" name="morning_end_time" id ="met" required/>
 							</div>
 							<div class="form-group">
 								Evening Shift Start Time
-								<input type="time" name="evening_start_time" />
+								<input type="time" name="evening_start_time" id ="est" required />
 							</div>
 
 							<div class="form-group">
 								Evening Shift End Time
-								<input type="time" name="evening_end_time" />
+								<input type="time" name="evening_end_time" id ="eet" required/>
 							</div>
 
 
@@ -121,10 +121,75 @@ $_SESSION['msg'] = ' ';
 	</div>
 	<!-- /container -->
 	</div>
+	<!--jquery validator-->
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+ <script src="./js/formvalidator.js"></script>
+
+
+<!--validator ends-->
 	<!-- /hero_register -->
 </main>
 <!-- /main -->
 
+
+<script>
+$("#register-form").validate({
+    rules: {
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        strongPassword: true
+      },
+      password2: {
+        required: true,
+        equalTo: '#password'
+      },
+      firstName: {
+        required: true,
+        nowhitespace: true,
+        lettersonly: true
+      },
+      secondName: {
+        required: true,
+        nowhitespace: true,
+        lettersonly: true
+      },
+      businessName: {
+        required: true
+      },
+      phone: {
+        required: true,
+        digits: true,
+        phonesUK: true
+      },
+      address: {
+        required: true
+      },
+      town: {
+        required: true,
+        lettersonly: true
+      },
+      postcode: {
+        required: true,
+        postcodeUK: true
+      },
+      terms: {
+        required: true
+      }
+    },
+    messages: {
+      email: {
+        required: 'Please enter an email address.',
+        email: 'Please enter a <em>valid</em> email address.',
+        remote: $.validator.format("{0} is already associated with an account.")
+      }
+
+
+
+</script>
 <?php
 include("footer.php");
 

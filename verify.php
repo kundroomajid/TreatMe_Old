@@ -3,6 +3,7 @@
 include("header.php"); 
 include ("config.php");
 $email = mysqli_escape_string($conn,$_GET['email']); // Set email variable
+$msg1 = $_SESSION['msg'];
 
 ?>
 <html>
@@ -105,12 +106,13 @@ else  // else isset get email
 					<div class="container margin_60_35">
 						<div id="login-2">
 							<h1>Enter Verification Code</h1>
-							<form action="" method="post">
+							<form action="" method="post" id="verify">
 								<div class="box_form clearfix">
+									<div id="info2" class="clearfix">  <?= "$msg1";?> </div>
 									<div id="info" class="clearfix">  <?= "$msg";?> </div>
 									<div class="box_login last" >
 										<div class="form-group">
-											<input type="number_format" name="hash" class="form-control" placeholder="Enter Verification Code" maxlength="6" required="true" />
+											<input type="number" name="hash" class="form-control" placeholder="Enter Verification Code" maxlength="6" required="true" />
 										</div>
 										<div class="form-group" align="center">
 											<input class="btn_1" name ="submit" type="submit" value="Verify" />
@@ -122,9 +124,16 @@ else  // else isset get email
 						<!-- /login -->
 					</div>
 				</div>	
+	<!--jquery validator-->
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+ <script src="./js/formvalidator.js"></script>
+
+
+<!--validator ends-->
+<?php include("footer.php"); 
+	$_SESSION['msg'] = $msg;
 	
-	
-<?php include("footer.php"); ?>
+	?>
 	</main>
 </html>
 

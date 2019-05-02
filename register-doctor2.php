@@ -66,11 +66,13 @@ if((isset($_POST['name']))&isset($_GET['email'])){
 						<h3>Grow your Practice</h3>
 						<p> Take your practice to new heights where you don't just get new patients but also enhance your credibility. </p>
 					</div>
+<!--
 					<div class="box_feat_2">
 						<i class="pe-7s-phone"></i>
 						<h3>Connect Globally</h3>
 						<p> Reach out to thousands of patients across the globe using smart practice techniques on your phone. Talk to your patients through various channels and widen your accessibility. </p>
 					</div>
+-->
 				</div>
 				<!-- /col -->
 
@@ -83,15 +85,15 @@ if((isset($_POST['name']))&isset($_GET['email'])){
 					</div>
 					<br/>
 
-					<form action="" method="POST">
+					<form action="" method="POST" id="docRegister2">
 						<div class="box_form">
 							<div class="form-group">
 								<label>Name</label>
-								<input type="name" name ="name"class="form-control" placeholder="Enter Your Name" />
+								<input type="text" name ="name" class="form-control" placeholder="Enter Your Name"  required/>
 							</div>
 							<div class="form-group">
 								<label>PhoneNo</label>
-								<input type="phone_no" name ="phone_no" class="form-control" id="phone_no" placeholder="Phone No" />
+								<input type="number" name ="phone_no" class="form-control" id="phone_no" placeholder="Phone No" required/>
 							</div>
 							<p>
 								<label>Gender</label>
@@ -113,11 +115,11 @@ if((isset($_POST['name']))&isset($_GET['email'])){
 							</p>
 							<div class="form-group">
 								<label>Date Of Birth</label>
-								<input type="date" name ="dob" class="form-control"/>
+								<input type="date" name ="dob" class="form-control" required/>
 							</div>
 							
 							<label>Select District</label>
-							<select id = "district" class="form-control" name ="district">
+							<select id = "district" class="form-control" name ="district" required>
 								<option value = "Anantnag">Anantnag</option>
 								<option value = "Bandipora">Bandipora</option>
 								<option value = "Baramulla">Baramulla</option>
@@ -155,6 +157,13 @@ if((isset($_POST['name']))&isset($_GET['email'])){
 		</div>
 		<!-- /container -->
 	</div>
+	
+	<!--jquery validator-->
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+ <script src="./js/formvalidator.js"></script>
+
+
+<!--validator ends-->
 	<!-- /hero_register -->
 </main>
 <!-- /main -->

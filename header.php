@@ -72,7 +72,7 @@ include('session.php');?>
 								if(isset($_SESSION['login_user']))
 								{
                                   $username = ($_SESSION['login_user']);
-									echo "<li id='user'><a href='welcome.php'> <figure> $imagepic </figure> $user </a></li>";
+									echo "<li id='user'><a href='welcome.php'> <figure> $imagepic</figure>$user </a></li>";
 									
 //                                  echo "<li> </li>";
 								}
