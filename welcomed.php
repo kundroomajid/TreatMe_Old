@@ -48,13 +48,13 @@ if($id!=null){
   $evening_end_time = $cdrow1['evening_end_time'];
 
   $gender_symbol = ($gender=='Male')?"&#9794;":($gender=='Female')?"&#9792;":"&#9893;";
-  
+
   // get verification satus from tb_verification
   $verify = $conn->query("Select status from tb_verification where doc_id = $id");
   $cdrow4=mysqli_fetch_array($verify);
   $verification_status = $cdrow4['status'];
-  
-  
+
+
   if($verification_status == 0) // has not uploaded documnets yet
   {
   $msgverification = '<div class="alert alert-danger alert-dismissible">
@@ -71,9 +71,9 @@ if($id!=null){
   }
   else
   {
-    
+
   }
-  
+
 
 
   //get data from appointment table
@@ -211,35 +211,35 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
       </ul>
 
       <div class="tab-content py-4">
-        
+
 
         <div class="tab-pane active" id="profile">
           <div class="tab-pane" id="profile">
           <div class="row">
             <div class="col-md-8 ">
-              
+
               <h4> <?= $user."(".getAge($dob).")".$gender_symbol  ?>
               <?php
                   if($verification_status == 0)
-                    {   
+                    {
                     echo('<h5><b style="color:red">(Not Verified)</b></h5>');
-                      
-                  
+
+
                     }
                     else if($verification_status == 1)
                       {
                          echo('<h5><i style="color:blue">(Pending for Verification)</i></h5>');
-                    
+
                         }
                 else
                 {
                   echo('<h5>(Verified)</h5>');
                 }
                   ?>
-              
-              
-              
-              
+
+
+
+
               </h4>
             </div>
             <div class="col-md-12">
@@ -263,7 +263,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
             </div>
           </div>
         </div>
-          
+
 
         </div>
         <div class="tab-pane" id ="myappointments">
@@ -294,7 +294,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 $patnamequery = $conn->query("select name from tb_appointment where pat_id = $pat_id and apptt_id = $appt_id");
                 $cdrow3=mysqli_fetch_array($patnamequery);
                 $pat_name = $cdrow3["name"];
-              
+
                 echo "<tr><td>$appt_id <span class=''></span> </td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>$queue_no</td>
                 <td>confirmed</td>
                 </tr>" ;
@@ -317,9 +317,9 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
                 $patnamequery = $conn->query("select name from tmp_appointment where pat_id = $pat_id and tmp_id = $tmp_id");
                 $cdrow3=mysqli_fetch_array($patnamequery);
                 $pat_name = $cdrow3["name"];
-              
-            
-                
+
+
+
                 echo "<tr><td>$tmp_id</td><td>$appt_date</td><td>$pat_name</td><td>$shift_type</td><td>unconfirmed</td>
                 <td>
                   <a class='btn btn-sm btn-danger' href='confirm_appointment.php?tmp_id=$tmp_id&confirmed=0'><span class='icon_close_alt2'></span></a>
@@ -383,7 +383,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
               <label class="col-lg-3 col-form-label form-control-label">Validity</label>
               <div class="col-lg-9"> <input class="form-control" type="text" name ="c_validity" value="<?php echo $c_validity; ?>"> </div>
             </div>
-           
+
             <div class="form-group row">
               <label class="col-lg-3 col-form-label form-control-label">District</label>
               <div class="col-lg-3">
@@ -422,7 +422,7 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
             <div class="form-group row">
               <label class="col-lg-3 col-form-label form-control-label">Specialization</label>
               <div class="col-lg-9">
-                <input class="form-control" type="text" name ="specialization" value="<?= $specialization ?>"> </div>               
+                <input class="form-control" type="text" name ="specialization" value="<?= $specialization ?>"> </div>
               </div>
               <div class="form-group row">
                 <label class="col-lg-3 col-form-label form-control-label">Registration Council</label>
@@ -439,15 +439,15 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
 
               <div class="form-group row">
                 <label class="col-lg-3 col-form-label form-control-label">Morning Start Time</label>
-                <div class="col-lg-3"> <input class="form-control" type="time" name ="morning_start_time" value="<?php echo $morning_start_time ?>"> </div>
+                <div class="col-lg-3"> <input class="form-control" type="time" name ="morning_start_time" id="mst" value="<?php echo $morning_start_time ?>"> </div>
                 <label class="col-lg-3 col-form-label form-control-label">Morning End Time</label>
-                <div class="col-lg-3"> <input class="form-control" type="time" name ="morning_end_time" value="<?php echo $morning_end_time ?>"> </div>
+                <div class="col-lg-3"> <input class="form-control" type="time" name ="morning_end_time" id="met" onchange="check_morning_time()" value="<?php echo $morning_end_time ?>"> </div>
               </div>
               <div class="form-group row">
                 <label class="col-lg-3 col-form-label form-control-label">Evening Start Time</label>
-                <div class="col-lg-3"> <input class="form-control" type="time" name ="evening_start_time" value="<?php echo $evening_start_time ?>"> </div>
+                <div class="col-lg-3"> <input class="form-control" type="time" name ="evening_start_time" id="est" value="<?php echo $evening_start_time ?>"> </div>
                 <label class="col-lg-3 col-form-label form-control-label">Evening End Time</label>
-                <div class="col-lg-3"> <input class="form-control" type="time" name ="evening_end_time" value="<?php echo $evening_end_time ?>"> </div>
+                <div class="col-lg-3"> <input class="form-control" type="time" name ="evening_end_time" id="eet" onchange="check_evening_time()" value="<?php echo $evening_end_time ?>"> </div>
               </div>
               <div class="form-group row">
                 <label class="col-lg-3 col-form-label form-control-label"></label>
@@ -526,11 +526,11 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
         </div>
          <!---------------------verification upload documnets--------------------->
         <div class="tab-pane" id="verification">
-           
+
   <form method="POST" enctype="multipart/form-data" action="upload_docs.php">
     <div class="row my-2">
       <div class="form-group">
-          
+
         <h6 class="mt-2">Upload Letter of authourity or Degree Certificate</h6>
         <label class="custom-file">
           <input type="file" class="custom-file-input" id="uploadImage" name="image" id="image" accept=".jpg, .jpeg, .png" required />
@@ -551,14 +551,14 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
 
         </div>
 
-   
+
   </div>
     </div>
- 
+
 </div>
 
 <?php include("footer.php");
-  
+
   unset($_SESSION['msg']);
 
 function getAge($date){

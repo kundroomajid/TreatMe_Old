@@ -154,7 +154,7 @@ if((isset($_POST['specialization'])) & (isset($_POST['morning_start_time']))& (i
 	$address = mysqli_real_escape_string($conn,$_POST['address']);
 	$fee = mysqli_real_escape_string($conn,$_POST['fee']);
 	$validity = mysqli_real_escape_string($conn,$_POST['c_validity']);
-	
+
     $morning_start_time = (new DateTime($_POST['morning_start_time']))->format("H:i");
     $morning_end_time = (new DateTime($_POST['morning_end_time']))->format("H:i");
     $evening_start_time = (new DateTime($_POST['evening_start_time']))->format("H:i");
@@ -169,18 +169,18 @@ if((isset($_POST['specialization'])) & (isset($_POST['morning_start_time']))& (i
 	{
 		$msg = '<div class="alert alert-success alert-dismissible">
     	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    	<strong>Success!</strong> Details Saved Sucessfully 
+    	<strong>Success!</strong> Details Saved Sucessfully
   	</div>';
 		echo '<script type="text/javascript">
 //		alert("Details Saved Sucessfully")
 		window.location = "./upload_photo.php?email='.$doc_email.'";
 		</script> ';
-	} 
-	else 
+	}
+	else
 	{
     	$msg = '<div class="alert alert-success alert-dismissible">
     	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    	<strong>Error!</strong> Error in saving details 
+    	<strong>Error!</strong> Error in saving details
   		</div>';
 		echo '<script type="text/javascript">
 //		alert("query failed".mysqli_error($conn).);
@@ -188,9 +188,9 @@ if((isset($_POST['specialization'])) & (isset($_POST['morning_start_time']))& (i
 		</script> ';
 		mysqli_close($conn);
 	}
-	
+
 }
-else 
+else
 {
 	$msg = '<div class="alert alert-success alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
