@@ -131,65 +131,6 @@ $_SESSION['msg'] = ' ';
 </main>
 <!-- /main -->
 
-
-<script>
-$("#register-form").validate({
-    rules: {
-      email: {
-        required: true,
-        email: true
-      },
-      password: {
-        required: true,
-        strongPassword: true
-      },
-      password2: {
-        required: true,
-        equalTo: '#password'
-      },
-      firstName: {
-        required: true,
-        nowhitespace: true,
-        lettersonly: true
-      },
-      secondName: {
-        required: true,
-        nowhitespace: true,
-        lettersonly: true
-      },
-      businessName: {
-        required: true
-      },
-      phone: {
-        required: true,
-        digits: true,
-        phonesUK: true
-      },
-      address: {
-        required: true
-      },
-      town: {
-        required: true,
-        lettersonly: true
-      },
-      postcode: {
-        required: true,
-        postcodeUK: true
-      },
-      terms: {
-        required: true
-      }
-    },
-    messages: {
-      email: {
-        required: 'Please enter an email address.',
-        email: 'Please enter a <em>valid</em> email address.',
-        remote: $.validator.format("{0} is already associated with an account.")
-      }
-
-
-
-</script>
 <?php
 include("footer.php");
 

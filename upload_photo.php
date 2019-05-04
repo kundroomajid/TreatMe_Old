@@ -120,7 +120,8 @@ uploadImage.onchange = function() {
                                   
                                   ?>
                       	
-                    </div>
+                              </div>
+                          </form>
                   </div>
                 </div>
               </div>

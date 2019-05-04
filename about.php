@@ -13,8 +13,7 @@ include("header.php");?>
 						<h3>Contacts info</h3>
 						<p>
 							IUST AWANTIPORA <br /> <br />
-							number 
-							email@email.com
+							feedback@treatme.co.in
 							
 						</p>
 						

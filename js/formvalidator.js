@@ -79,8 +79,7 @@ $(function() {
         required: true
       },
       registration_year: {
-        required: true,
-        max : 4
+        required: true
       },
       registration_council: {
         required: true
@@ -100,21 +99,17 @@ $(function() {
         number :true
       },
       morning_start_time: {
-        required: true,
-        time : true
+        required: true
       },
       morning_end_time: {
-        required: true,
-        time : true
+        required: true
         
       },
       evening_start_time: {
-        required: true,
-        time : true
+        required: true
       },
       evening_end_time: {
-        required: true,
-        time : true
+        required: true
       },
       
     },
