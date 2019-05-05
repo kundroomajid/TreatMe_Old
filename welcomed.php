@@ -436,18 +436,20 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
               </div>
 
               <hr style="width:100%"/>
-
+            <div align ="center" id="infotime1" class="clearfix" style="color:red"> </div>
+                <div align ="center" id="infotime2" class="clearfix" style="color:red"> </div>
               <div class="form-group row">
+                
                 <label class="col-lg-3 col-form-label form-control-label">Morning Start Time</label>
-                <div class="col-lg-3"> <input class="form-control" type="time" name ="morning_start_time" id="mst" value="<?php echo $morning_start_time ?>"> </div>
+                <div class="col-lg-3"> <input class="form-control" type="time" name ="morning_start_time" id="mst" value="<?php echo $morning_start_time ?>" required> </div>
                 <label class="col-lg-3 col-form-label form-control-label">Morning End Time</label>
-                <div class="col-lg-3"> <input class="form-control" type="time" name ="morning_end_time" id="met" onchange="check_morning_time()" value="<?php echo $morning_end_time ?>"> </div>
+                <div class="col-lg-3"> <input class="form-control" type="time" name ="morning_end_time" id="met" onchange="check_morning_time()" value="<?php echo $morning_end_time ?>" required> </div>
               </div>
               <div class="form-group row">
                 <label class="col-lg-3 col-form-label form-control-label">Evening Start Time</label>
-                <div class="col-lg-3"> <input class="form-control" type="time" name ="evening_start_time" id="est" value="<?php echo $evening_start_time ?>"> </div>
+                <div class="col-lg-3"> <input class="form-control" type="time" name ="evening_start_time" id="est" value="<?php echo $evening_start_time ?>" required> </div>
                 <label class="col-lg-3 col-form-label form-control-label">Evening End Time</label>
-                <div class="col-lg-3"> <input class="form-control" type="time" name ="evening_end_time" id="eet" onchange="check_evening_time()" value="<?php echo $evening_end_time ?>"> </div>
+                <div class="col-lg-3"> <input class="form-control" type="time" name ="evening_end_time" id="eet" onchange="check_evening_time()" value="<?php echo $evening_end_time ?>" required> </div>
               </div>
               <div class="form-group row">
                 <label class="col-lg-3 col-form-label form-control-label"></label>

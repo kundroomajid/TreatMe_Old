@@ -6,7 +6,8 @@ function check_morning_time(){
   start_time = document.getElementById('mst').value;
   end_time = document.getElementById('met').value;
   if(!check_timing(start_time,end_time)){
-    alert('A minimum of one hour gap should be in a shift');
+//    alert('A minimum of one hour gap should be in a shift');
+    document.getElementById('infotime1').innerHTML= 'A minimum of one hour gap should be in a shift';
     document.getElementById('met').value='';
   }
 
@@ -17,7 +18,8 @@ function check_evening_time(){
   end_time = document.getElementById('eet').value;
 
   if(!check_timing(start_time,end_time)){
-    alert('A minimum of one hour gap should be in a shift');
+//    alert('A minimum of one hour gap should be in a shift');
+    document.getElementById('infotime2').innerHTML = 'A minimum of one hour gap should be in a shift';
     document.getElementById('eet').value='';
   }
 }

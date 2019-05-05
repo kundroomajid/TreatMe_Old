@@ -15,6 +15,7 @@ $_SESSION['msg'] = ' ';
 				<div class="col-lg-6">
 					<h1>It's time to find you!</h1>
 					<p class="lead"></p>
+					<div id="info" class="clearfix">  <?= "$error";?><?= "$msg";?> </div>
 					<div class="box_feat_2">
 						<i class="pe-7s-map-2"></i>
 						<h3>Effortless Practice Management</h3>
@@ -89,7 +90,6 @@ $_SESSION['msg'] = ' ';
 								<input type="number" name="c_validity" class="form-control" placeholder="Consultation Valid for days"required />
 							</div>
 							<div class="form-group">
-
 								Morning Shift Start Time
 								<input type="time" name="morning_start_time" id ="mst" required/>
 							</div>
@@ -98,6 +98,9 @@ $_SESSION['msg'] = ' ';
 								Morning Shift End Time
 								<input type="time" name="morning_end_time" id ="met" onchange="check_morning_time()"required/>
 							</div>
+						
+							<div align="center" id="infotime1" class="clearfix" style="color:red"> </div>
+						
 							<div class="form-group">
 								Evening Shift Start Time
 								<input type="time" name="evening_start_time" id ="est" required />
@@ -107,7 +110,9 @@ $_SESSION['msg'] = ' ';
 								Evening Shift End Time
 								<input type="time" name="evening_end_time" id ="eet" onchange="check_evening_time()" required/>
 							</div>
-
+					
+							<div align ="center" id="infotime2" class="clearfix" style="color:red"> </div>
+						
 
 							<p class="text-center add_top_30"><input type="submit" class="btn_1" value="Submit" /></p>
 							<div class="text-center"><small></small></div>
