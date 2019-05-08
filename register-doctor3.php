@@ -106,7 +106,7 @@ $_SESSION['msg'] = ' ';
 								<input type="time" name="evening_start_time" id ="est" required />
 							</div>
 
-							<div class="form-group">
+							<div class="form-group ">
 								Evening Shift End Time
 								<input type="time" name="evening_end_time" id ="eet" onchange="check_evening_time()" required/>
 							</div>

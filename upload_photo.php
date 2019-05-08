@@ -14,6 +14,8 @@ imagecopyresampled($target_layer,$image_resource_id,0,0,0,0,$target_width,$targe
 return $target_layer;
 }
 
+
+
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {
 $file = addslashes(file_get_contents($_FILES['image']['tmp_name']));
@@ -25,8 +27,8 @@ $file_size = $_FILES['image']['size'];
 //        echo '<script type="text/javascript">alert("'.$message.'");</script>';
     }
 
-if($file!=null && $file!="")
-{
+    if($file!=null && $file!="")
+    {
 $file = $_FILES['image']['tmp_name'];
 $source_properties = getimagesize($file);
 $image_type = $source_properties[2];
@@ -62,15 +64,17 @@ $q = "UPDATE tb_user SET photo= '$blob' where user_email = '$user_email'";
 }
 
 }
-}
+
 
 $str = "select photo from tb_user where user_email = '$user_email'";
 $result = $conn->query($str);
 if($result==null) echo "nonos";
-while(($r = mysqli_fetch_array($result))!=null){
+while(($r = mysqli_fetch_array($result))!=null)
+{
   $output = "<br> <br> <img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width='300' height='300' /><br> <br>";
-}
 
+}
+}
 
 ?>
 
@@ -90,24 +94,23 @@ uploadImage.onchange = function() {
 
 <!-- <pre> -->
 <main>
-		<div class="bg_color_2">
-			<div class="container margin_60_35">
-				<div id="register">
-                  <div id="info" class="clearfix">  <?= "$msg";?> </div>
-					<h1>Upload Your Photo(optional)</h1>
-					<div class="row justify-content-center">
-						<div class="col-md-5">
-							<form method="POST" enctype="multipart/form-data">
-								<div class="box_form">
+  <div class="bg_color_2">
+    <div class="container margin_60_35">
+      <div id="register">
+        <div id="info" class="clearfix"> <?= "$msg";?> </div>
+        <h1>Upload Your Photo(optional)</h1>
+        <div class="row justify-content-center">
+          <div class="col-md-5">
+            <form method="POST" enctype="multipart/form-data">
+              <div class="box_form">
 
-									<div class="form-group">
-                    <!-- <input type ="text" name = "hola" /> -->
-  	                 <input type="file" class = "form-control" id="uploadImage" name="image" id="image" accept=".jpg, .jpeg, .png" required />
-                     	</div>
+                <div class="form-group">
+                  <input type="file" class="form-control" name="image" id="image" accept=".jpg, .jpeg, .png" required />
+                </div>
 
-  	                  <input type="submit" class = "btn_1" value = "Upload" />
-                      <?= "$output";?>
-                                  <?php
+                <input type="submit" class="btn_1" value="Upload" />
+                <?= "$output";?>
+                <?php
                                   if(isset($_SESSION['login_user']))
                                     {
                                    echo ('<p class="text-center"><a href="./welcome.php" class="btn_1 medium">Proceed</a></p>');
@@ -119,13 +122,13 @@ uploadImage.onchange = function() {
                                   }
                                   
                                   ?>
-                      	
-                              </div>
-                          </form>
-                  </div>
-                </div>
+
               </div>
-            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 </main>
 <?php
 include("footer.php");
