@@ -86,23 +86,22 @@ include("header.php");
 				
 				<div id="reccomended" class="owl-carousel owl-theme">
 					<?php 
-					
 					$query="SELECT * FROM vw_doctor ORDER BY avg_rating DESC LIMIT 10";
 					$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 					$count = mysqli_num_rows($result);
-									
-            while ($cdrow=mysqli_fetch_array($result)) {
-                $user_name=$cdrow["user_name"];
-                $doc_id=$cdrow["doc_id"];
-				$specialization = $cdrow["specialization"]; 
-               $views = $cdrow['views'];
-				$image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' />";
+
+					while ($cdrow=mysqli_fetch_array($result)) {
+					$user_name=$cdrow["user_name"];
+					$doc_id=$cdrow["doc_id"];
+					$specialization = $cdrow["specialization"];
+					$views = $cdrow['views'];
+					$image = "<img src='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' />";
 					?>
-					<div class="item" >
+					<div class="item">
 						<a href="./detail-page.php?doc_id=<?="$doc_id";?>">
 							<div class="views"><i class="icon-eye-7"></i><?= "$views";?></div>
 							<div class="title">
-								<h4><?= "$user_name";?>  <em><?= "$specialization";?></em></h4>
+								<h4><?= "$user_name";?> <em><?= "$specialization";?></em></h4>
 							</div>
 							<img src="" alt="" />
 							<?= "$image";?>
