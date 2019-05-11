@@ -1,114 +1,101 @@
 <?php
+
+//with progress bar
 include("header.php");
 include("config.php");
 $user_email =  mysqli_real_escape_string($conn,$_GET['email']);
 
 $msg = $_SESSION['msg'];
-function fn_resize($image_resource_id,$width,$height)
-{
 
-$target_width =300;
-$target_height =300;
-$target_layer=imagecreatetruecolor($target_width,$target_height);
-imagecopyresampled($target_layer,$image_resource_id,0,0,0,0,$target_width,$target_height, $width,$height);
-return $target_layer;
-}
-
-
-
-if($_SERVER["REQUEST_METHOD"] == "POST")
-{
-$file = addslashes(file_get_contents($_FILES['image']['tmp_name']));
-$file_size = $_FILES['image']['size'];
-
-    if (($file_size > 655000))
-    {
-        $message = 'File too large. File must be less than 640 kb.';
-//        echo '<script type="text/javascript">alert("'.$message.'");</script>';
-    }
-
-    if($file!=null && $file!="")
-    {
-$file = $_FILES['image']['tmp_name'];
-$source_properties = getimagesize($file);
-$image_type = $source_properties[2];
-
-if( $image_type == IMAGETYPE_JPEG )
-{
-$image_resource_id = imagecreatefromjpeg($file);
-$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-imagejpeg($target_layer,'temp.jpg');
-$blob = addslashes(file_get_contents('./temp.jpg', true));
-   $q = "UPDATE tb_user SET photo= '$blob' where user_email = '$user_email'";
-  $conn->query($q);
-}
-elseif( $image_type == IMAGETYPE_GIF )
-{
-$image_resource_id = imagecreatefromgif($file);
-$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-imagejpeg($target_layer,'temp.jpg');
-$blob = addslashes(file_get_contents('./temp.jpg', true));
-   $q = "UPDATE tb_user SET photo= '$blob' where user_email = '$user_email'";
-  $conn->query($q);
-
-}
-elseif( $image_type == IMAGETYPE_PNG )
-{
-$image_resource_id = imagecreatefrompng($file);
-$target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-imagejpeg($target_layer,'temp.jpg');
-$blob = addslashes(file_get_contents('./temp.jpg', true));
-$q = "UPDATE tb_user SET photo= '$blob' where user_email = '$user_email'";
-  $conn->query($q);
-
-}
-
-}
-
-
-$str = "select photo from tb_user where user_email = '$user_email'";
-$result = $conn->query($str);
-if($result==null) echo "nonos";
-while(($r = mysqli_fetch_array($result))!=null)
-{
-  $output = "<br> <br> <img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width='300' height='300' /><br> <br>";
-
-}
-}
 
 ?>
+<script type="text/javascript" src="./js/jquery.form.min.js"></script>
 
-<!--
-<script>
-var uploadImage = document.getElementById("uploadImage");
+<script type="text/javascript">
+	 var email = " <?php echo $user_email ?> ";
+	var url = "uploadFile.php?email="+email;
+	url = url.replace(/\s/g,'');
+$(document).ready(function () {
+    $('#submitButton').click(function () {
+    	    $('#uploadForm').ajaxForm({
+    	        target: '#outputImage',
+    	        url: url,
+    	        beforeSubmit: function () {
+    	        	  $("#outputImage").hide();
+    	        	   if($("#uploadImage").val() == "") {
+    	        		   $("#outputImage").show();
+    	        		   $("#outputImage").html("<div class='error'>Choose a file to upload.</div>");
+                    return false; 
+                }
+    	            $("#progressDivId").css("display", "block");
+    	            var percentValue = '0%';
 
-uploadImage.onchange = function() {
-  if(this.files[0].size > 131072){
-     alert("File is too big!");
-     this.value = "";
-  };
-};
+    	            $('#progressBar').width(percentValue);
+    	            $('#percent').html(percentValue);
+    	        },
+    	        uploadProgress: function (event, position, total, percentComplete) {
 
+    	            var percentValue = percentComplete + '%';
+    	            $("#progressBar").animate({
+    	                width: '' + percentValue + ''
+    	            }, {
+    	                duration: 5000,
+    	                easing: "linear",
+    	                step: function (x) {
+                        percentText = Math.round(x * 100 / percentComplete);
+    	                    $("#percent").text(percentText + "%");
+                        if(percentText == "100") {
+                        	   $("#outputImage").show();
+                        }
+    	                }
+    	            });
+    	        },
+    	        error: function (response, status, e) {
+    	            alert('Oops something went.');
+    	        },
+    	        
+//    	        complete: function (xhr) {
+//    	            if (xhr.responseText && xhr.responseText != "error")
+//    	            {
+//    	            	  $("#outputImage").html(xhr.responseText);
+//    	            }
+//    	            else{  
+//    	               	$("#outputImage").show();
+//        	            	$("#outputImage").html("<div class='error'>Problem in uploading file.</div>");
+//        	            	$("#progressBar").stop();
+//    	            }
+//    	        }
+    	    });
+    });
+});
 </script>
--->
 
-<!-- <pre> -->
 <main>
-  <div class="bg_color_2">
+  
+
+<div class="bg_color_2">
     <div class="container margin_60_35">
       <div id="register">
-        <div id="info" class="clearfix"> <?= "$msg";?> </div>
+        
         <h1>Upload Your Photo(optional)</h1>
         <div class="row justify-content-center">
           <div class="col-md-5">
-            <form method="POST" enctype="multipart/form-data">
+            <form action="uploadFile.php?email=<?=$email?>" id="uploadForm" name="frmupload"
+            method="post" enctype="multipart/form-data">
               <div class="box_form">
-
+				  <div id="info" class="clearfix"> <?= "$msg";?> </div>
                 <div class="form-group">
-                  <input type="file" class="form-control" name="image" id="image" accept=".jpg, .jpeg, .png" required />
+                   <input type="file" class="form-control" id="uploadImage" name="uploadImage" accept=".jpg, .jpeg, .png" required />
                 </div>
 
-                <input type="submit" class="btn_1" value="Upload" />
+                <input type="submit" id="submitButton" name="btnSubmit" class="btn_1" value="Upload" />
+				  <br /><br />
+				  <div class='progress' id="progressDivId">
+            <div class='progress-bar' id='progressBar'></div>
+            <div class='percent' id='percent'>0%</div>
+        </div>
+        <div style="height: 10px;"></div>
+        <div id='outputImage'></div>
                 <?= "$output";?>
                 <?php
                                   if(isset($_SESSION['login_user']))
@@ -129,6 +116,9 @@ uploadImage.onchange = function() {
         </div>
       </div>
     </div>
+   
+	
+	
 </main>
 <?php
 include("footer.php");

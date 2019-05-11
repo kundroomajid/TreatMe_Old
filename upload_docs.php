@@ -2,7 +2,6 @@
 include("header.php");
 include("config.php");
 $id =  mysqli_real_escape_string($conn,$_SESSION['id']);
-echo($id);
 
 $msg = $_SESSION['msg'];
 function fn_resize($image_resource_id,$width,$height)
@@ -20,11 +19,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 $file = addslashes(file_get_contents($_FILES['image']['tmp_name']));
 $file_size = $_FILES['image']['size'];
 
-    if (($file_size > 655000))
-    {
-        $message = 'File too large. File must be less than 640 kb.';
-        echo '<script type="text/javascript">alert("'.$message.'");</script>';
-    }
+    if($file_size > 9500000)
+  {
+     $msg = '<div class="alert alert-danger alert-dismissible">
+     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+     File too large. File must be less than 9.5 Mb
+    </div>';
+	  echo($msg);
+  }
 
 if($file!=null && $file!="")
 {
@@ -46,7 +48,7 @@ if($conn->query($q))
      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
      Document uploaded Sucessfully
     </div>';
-    echo '<script>window.location = "welcomep.php";</script>';
+    echo '<script>window.location = "welcomed.php";</script>';
     
 }
     
@@ -57,7 +59,7 @@ if($conn->query($q))
      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
      Error in Uploading documnets.
     </div>';
-    echo '<script>window.location = "welcomep.php";</script>';
+    echo '<script>window.location = "welcomed.php";</script>';
         
     }
 }
@@ -75,7 +77,7 @@ if($conn->query($q))
      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
      Document uploaded Sucessfully
     </div>';
-    echo '<script>window.location = "welcomep.php";</script>';
+    echo '<script>window.location = "welcomed.php";</script>';
     
 }
     
@@ -86,7 +88,7 @@ if($conn->query($q))
      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
      Error in Uploading documnets.
     </div>';
-    echo '<script>window.location = "welcomep.php";</script>';
+    echo '<script>window.location = "welcomed.php";</script>';
         
     }
 
@@ -105,7 +107,7 @@ if($conn->query($q))
      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
      Document uploaded Sucessfully
     </div>';
-    echo '<script>window.location = "welcomep.php";</script>';
+    echo '<script>window.location = "welcomed.php";</script>';
     
 }
     
@@ -116,7 +118,7 @@ if($conn->query($q))
      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
      Error in Uploading documnets.
     </div>';
-    echo '<script>window.location = "welcomep.php";</script>';
+    echo '<script>window.location = "welcomed.php";</script>';
         
     }
 
@@ -128,5 +130,4 @@ $_SESSION['msg'] = $msg;
 
 
 ?>
-
 

@@ -144,7 +144,7 @@ $count = mysqli_num_rows($result);
 
 			<li>
 				<h6>Select By District</h6>
-				<select name="dist" id="dist" class="selectbox">
+				<select name="dist" id="dist" class="layout_view">
 					<option value="">Select District</option>
 					<option value="Anantnag">Anantnag</option>
 					<option value="Bandipora">Bandipora</option>
@@ -175,8 +175,10 @@ $count = mysqli_num_rows($result);
 					window.location.href = '?dist=' + this.value + <?= $redirect ?>;
 				};
 				</script>
+				
 			</li>
-			<!--
+			
+<!--
 			<li>
 			<h6>Layout</h6>
 			<div class="layout_view">
@@ -186,6 +188,7 @@ $count = mysqli_num_rows($result);
 		</div>
 	</li>
 -->
+
 <!--
 <li>
 <h6>Sort by</h6>

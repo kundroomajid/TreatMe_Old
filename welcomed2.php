@@ -240,7 +240,7 @@ $(document).ready(function () {
 	
 	
   <!--div style="border: 5px solid aqua; margin: 20px; padding : 20px; border-radius: 10px;"-->
-  <form action="uploadFile.php" id="uploadForm" name="frmupload"
+  <form action="uploadFile.php?email=<?=$email?>" id="uploadForm" name="frmupload"
             method="post" enctype="multipart/form-data">
     <div class="row my-2">
       <div class="col-lg-4 order-lg-1 text-center">
@@ -249,14 +249,14 @@ $(document).ready(function () {
         
 
         <h6 class="mt-2">Upload a different photo</h6>
-
-		  
-			  <label class="custom-file">
-          <input type="file" class="custom-file-input" id="uploadImage" name="uploadImage" accept=".jpg, .jpeg, .png" required />
+        <label class="custom-file">
+          <input type="file" class="custom-file-input" id="uploadImage" name="uploadImage"  accept=".jpg, .jpeg, .png" required />
           <span class="custom-file-control">Choose file</span>
           <br><br> <br>
         </label>
 		  
+		  
+
 		 <br /> <input type="submit" id="submitButton" name="btnSubmit" class="btn_1" value="Upload" />
 		  </form>
 			  <br /><br />
@@ -610,28 +610,92 @@ $(document).ready(function () {
         </div>
          <!---------------------verification upload documnets--------------------->
         <div class="tab-pane" id="verification">
+<script type="text/javascript">
+	 var id = " <?php echo $id ?> ";
+	var url = "upload_docs.php?id="+id;
+	url = url.replace(/\s/g,'');
+$(document).ready(function () {
+	$('#progressDivId2').hide();
+    $('#submitButton2').click(function () {
+    	    $('#uploadForm2').ajaxForm({
+    	        target: '#outputImage2',
+    	        url: url,
+    	        beforeSubmit: function () {
+    	        	  $("#outputImage2").hide();
+    	        	   if($("#uploadImage2").val() == "") {
+    	        		   $("#outputImage2").show();
+    	        		   $("#outputImage2").html("<div class='error'>Choose a file to upload.</div>");
+                    return false; 
+                }
+    	            $("#progressDivId2").css("display", "block");
+    	            var percentValue = '0%';
 
-  <form method="POST" enctype="multipart/form-data" action="upload_docs.php">
+    	            $('#progressBar2').width(percentValue);
+    	            $('#percent').html(percentValue);
+    	        },
+    	        uploadProgress: function (event, position, total, percentComplete) {
+
+    	            var percentValue = percentComplete + '%';
+    	            $("#progressBar2").animate({
+    	                width: '' + percentValue + ''
+    	            }, {
+    	                duration: 3000,
+    	                easing: "linear",
+    	                step: function (x) {
+                        percentText = Math.round(x * 100 / percentComplete);
+    	                    $("#percent2").text(percentText + "%");
+                        if(percentText == "100") {
+							
+                        	   $("#outputImage2").show();
+								$('#progressDivId2').hide();
+							
+                        }
+    	                }
+    	            });
+    	        },
+    	        error: function (response, status, e) {
+					$("#progressBar2").stop();
+    	            alert('Oops something went.');
+    	        },
+    	        
+//    	        complete: function (xhr) {
+//    	            if (xhr.responseText && xhr.responseText != "error")
+//    	            {
+//    	            	  $("#outputImage").html(xhr.responseText);
+//    	            }
+//    	            else{  
+//    	               	$("#outputImage").show();
+//        	            	$("#outputImage").html("<div class='error'>Problem in uploading file.</div>");
+//        	            	$("#progressBar").stop();
+//    	            }
+//    	        }
+    	    });
+    });
+});
+</script>
+ <form action="upload_docs.php?id=<?=$id?>" id="uploadForm2" name="frmupload"
+            method="post" enctype="multipart/form-data">
     <div class="row my-2">
       <div class="form-group">
 
         <h6 class="mt-2">Upload Letter of authourity or Degree Certificate</h6>
         <label class="custom-file">
-          <input type="file" class="custom-file-input" id="uploadImage" name="image" accept=".jpg, .jpeg, .png" required />
+          <input type="file" class="custom-file-input" id="uploadImage2" name="image"  accept=".jpg, .jpeg, .png" required />
           <span class="custom-file-control">Choose file</span>
           <br><br> <br>
         </label>
-        <input type="submit" class = "btn_1" value = "Upload"/>
+        <input type="submit" id="submitButton2" class = "btn_1" value = "Upload"/>
       </div>
 
-
-
-
-            </div>
-
+	  </div>
 
           </form>
-
+<br /><br />
+				  <div class='progress' id="progressDivId2">
+            <div class='progress-bar' id='progressBar2' role="progressbar"></div>
+            <div class='percent' id='percent2'>0%</div>
+					   <div style="height: 10px;"></div>
+        </div>
 
         </div>
 

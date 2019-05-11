@@ -32,6 +32,47 @@ $(function() {
 //      && /[a-z]/i.test(value);
 //  }, 'Your password must be at least 6 characters long and contain at least one number and one char\'.')
   
+   //      validate contacts.php begins
+  $("#contactform").validate({
+    rules: {
+      name: {
+        required: true
+      },
+      phone: {
+        required: true
+      },
+      email: {
+        required: true,
+        email : true
+      },
+      comment: {
+        required: true
+      }
+      
+      
+    },
+    messages: {
+      name: {
+        required: '<i style="color:red">Enter Your Name.</i>'
+      },
+      phone: {
+        required: '<i style="color:red">Enter Contact Number.</i>'
+      },
+      email: {
+        required: '<i style="color:red">Enter Your Email.</i>'
+      },
+      comment: {
+        required: '<i style="color:red">Enter Your Message.</i>'
+      },
+    }
+  });
+    
+    //  validate contacts.php ends  
+  
+  
+  
+  
+  
   //      validate registerclinic.php begins
   $("#registerClinic").validate({
     rules: {

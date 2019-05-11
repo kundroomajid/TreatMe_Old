@@ -98,7 +98,7 @@ include("header.php");
                $views = $cdrow['views'];
 				$image = "<img src ='data:image/jpeg;base64,".base64_encode( $cdrow["photo"])."' />";
 					?>
-					<div class="item">
+					<div class="item" >
 						<a href="./detail-page.php?doc_id=<?="$doc_id";?>">
 							<div class="views"><i class="icon-eye-7"></i><?= "$views";?></div>
 							<div class="title">

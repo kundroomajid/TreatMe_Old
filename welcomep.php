@@ -49,70 +49,7 @@ if($id!=null) {
   window.location = "./login.php";
   </script> ';
 }
-if($_SERVER["REQUEST_METHOD"] == "POST")
-{
-  $file = addslashes(file_get_contents($_FILES['image']['tmp_name']));
-  $file_size = $_FILES['image']['size'];
-  if (($file_size > 655000))
-  {
-//    $message = 'File too large. File must be less than 640 kb.';
-//	   $msg = '<div class="alert alert-danger alert-dismissible">
-//     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-//     File too large. File must be less than 1Mb
-//    </div>';
-//    echo '<script type="text/javascript">alert("'.$message.'");</script>';
-  } 
-	if($file!=null && $file!="" && file_exists($_FILES['image']['tmp_name']))
-  {
-    $file = $_FILES['image']['tmp_name'];
-    $source_properties = getimagesize($file);
-    $image_type = $source_properties[2];
 
-    if( $image_type == IMAGETYPE_JPEG )
-    {
-      $image_resource_id = imagecreatefromjpeg($file);
-      $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-      imagejpeg($target_layer,'temp.jpg');
-      $blob = addslashes(file_get_contents('./temp.jpg', true));
-      $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-      $conn->query($q);
-    }
-    elseif( $image_type == IMAGETYPE_GIF )
-    {
-      $image_resource_id = imagecreatefromgif($file);
-      $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-      imagejpeg($target_layer,'temp.jpg');
-      $blob = addslashes(file_get_contents('./temp.jpg', true));
-      $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-      $conn->query($q);
-
-    }
-    elseif( $image_type == IMAGETYPE_PNG )
-    {
-      $image_resource_id = imagecreatefrompng($file);
-      $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-      imagejpeg($target_layer,'temp.jpg');
-      $blob = addslashes(file_get_contents('./temp.jpg', true));
-      $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-      $conn->query($q);
-
-    }
-		$msg = '<div class="alert alert-danger alert-dismissible">
-     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-     Photo Uploaded Sucessfully
-    </div>';
-	}
-else{
-		$msg = '<div class="alert alert-danger alert-dismissible">
-     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-     File too large. File must be less than 1 MB
-    </div>';
-	}
-
-
-  
-	
-}
 $str = "select photo from tb_user where user_id = '$id'";
 $result = $conn->query($str);
 if($result==null) echo "nonos";
@@ -136,20 +73,107 @@ this.value = "";
 
 <body>
   <div class="container">
-    <form method="POST" enctype="multipart/form-data">
-      <div class="row my-2">
-        <div class="col-lg-4 order-lg-1 text-center">
-          <?= $imagepic ?>
-          <h6 class="mt-2">Upload a different photo</h6>
-          <label class="custom-file">
-            <input type="file" class="custom-file-input" id="uploadImage" name="image" id="image" accept=".jpg, .jpeg, .png" required />
-            <span class="custom-file-control">Choose file</span>
-            <br><br> <br>
-          </label>
-          <input type="submit" class = "btn_1" value = "Upload"/>
-        </div>
-      </form>
+    <!---------------------PHOTO--------------------->
+	<script type="text/javascript" src="./js/jquery.form.min.js"></script>
 
+<script type="text/javascript">
+	 var email = " <?php echo $email ?> ";
+	var url = "uploadFile.php?email="+email;
+	url = url.replace(/\s/g,'');
+$(document).ready(function () {
+	$('#progressDivId').hide();
+    $('#submitButton').click(function () {
+    	    $('#uploadForm').ajaxForm({
+    	        target: '#outputImage',
+    	        url: url,
+    	        beforeSubmit: function () {
+    	        	  $("#outputImage").hide();
+    	        	   if($("#uploadImage").val() == "") {
+    	        		   $("#outputImage").show();
+    	        		   $("#outputImage").html("<div class='error'>Choose a file to upload.</div>");
+                    return false; 
+                }
+    	            $("#progressDivId").css("display", "block");
+    	            var percentValue = '0%';
+
+    	            $('#progressBar').width(percentValue);
+    	            $('#percent').html(percentValue);
+    	        },
+    	        uploadProgress: function (event, position, total, percentComplete) {
+
+    	            var percentValue = percentComplete + '%';
+    	            $("#progressBar").animate({
+    	                width: '' + percentValue + ''
+    	            }, {
+    	                duration: 3000,
+    	                easing: "linear",
+    	                step: function (x) {
+                        percentText = Math.round(x * 100 / percentComplete);
+    	                    $("#percent").text(percentText + "%");
+                        if(percentText == "100") {
+							
+                        	   $("#outputImage").show();
+								$('#progressDivId').hide();
+							
+                        }
+    	                }
+    	            });
+    	        },
+    	        error: function (response, status, e) {
+					$("#progressBar").stop();
+    	            alert('Oops something went.');
+    	        },
+    	        
+//    	        complete: function (xhr) {
+//    	            if (xhr.responseText && xhr.responseText != "error")
+//    	            {
+//    	            	  $("#outputImage").html(xhr.responseText);
+//    	            }
+//    	            else{  
+//    	               	$("#outputImage").show();
+//        	            	$("#outputImage").html("<div class='error'>Problem in uploading file.</div>");
+//        	            	$("#progressBar").stop();
+//    	            }
+//    	        }
+    	    });
+    });
+});
+</script>
+
+	
+	
+  <!--div style="border: 5px solid aqua; margin: 20px; padding : 20px; border-radius: 10px;"-->
+  <form action="uploadFile.php?email=<?=$email?>" id="uploadForm" name="frmupload"
+            method="post" enctype="multipart/form-data">
+    <div class="row my-2">
+      <div class="col-lg-4 order-lg-1 text-center">
+
+		  <div id='outputImage'><?php echo $imagepic; ?></div>
+        
+
+        <h6 class="mt-2">Upload a different photo</h6>
+		  
+		  
+			 
+			  <label class="custom-file">
+          <input type="file" class="custom-file-input" id="uploadImage" name="uploadImage" accept=".jpg, .jpeg, .png" required />
+          <span class="custom-file-control">Choose file</span>
+          <br><br> <br>
+        </label>
+		  
+		 <br /> <input type="submit" id="submitButton" name="btnSubmit" class="btn_1" value="Upload" />
+		  </form>
+			  <br /><br />
+				  <div class='progress' id="progressDivId">
+            <div class='progress-bar' id='progressBar' role="progressbar"></div>
+            <div class='percent' id='percent'>0%</div>
+					   <div style="height: 10px;"></div>
+        </div>
+       
+	  </div>
+      
+		  
+		 
       <div class="col-lg-8 order-lg-2">
 		  <div id="info" class="clearfix">  <?= "$msg";?> </div>
         <ul class="nav nav-tabs">

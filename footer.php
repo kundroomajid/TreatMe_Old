@@ -14,6 +14,7 @@
 					<h5>About</h5>
 					<ul class="links">
 						<li><a href="./about.php">About us</a></li>
+						<li><a href="./contacts.php">Contact Us</a></li>
 <!--
 						<li><a href="./blog-1.php">Blog</a></li>
 						<li><a href="#0">FAQ</a></li>

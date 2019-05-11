@@ -14,7 +14,7 @@ if(isset($_SESSION['login_user']))
    $login_session = $row['user_email'];
     $user = $row['user_name'];
 //    $imagepic = "<img src ='data:image/jpeg;base64,".base64_encode( $row["photo"])."' />";
-    $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $row["photo"])."' width='34' height='34' /><br/>";
+    $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $row["photo"])."' width='34' height='34' />";
     
 }
 
