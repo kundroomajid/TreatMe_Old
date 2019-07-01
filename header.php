@@ -8,7 +8,8 @@ include('session.php');?>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 		<meta name="description" content="Find trusted medical advice from Kashmir's top doctors" />
-		<meta name="author" content="" />
+		<meta name="keywords" content="treatme,treatme.co.in,kashmir,appointment booking, doctor,rating,top doctors in j&k,top doctors in Kashmir"/>
+		<meta name="author" content="Kash Dev Squad" />
 		<title> TreatMe | Appointments | Reviews Find trusted medical advice from Kashmir's top doctors</title>
 
 		<!-- Favicons-->

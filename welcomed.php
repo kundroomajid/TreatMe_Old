@@ -5,14 +5,7 @@ $msg = $_SESSION['msg'];
 $id = isset($_SESSION['id'])?$_SESSION['id']:null;
 
 
-function fn_resize($image_resource_id,$width,$height){
 
-  $target_width =300;
-  $target_height =300;
-  $target_layer=imagecreatetruecolor($target_width,$target_height);
-  imagecopyresampled($target_layer,$image_resource_id,0,0,0,0,$target_width,$target_height, $width,$height);
-  return $target_layer;
-}
 
 if($id!=null){
   $user_type = isset($_SESSION['user_type'])?$_SESSION['user_type']:null;
@@ -92,71 +85,6 @@ if($id!=null){
   </script> ';
 }
 
-//if($_SERVER["REQUEST_METHOD"] == "POST" ){
-//  $file = addslashes(file_get_contents($_FILES['image']['tmp_name']));
-//  $file_size = $_FILES['image']['size'];
-//
-//  if (($file_size > 655000)){
-////    $message = 'File too large. File must be less than 640kb.';
-//	  $msg = '<div class="alert alert-danger alert-dismissible">
-//     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-//     File too large. File must be less than 1Mb
-//    </div>';
-////    echo '<script type="text/javascript">alert("'.$message.'");</script>';
-//  }
-//
-//  if($file!=null && $file!="")
-//  {
-//    //  unset($imagepic);
-//   $file = $_FILES['image']['tmp_name'];
-//   $source_properties = getimagesize($file);
-//   $image_type = $source_properties[2];
-//
-//  if( $image_type == IMAGETYPE_JPEG ){
-//    $image_resource_id = imagecreatefromjpeg($file);
-//    $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-//    imagejpeg($target_layer,'temp.jpg');
-//    $blob = addslashes(file_get_contents('./temp.jpg', true));
-//    $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-//      $conn->query($q);
-//	  $msg = '<div class="alert alert-danger alert-dismissible">
-//     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-//     Photo uploaded Sucessfully
-//    </div>';
-//  }
-//  elseif( $image_type == IMAGETYPE_GIF ) {
-//    $image_resource_id = imagecreatefromgif($file);
-//    $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-//    imagejpeg($target_layer,'temp.jpg');
-//    $blob = addslashes(file_get_contents('./temp.jpg', true));
-//    $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-//      $conn->query($q);
-//	  $msg = '<div class="alert alert-danger alert-dismissible">
-//     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-//     Photo uploaded Sucessfully
-//    </div>';
-//
-//  }
-//  elseif( $image_type == IMAGETYPE_PNG ){
-//    $image_resource_id = imagecreatefrompng($file);
-//    $target_layer = fn_resize($image_resource_id,$source_properties[0],$source_properties[1]);
-//    imagejpeg($target_layer,'temp.jpg');
-//    $blob = addslashes(file_get_contents('./temp.jpg', true));
-//    $q = "UPDATE tb_user SET photo= '$blob' where user_id = '$id'";
-//      $conn->query($q);
-//	  $msg = '<div class="alert alert-danger alert-dismissible">
-//     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-//     Photo uploaded Sucessfully
-//    </div>';
-//  }
-//    }
-//	else{
-//		$msg = '<div class="alert alert-danger alert-dismissible">
-//     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-//     Some Error Occured
-//    </div>';
-//	}
-//}
 
 $str = "select photo from tb_user where user_id = '$id'";
 $result = $conn->query($str);
@@ -178,6 +106,10 @@ $imagepic = "<img src = 'data:image/jpeg;base64,".base64_encode( $r[0])."' width
 	var url = "uploadFile.php?email="+email;
 	url = url.replace(/\s/g,'');
 $(document).ready(function () {
+	$('input[type="file"]').change(function(e){
+            var fileName = e.target.files[0].name;
+            $('#filename').html(fileName);
+        });
 	$('#progressDivId').hide();
     $('#submitButton').click(function () {
     	    $('#uploadForm').ajaxForm({
@@ -256,6 +188,7 @@ $(document).ready(function () {
           <span class="custom-file-control">Choose file</span>
           <br><br> <br>
         </label>
+		  <div id="filename"></div>
 		  
 		 <br /> <input type="submit" id="submitButton" name="btnSubmit" class="btn_1" value="Upload" />
 		  </form>
@@ -349,6 +282,7 @@ $(document).ready(function () {
 
         </div>
         <div class="tab-pane" id ="myappointments">
+			<div class="table-responsive">
           <table class='table'>
             <thead>
               <tr><th>Appt Id</th><th>Date</th><th>Patient Name</th><th>Shift</th><th>Queue No</th><th>&nbsp;</th></tr>
@@ -419,6 +353,7 @@ $(document).ready(function () {
           <tbody>
           </table>
         </div>
+			</div>
 
         <div class="tab-pane" id="edit">
           <form role="form" method="post" action="edit_profile.php">
@@ -543,9 +478,10 @@ $(document).ready(function () {
         </div>
 
         <div class="tab-pane" id="addinfo">
+			<div class="table-responsive">
           <form class="" action="update_edu.php" method="post">
-
-            <table id="edutable" class="table">
+			  
+            <table id="edutable" class="table-condensed">
               <thead> <tr>
                 <th>Degree</th> <th>Year</th> <th>Institute</th>
                 <th>&nbsp;</th>
@@ -588,7 +524,7 @@ $(document).ready(function () {
             <input class = 'btn btn-success' type='submit' value="Update"/>
 
           </form>
-
+			  </div>
           <script type="text/javascript">
           var add_button = $("#add");
 

@@ -1,25 +1,24 @@
-<?php 
+<?php
 
-include("header.php"); 
+include("header.php");
 include ("config.php");
 $email = mysqli_escape_string($conn,$_GET['email']); // Set email variable
 $msg1 = $_SESSION['msg'];
-
 ?>
 <html>
 <main>
-<?php	
+<?php
 
  if(isset($_GET['email']) && !empty($_GET['email']))
   {
-	 
-	 if($_SERVER["REQUEST_METHOD"] == "POST") 
+
+	 if($_SERVER["REQUEST_METHOD"] == "POST")
 	 {
 			// Verify data
 			$hash = mysqli_escape_string($conn,$_POST['hash']); // Set hash variable
 //		 echo($hash);
 //		 echo($email);
-		 
+
 		    // search database for email and verification code
 		 	$search = mysqli_query($conn,"SELECT user_email, hash, active FROM tb_user WHERE user_email='".$email."' AND hash='".$hash."' AND active='0'") or die(mysqli_error($conn));
       		$match  = mysqli_num_rows($search);
@@ -31,8 +30,10 @@ $msg1 = $_SESSION['msg'];
 				  $user_type = $row['user_type'];
 				  // We have a match, activate the account
 				  mysqli_query($conn,"UPDATE tb_user SET active='1' WHERE user_email='".$email."' AND hash='".$hash."' AND active='0'") or die(mysqli_error($conn));
+          $_SESSION['verify'] = 1;
+          unset($_SESSION['verify']);
 				 // check user type to send user to proper page
-				 
+
 				 if($user_type == 'd')
 					  {
 						$msg = '<div class="alert alert-success alert-dismissible">
@@ -55,7 +56,7 @@ $msg1 = $_SESSION['msg'];
 						window.location = "./register2.php?email='.$email.'";
 						</script> ';
 					  }
-				 	else 
+				 	else
 					  {
 						$msg = '<div class="alert alert-success alert-dismissible">
 					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -67,7 +68,7 @@ $msg1 = $_SESSION['msg'];
 						</script> ';
 					  }
 			 }
-		 		else 
+		 		else
 //					if not found
 		 		{
 					  // No match -> invalid url or account has already been activated.
@@ -81,11 +82,11 @@ $msg1 = $_SESSION['msg'];
 					  </script> ';
 					}
 
-					
+
 			 } //if post
  }// if isset get email
-	
-	
+
+
 else  // else isset get email
 {
 	$msg = '<div class="alert alert-danger alert-dismissible">
@@ -93,7 +94,7 @@ else  // else isset get email
          Sorry Error Missing Parameter
         </div>';
 	echo('<h3 align="center">Sorry Error Missing Parameter</h3>');
-	
+
 }
 
 
@@ -123,20 +124,16 @@ else  // else isset get email
 						</div>
 						<!-- /login -->
 					</div>
-				</div>	
+				</div>
 	<!--jquery validator-->
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
  <script src="./js/formvalidator.js"></script>
 
 
 <!--validator ends-->
-<?php include("footer.php"); 
+<?php include("footer.php");
 	$_SESSION['msg'] = $msg;
-	
+
 	?>
 	</main>
 </html>
-
-
-
-  

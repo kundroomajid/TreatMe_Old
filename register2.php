@@ -1,7 +1,7 @@
 <?php
 include("header.php");
 include("config.php");
-
+$msg = $_SESSION['msg'];
 $user_email =  mysqli_real_escape_string($conn,$_GET['email']);
 
 $_SESSION['email'] = $user_email;
@@ -27,7 +27,7 @@ if((isset($_POST['name']))&isset($_POST['phone_no'])&isset($_POST['gender'])){
   if(mysqli_query($conn, $sql) && mysqli_query($conn, $sql2)){
     $msg = '<div class="alert alert-success alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Details Saved Sucessfully 
+    <strong>Success!</strong> Details Saved Sucessfully
   </div>';
     echo '<script type="text/javascript">
 //    alert("Details Saved Sucessfully")

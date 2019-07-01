@@ -14,7 +14,7 @@ if ( !empty($user_password) || !empty($user_email) )
 {    //create connection
     if (mysqli_connect_error()) {
      die('Connect Error('. mysqli_connect_errno().')'. mysqli_connect_error());
-    } else 
+    } else
     {
 
      $hash = rand(1, 1000000);
@@ -28,23 +28,24 @@ if ( !empty($user_password) || !empty($user_email) )
      $stmt->bind_result($user_email);
      $stmt->store_result();
      $rnum = $stmt->num_rows;
-     if ($rnum==0) 
+     if ($rnum==0)
      {
       $stmt->close();
       $stmt = $conn->prepare($INSERT);
       $stmt->bind_param("ssss",  $user_password,$user_email,$hash,$user_type);
           if( $stmt->execute() == False)
         {
-        
+
          echo("Error description: " . mysqli_error($conn));
           echo '<script type="text/javascript">
-         alert("execution failed of sql")
+         // alert("execution failed of sql")
          window.location = "index.php";
          </script> ';
         }
        else
         {
      $_SESSION['email'] = $user_email;
+
         $q = "UPDATE tb_user SET photo= '$blob' where user_email = '$user_email'";
          $conn->query($q) or die(mysql_error($conn));
           $to      = $user_email; // Send email to our user
@@ -115,21 +116,21 @@ $message = '<div style="margin:0;padding:0;width:100%!important">
 $mail = new PHPMailer;
 
 
-//Enable SMTP debugging. 
-$mail->SMTPDebug = 0;                               
+//Enable SMTP debugging.
+$mail->SMTPDebug = 0;
 //Set PHPMailer to use SMTP.
-$mail->isSMTP();            
-//Set SMTP host name                          
+$mail->isSMTP();
+//Set SMTP host name
 $mail->Host = "smtp.gmail.com";
 //Set this to true if SMTP host requires authentication to send email
-$mail->SMTPAuth = true;                          
-//Provide username and password     
-$mail->Username = "treatme247@gmail.com";                 
-$mail->Password = "Startup@2019"; 
+$mail->SMTPAuth = true;
+//Provide username and password
+$mail->Username = "treatme247@gmail.com";
+$mail->Password = "Startup@2019";
 //If SMTP requires TLS encryption then set it
-$mail->SMTPSecure = "tls";                           
-//Set TCP port to connect to 
-$mail->Port = 587;    
+$mail->SMTPSecure = "tls";
+//Set TCP port to connect to
+$mail->Port = 587;
 $mail->SMTPOptions = array(
     'ssl' => array(
         'verify_peer' => false,
@@ -137,7 +138,7 @@ $mail->SMTPOptions = array(
         'allow_self_signed' => true
     )
 );
-                               
+
 
 
 //From email address and name
@@ -159,40 +160,41 @@ $mail->Subject = "Account Activation";
 $mail->Body = $message;
 $mail->AltBody = "";
 
-if(!$mail->send()) 
+if(!$mail->send())
 {
 //    echo "Mailer Error: " . $mail->ErrorInfo;
-  
-} 
-else 
+
+}
+else
 {
 //    echo "Message has been sent successfully";
 }
 
 
-  
+
       $msg = '<div class="alert alert-success alert-dismissible">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Success!</strong> Registered Sucessfully please confirm your email id please check spam folder also.
   </div>';
          $_SESSION['msg'] = $msg;
-      
+          $_SESSION['verify'] = 0;
+
 //        echo("Registered Sucessfully please confirm your email id please check spam folder also");
          echo '<script type="text/javascript">
 //         alert("Registered Sucessfully please confirm your email id please check spam folder also")
          window.location = "./verify.php?email='.$to.'";
          </script> ';
 
-      } 
+      }
      }
-        else 
+        else
      {
          $msg = '<div class="alert alert-danger alert-dismissible">
      <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
      Someone is allready registered using this email
     </div>';
-          
-         
+
+
 //          echo '<script type="text/javascript">
 //         alert("Someone already register using this email")
 //         window.location = "./login.php";
@@ -203,10 +205,10 @@ else
      $conn->close();
     }
 
-   
-  
-  
-  
+
+
+
+
 } else {
  echo "All field are required";
  die();

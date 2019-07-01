@@ -8,10 +8,10 @@
     $a = transposeData($_POST);
     //print_r($a);
     $q = "DELETE FROM tb_qualifications where doct_id=$id";
-    $result = mysqli_query($conn,$q) or die ( '<script type="text/javascript"> window.location = "./welcomed.php"; 
+    $result = mysqli_query($conn,$q) or die ( '<script type="text/javascript"> window.location = "./welcomed.php";
     </script> ');
-   
-   
+
+
 
     $q = "INSERT INTO tb_qualifications(doct_id,degree,institute,completion_year) VALUES ";
     if(count($a)>1){
@@ -32,7 +32,7 @@
       $q = $q."($id,'$degree','$institute',$year);";
       echo($q);
     }
-    
+
     $result = mysqli_query($conn,$q) or die (mysqli_error($conn));
     echo '<script type="text/javascript">  window.location = "./welcomed.php"; </script>';
     $msg = '<div class="alert alert-danger alert-dismissible">
@@ -43,7 +43,7 @@
     echo "Illegal entry";
   }
 $_SESSION['msg'] = $msg;
-  
+
 
 function transposeData($data) {
     $retData = array();
@@ -53,7 +53,7 @@ function transposeData($data) {
       }
     }
     echo "trsnsnpose : \n";
-    print_r($retData);
+    // print_r($retData);
     return $retData;
 }
 ?>

@@ -3,6 +3,8 @@ session_start();
 include("header.php");
 include("config.php");
 $error = $_SESSION['msg'];
+
+
 // if(isset($_SESSION['login_user']))
 $log_status = isset($_SESSION['login_user'])?$_SESSION['login_user']:null;
   if($log_status !=null){
@@ -22,7 +24,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   //echo($myemail_id);
   //echo($mypassword);
   $mypassword = md5($mypassword);
-  $sql = "SELECT user_id,user_type FROM tb_user WHERE user_email = '$myemail_id' and user_password = '$mypassword' and active='1'";
+  $sql = "SELECT user_id,user_type,active FROM tb_user WHERE user_email = '$myemail_id' and user_password = '$mypassword'";
 
   $result = mysqli_query($conn,$sql);
 
@@ -32,16 +34,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
   $id = $row['user_id'];
   $user_type = $row['user_type'];
+  $verify = $row['active'];
   $count = mysqli_num_rows($result);
 
   // If result matched $myemail_id and $mypassword, table row must be 1 row
 
-  if($count == 1) {
+  if($count == 1)
+  {
     $_SESSION['login_user'] = $myemail_id;
     $_SESSION['id'] = $id;
     $_SESSION['user_type'] = $user_type;
     $user_type = $_SESSION['user_type'];
 //	  echo '<script type="text/javascript"> alert("login sucesssful "); window.location = "./welcome.php"; </script>';
+    if($verify == 0) //i.e user is unverified redirect to verify page
+      {
+        $_SESSION['msg'] = '<div class="alert alert-danger alert-dismissible">
+         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+         Please Enter Verification Code Recieved in Email to Continue Registration.
+        </div>';
+        header("Location:verify.php?email=$myemail_id");
+      }
+      else
+      {
+
     if($user_type=='d')
     {
 		echo '<script type="text/javascript"> window.location = "./welcomed.php"; </script>';
@@ -56,11 +71,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     {
 		echo '<script type="text/javascript"> window.location = "./welcomec.php"; </script>';
     }
-    
-    
+
+
 	  echo '<script type="text/javascript"> window.location = "./welcome.php"; </script>';
 //    header("location:   welcome.php");
   }
+}
   else
   {
     // to display error alert box in html
@@ -68,7 +84,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
      Invalid Username Or Password
     </div>';
-    
+
   }
 }
 
@@ -86,9 +102,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="#0" class="social_bt google">Login with Google</a>
             <a href="#0" class="social_bt linkedin">Login with Linkedin</a>
           </div>-->
-            
+
           <div class="box_login last">
-            
+
             <div id="info" class="clearfix">  <?= "$error";?> </div>
             <div class="form-group">
               <input type="email" name="email_id" class="form-control" placeholder="Your email address" required/>
@@ -97,7 +113,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
               <input type="password" name="password" class="form-control" placeholder="Your password"  required/>
               <a href="forgot.php" class="forgot"><small>Forgot password?</small></a>
             </div>
-            
+
             <div class="form-group" align = "center">
               <input class="btn_1" name ="submit" type="submit" value="Login"  />
             </div>

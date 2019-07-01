@@ -19,6 +19,8 @@ $filters = array();
 
 if($q!=null)
 $filters[] = "user_name like '%$q%' or specialization like '%$q%'";
+//	$q = metaphone($q);
+//$filters[] = "sounds_like like '%$q%'";
 if($district!=null)
 $filters[] = "district='$district'";
 if($specialization!=null)
@@ -35,15 +37,6 @@ if(count($filters)>0){
 
 
 
-//$main_query .= ($q!=null || $district!=null || $specialization!=null || $radio_search!="")?" WHERE ":"";
-//$main_query .= ($q==null)?"":"user_name like '%$q%'";
-//$main_query .= ($q!=null && $district!=null)?" AND ":"";
-//$main_query .= ($district==null)?"":"district='$district'";
-//$main_query .= ($q!=null || $district!=null)?" AND ":"";
-//$main_query .= $radio_query;
-//$main_query .= ($q!=null || $district!=null || $radio_query!="")?" AND ":"";
-//$main_query .= ($specialization==null)?"":"specialization='$specialization'";
-
 
 $result1=mysqli_query($conn,$main_query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $total_results = mysqli_num_rows($result1);
@@ -52,6 +45,7 @@ $total_pages = ceil($total_results / $num_results_on_page);
 $main_query .= " LIMIT $offset,$num_results_on_page";
 $result=mysqli_query($conn,$main_query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 $count = mysqli_num_rows($result);
+//echo($main_query);
 
 ?>
 

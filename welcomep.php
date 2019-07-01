@@ -81,6 +81,10 @@ this.value = "";
 	var url = "uploadFile.php?email="+email;
 	url = url.replace(/\s/g,'');
 $(document).ready(function () {
+	$('input[type="file"]').change(function(e){
+            var fileName = e.target.files[0].name;
+            $('#filename').html(fileName);
+        });
 	$('#progressDivId').hide();
     $('#submitButton').click(function () {
     	    $('#uploadForm').ajaxForm({
@@ -160,11 +164,12 @@ $(document).ready(function () {
           <span class="custom-file-control">Choose file</span>
           <br><br> <br>
         </label>
+		  <div id="filename"></div>
 		  
 		 <br /> <input type="submit" id="submitButton" name="btnSubmit" class="btn_1" value="Upload" />
 		  </form>
 			  <br /><br />
-				  <div class='progress' id="progressDivId">
+			<div class='progress' id="progressDivId">
             <div class='progress-bar' id='progressBar' role="progressbar"></div>
             <div class='percent' id='percent'>0%</div>
 					   <div style="height: 10px;"></div>

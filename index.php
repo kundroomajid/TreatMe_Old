@@ -1,6 +1,15 @@
 <?php
 include("header.php");
 
+if(isset($_SESSION['verify']))
+{
+  if($_SESSION['verify'] == 0)
+  {
+    $email= $_SESSION['email'];
+    header("Location:verify.php?email=$email");
+  }
+}
+
  ?>
 
 
@@ -83,9 +92,9 @@ include("header.php");
 					<h2>Most Viewed doctors</h2>
 					<!--<p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri.</p>-->
 				</div>
-				
+
 				<div id="reccomended" class="owl-carousel owl-theme">
-					<?php 
+					<?php
 					$query="SELECT * FROM vw_doctor ORDER BY avg_rating DESC LIMIT 10";
 					$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
 					$count = mysqli_num_rows($result);
@@ -108,8 +117,8 @@ include("header.php");
 						</a>
 					</div>
 					<?php }?>
-					
-  
+
+
 				</div>
 				<!-- /carousel -->
 			</div>
@@ -130,7 +139,7 @@ include("header.php");
 							<h3>Search by District</h3>
 						</div>
 						<ul>
-							
+
 <?php
 							$query = "SELECT district,count(district) as freq from vw_doctor GROUP BY district order by freq desc limit 10";
 							$result = mysqli_query($conn, $query);
@@ -138,7 +147,7 @@ include("header.php");
 								$f = $row['freq'];
 								$s = ucfirst($row['district']);
 								echo "<li><a href='list.php?dist=$s'><strong>$f</strong>$s</a></li>";
-							}							
+							}
 ?>
 
 						</ul>
@@ -151,8 +160,8 @@ include("header.php");
 							<h3>Search by type</h3>
 						</div>
 						<ul>
-							
-							
+
+
 <?php
 							$query = "SELECT specialization,count(specialization) as freq from tb_doctor GROUP BY specialization order by freq desc limit 9";
 							$result = mysqli_query($conn, $query);
@@ -161,10 +170,10 @@ include("header.php");
 								$s = ucfirst($row['specialization']);
 								echo "<li><a href='list.php?spec=$s'><strong>$f</strong>$s</a></li>";
 							}
-							
-?>							
-							
-							
+
+?>
+
+
 <!--
 							<li><a href="#0">More....</a></li>
 -->

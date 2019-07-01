@@ -1,22 +1,109 @@
-<html>
-<form action='' method='POST'>
-        <div class='form-group'>
-                <div id=msg> $msg </div>
+<div class="col-6 col-sm-8" id="servicenow" style="display:none">
 
-                <label for='comment'>
-                        <h6>Post Your Comment :</h6>
-                </label>
-                <textarea class='form-control' rows='5' name='comment' id='comment' placeholder='Enter Your Comment Here' required> </textarea>
-                <br /> <br />
-                <div class='rev-text'>
-                        <div>
-                                <p align='right'>
-                                        <input type='submit' id='postcommnet' class='btn_1' value='Post Comment'>
-                                        <br>
-                                </p>
+                                <form name="sources_controller"  action="../database/sources_controller.php" method="POST" style="padding:30px">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="instancelabel">Instance Label</label>
+                                        <input type="text" class="form-control" name="instancelabel" value="" placeholder="Label">
+                                     </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="sourcetype">Cloud App</label>
+                                         <input type="text" class="form-control" name="sourcetype" value="ServiceNow" readonly>
+                                    </div>
+                                </div>
+  
+                               
+                                <div class="input-group mb-3" style="margin-left:15px;margin-right:15px">
+                                    <div class="input-group-addon">
+                                        <span class="input-group-text" id="basic-addon1">https://</span>
+                                    </div>
+                                     <label for="sourcetype" style="margin-left:15px;margin-right:15px">URL</label>
+                                    <input type="text" name="url" class="form-control" value="" placeholder="ServiceNow Instance URL" aria-label="Username" aria-describedby="basic-addon1">
+                                    </div>
+    
+                            
+                                <br/>
+                                    <br/>
+                                   
+                            <div class="form-row" >
+                                <div class="form-group col-md-6">
+                                    <label for="username">ServiceNow Login</label>
+                                    <input type="text" class="form-control" name="username" value="">
+                                </div>
+    
+                                <div class="form-group col-md-6">
+                                     <label for="password">Password</label>
+                                      <input type="password" class="form-control" name="password" value="">
+                                </div>
+                                <div class="form-group col-md-6">
+                                     <label for="instancegroup">Instance Group</label>
+                                        <select name="instancegroup" class="form-control">
+                                         <option value="DEV" selected>Development</option>
+                                             <option value="TEST">Testing</option>
+                                             <option value="QA">Quality Assurance</option>
+                                          </select>
+                                </div>
+                            </div>
+                            <input style="align:center" type="submit" class="btn btn-primary"/>
+                                     </form>
+                 <!--service now form closed-->
                         </div>
-                </div>
-        </div>
-</form>
-
-</html>
+  
+                   
+ <!-- service now form-->
+                        <div class="col-6 col-sm-8" id="servicenow" style="display:none">
+                        
+                                       <div align=center> <p><strong>Service Now</strong> is a company that provides service management software as a service.</p>
+                                       
+                                       
+                                       </div>
+                                <form name="sources_controller"  action="../database/sources_controller.php" method="POST" style="padding:30px">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="instancelabel">Instance Label</label>
+                                        <input type="text" class="form-control" name="instancelabel" value="" placeholder="Label">
+                                     </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="sourcetype">Cloud App</label>
+                                         <input type="text" class="form-control" name="sourcetype" value="ServiceNow" readonly>
+                                    </div>
+                                </div>
+  
+                                <label for="sourcetype" style="margin-left:15px;margin-right:15px">URL</label>
+                                <div class="input-group mb-3" style="margin-left:15px;margin-right:15px">
+                                    <div class="input-group-addon">
+                                        <span class="input-group-text" id="basic-addon1">https://</span>
+                                    </div>
+                                    
+                                    <input type="text" name="url" class="form-control" value="" placeholder="ServiceNow Instance URL" aria-label="Username" aria-describedby="basic-addon1">
+                                    </div>
+    
+                            
+                                <br/>
+                                    <br/>
+                                   
+                            <div class="form-row" >
+                                <div class="form-group col-md-6">
+                                    <label for="username">ServiceNow Login</label>
+                                    <input type="text" class="form-control" name="username" value="">
+                                </div>
+    
+                                <div class="form-group col-md-6">
+                                     <label for="password">Password</label>
+                                      <input type="password" class="form-control" name="password" value="">
+                                </div>
+                                <div class="form-group col-md-6">
+                                     <label for="instancegroup">Instance Group</label>
+                                        <select name="instancegroup" class="form-control">
+                                         <option value="DEV" selected>Development</option>
+                                             <option value="TEST">Testing</option>
+                                             <option value="QA">Quality Assurance</option>
+                                          </select>
+                                </div>
+                            </div>
+                            <br>
+                            
+                            <input style="margin:30px;" type="submit" class="btn btn-primary"/>
+                                     </form>
+</div>
+                 <!--service now form closed-->
