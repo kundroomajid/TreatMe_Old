@@ -107,7 +107,13 @@ article.blog .post_info {
   padding: 30px;
   position: relative;
   box-sizing: border-box;
-  height: 100%;
+  min-height: 350px;
+}
+@media (max-width: 991px) {
+  article.blog .post_info {
+    /* For less than 991px */
+    min-height: inherit;
+  }
 }
 article.blog .post_info small {
   font-weight: 500;

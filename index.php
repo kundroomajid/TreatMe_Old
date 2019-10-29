@@ -46,8 +46,8 @@ if(isset($_SESSION['verify']))
 			</div>
 		</div>
 <!--jquery validator-->
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
- <script src="./js/formvalidator.js"></script>
+<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+ <script src="./js/formvalidator.js"></script> -->
 
 
 <!--validator ends-->
@@ -90,13 +90,12 @@ if(isset($_SESSION['verify']))
 			<div class="container margin_120_95">
 				<div class="main_title">
 					<h2>Most Viewed doctors</h2>
-					<!--<p>Usu habeo equidem sanctus no. Suas summo id sed, erat erant oporteat cu pri.</p>-->
 				</div>
 
 				<div id="reccomended" class="owl-carousel owl-theme">
 					<?php
 					$query="SELECT * FROM vw_doctor ORDER BY avg_rating DESC LIMIT 10";
-					$result=mysqli_query($conn,$query) or die ("Query to get data from firsttable failed: ".mysqli_error());
+					$result=mysqli_query($conn,$query) ;
 					$count = mysqli_num_rows($result);
 
 					while ($cdrow=mysqli_fetch_array($result)) {
