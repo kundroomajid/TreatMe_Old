@@ -26,8 +26,6 @@ include('session.php');?>
 		<link href="./css/icon_fonts/css/all_icons_min.css" rel="stylesheet" />
 		<link href="./css/ratecss.css" rel="stylesheet">
 
-        <!-- SPECIFIC CSS -->
-        <link href="./css/date_picker.css" rel="stylesheet">
 		<!-- YOUR CUSTOM CSS -->
 
 		<!-- COMMON SCRIPTS -->

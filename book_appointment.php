@@ -4,6 +4,8 @@ $bookerror = " ";
 //	unset($bookerror);
 include("session.php");
 include("config.php");
+
+
 if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION['user_type'] !='d' ){
    $username = ($_SESSION['login_user']);
   $doc_id = isset($_GET['doc_id'])? mysqli_real_escape_string($conn,$_GET['doc_id']):null;
@@ -12,7 +14,7 @@ if(isset($_SESSION['login_user']) && isset($_SESSION['user_type']) && $_SESSION[
   $shift = isset($_GET['shift'])? mysqli_real_escape_string($conn,$_GET['shift']):null;
   $pat_id = isset($_SESSION['id'])?$_SESSION['id']:null;
   $patient_name = isset($_GET['pat_name'])? mysqli_real_escape_string($conn,$_GET['pat_name']):null;
-  
+
 
   if($doc_id!=null && $pat_id!=null && $shift!=null && $date!=null){
     if(bookAppointment($doc_id,$pat_id,new DateTime($date),$shift,$patient_name)){
