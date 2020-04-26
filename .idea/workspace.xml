@@ -2,16 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="41d4daf9-e2bc-455a-916f-c8ed4cf2a850" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/textlocal.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/site.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/detail-page2.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/id6156934_users.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/id6156934_users_08_06_2019.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/formvalidator.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/formvalidator.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/register.php" beforeDir="false" afterPath="$PROJECT_DIR$/register.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/badges.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog-1.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog-post.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/forgot_old.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/list-map.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/list_backup.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/site_backup_06_08_2019.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/site_backup_31_jan_2020.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/site_workspace.code-workspace" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload_photo_old.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +61,7 @@
       <workItem from="1580106075884" duration="1227000" />
       <workItem from="1580973657486" duration="1615000" />
       <workItem from="1587818205645" duration="549000" />
+      <workItem from="1587882181812" duration="424000" />
     </task>
     <servers />
   </component>
@@ -79,9 +81,9 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="477" y="273" key="NewPhpFileDialog/0.0.1280.680@0.0.1280.680" timestamp="1580311235056" />
-    <state x="349" y="170" key="com.intellij.ide.util.TipDialog" timestamp="1580619987044">
+    <state x="349" y="170" key="com.intellij.ide.util.TipDialog" timestamp="1587882201577">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="349" y="170" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1580619987044" />
+    <state x="349" y="170" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1587882201577" />
   </component>
 </project>
