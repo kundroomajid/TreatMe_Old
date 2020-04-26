@@ -338,12 +338,7 @@ $(function() {
   });
     
     //register2.php validation ends    
-    
-    
-    
-    
-    
-    
+
     
     
 //      validate login.php
@@ -400,6 +395,11 @@ $(function() {
         required: true,
         email: true,
       },
+      user_mobile: {
+        required: true,
+       phoneUS: true
+
+      },
       user_password: {
         required: true
       },
@@ -414,6 +414,10 @@ $(function() {
       user_email: {
          required: '<i style="color:red">Please enter an email address.</i>',
         email:'<i style="color:red">Enter A Valid Email Address.</i>'
+      },
+      user_mobile: {
+        required: '<i style="color:red">Please enter mobile no.</i>',
+       phoneUS: '<i style="color:red">Please enter a valid 10 digit mobile no.</i>'
       },
       check_2: {
         required: '<i style="color:red">Please Accept Terms and Conditions.</i>'
