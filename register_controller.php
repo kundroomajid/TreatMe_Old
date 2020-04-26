@@ -186,8 +186,8 @@ function gCaptcha()
     return $responseG;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+if ($_SERVER["REQUEST_METHOD"] == "POST")
+{
 
     if(gCaptcha()->success){
     // user_email and user_password sent from form
@@ -198,8 +198,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_password = mysqli_real_escape_string($conn, $_POST['user_password']);
     $blob = addslashes(file_get_contents('./img/user.png', true));
     $blob = "'" . $blob . "'";
-
-
 //    check if email exists or not in our database
     $email_id = "'" . $user_email . "'";
     if (!check_email($conn, $email_id)) {
@@ -222,7 +220,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header('Location: ./register.php');
         exit();
     }
-
+    
     if (!empty($user_password) || !empty($user_email)) {    //create connection
         if (mysqli_connect_error()) {
             die('Connect Error(' . mysqli_connect_errno() . ')' . mysqli_connect_error());
@@ -236,32 +234,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!mysqli_query($conn, $INSERT)) {
                 echo 'insert error' . $conn->error;
                 $msg = '<div class="alert alert-danger alert-dismissible">
-     <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-     Sorry Something went Wrong Please try Again
-    </div>';
+                <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                Sorry Something went Wrong Please try Again
+                </div>';
                 $_SESSION['msg'] = $msg;
                 header('Location: ./register.php');
             }
             else {
-                echo 'success';
-                if (!sendsms($user_phone,$hash)) {
-                    echo "sms  Error";
-                } else {
-                    sendmail($_SESSION['email'],$hash);
-//                    Registered Sucessfully please confirm your email id please check spam folder also
+                if(sendsms($user_phone,$hash) || sendmail($_SESSION['email'],$hash)) {
+//                    Registered Sucessfully please confirm your mobile number
                     echo "Message has been sent successfully";
-
                     $msg = '<div class="alert alert-success alert-dismissible">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                               <strong>Success!</strong> Registered Sucessfully please confirm your Mobile No by entering Otp.
+                               <strong>Success!</strong> Registered Sucessfully please confirm your Mobile No or email by entering Otp.
                             </div>';
                     $_SESSION['msg'] = $msg;
                     $_SESSION['verify'] = 0;
                     $to = $_SESSION['email'];
                     echo '<script type="text/javascript">
-                    window.location = "./verify.php?email='.$to.'";
+                    window.location = "./verify.php?email=' . $to . '";
                     </script> ';
                 }
+                else
+                {
+                    $msg = '<div class="alert alert-danger alert-dismissible">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                               <strong>Error!</strong> Sorry Some Error Occured Please Try again.
+                            </div>';
+                    $_SESSION['msg'] = $msg;
+                    $_SESSION['verify'] = 0;
+                    $to = $_SESSION['email'];
+                    echo '<script type="text/javascript">
+                    window.location = "./register.php";
+                    </script> ';
+
+                }
+
             }
         }
 
@@ -274,9 +282,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     else{
         $msg = '<div class="alert alert-danger alert-dismissible">
-<a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-Sorry  please conform your recaptcha!
-</div>';
+        <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        Sorry  please confirm your recaptcha!
+        </div>';
         $boolean="true";
     }
 }
