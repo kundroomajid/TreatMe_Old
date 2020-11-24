@@ -278,7 +278,6 @@ if (isset($_SESSION['login_user'])) {
                                                                   placeholder="Enter Patient Name">
                                     </div>
                                 </div>
-                                <input type="hidden" name="doc_id" value="<?= $doc_id ?>">
                                 <div id=" " class="clearfix">  <?= "$bookerror"; ?> </div>
 
                                 <div class="main_title_3">
@@ -298,7 +297,9 @@ if (isset($_SESSION['login_user'])) {
                                 <div class="main_title_3">
                                     <h3><strong>3</strong>Select Appointment Time</h3>
                                 </div>
+
                                 <div class="row justify-content-center add_bottom_45">
+                                    <div id="time_msg">Please Select Date First to view Avalaible time slots</div>
                                     <div class="col-lg-5">
                                         <div class="row justify-content-center">
                                             <div class="col-6 text-center add_top_20">
@@ -314,9 +315,9 @@ if (isset($_SESSION['login_user'])) {
                                 </div>
                                 <!-- /row -->
 
-                                <div class="main_title_3">
-                                    <h3><strong>4</strong>Select Location</h3>
-                                </div>
+<!--                                <div class="main_title_3">-->
+<!--                                    <h3><strong>4</strong>Select Location</h3>-->
+<!--                                </div>-->
                                 <!--                              TO DO Add multiple addressses of doctor here and to make-->
                                 <!--                                user select one location-->
 
@@ -731,8 +732,6 @@ if (isset($_SESSION['login_user'])) {
         // datesDisabled: ["2017/10/20", "2017/11/21", "2017/12/21", "2018/01/21", "2018/02/21", "2018/03/21"],
     });
     schedule = <?= $schedule ?>;
-    console.log("Schedule: ");
-    console.log(schedule);
     window.onload = function () {
         calendar = document.getElementById('date');
         d = new Date();
@@ -755,76 +754,84 @@ if (isset($_SESSION['login_user'])) {
                 'date': calendar.value
             },
             success: function (data) {
-                console.log(data);
+                var time_msg = document.getElementById('time_msg');
+               time_msg.style.display = 'none';
                 booking_details = JSON.parse(data);
-                console.log(booking_details);
-                d = new Date(calendar.value);
-                weekday = d.getDay();
+                if (booking_details.length > 0) {
+                    d = new Date(calendar.value);
+                    weekday = d.getDay();
 
-                current_schedule = schedule[weekday];
-                mstart = current_schedule.morning_start;
-                mend = current_schedule.morning_end;
-                estart = current_schedule.evening_start;
-                eend = current_schedule.evening_end;
-                num_patients = current_schedule.num_patients;
+                    current_schedule = schedule[weekday];
+                    mstart = current_schedule.morning_start;
+                    mend = current_schedule.morning_end;
+                    estart = current_schedule.evening_start;
+                    eend = current_schedule.evening_end;
+                    num_patients = current_schedule.num_patients;
 
-                dt = new Date();
+                    dt = new Date();
 
-                mstart = dt.setHours(mstart.substr(0, 2), mstart.substr(3, 2), 0);
-                mend = dt.setHours(mend.substr(0, 2), mend.substr(3, 2), 0);
-                mtime = (mend - mstart) / 60000;
+                    mstart = dt.setHours(mstart.substr(0, 2), mstart.substr(3, 2), 0);
+                    mend = dt.setHours(mend.substr(0, 2), mend.substr(3, 2), 0);
+                    mtime = (mend - mstart) / 60000;
 
-                estart = dt.setHours(estart.substr(0, 2), estart.substr(3, 2), 0);
-                eend = dt.setHours(eend.substr(0, 2), eend.substr(3, 2), 0);
-                etime = (eend - estart) / 60000;
+                    estart = dt.setHours(estart.substr(0, 2), estart.substr(3, 2), 0);
+                    eend = dt.setHours(eend.substr(0, 2), eend.substr(3, 2), 0);
+                    etime = (eend - estart) / 60000;
 
-                morning_slots = mtime / 30;
-                evening_slots = etime / 30;
+                    morning_slots = mtime / 30;
+                    evening_slots = etime / 30;
 
 
-                morning = document.getElementById('morning');
-                inner = '<p>Morning</p>\n';
-                ms = new Date(mstart);
-                for (i = 1; i <= morning_slots; i++) {
-                    booking_detail = booking_details.filter(booking => (booking.shift == 0 && booking.slot_no == i))[0];
-                    slot_count = (booking_detail == null) ? 0 : booking_detail.slot_count;
-                    // if(i==4)
-                    console.log("slot count: " + slot_count + " \t --- \t num_pat " + current_schedule.num_patients);
-                    disabled = (slot_count == current_schedule.num_patients) ? "disabled" : "";
-                    console.log("disabled: " + disabled);
-                    label = ("0" + ms.getHours()).slice(-2) + ":" + ("0" + ms.getMinutes()).slice(-2) + " to ";
-                    ms.setMinutes(ms.getMinutes() + 30);
-                    label = label + ("0" + ms.getHours()).slice(-2) + ":" + ("0" + ms.getMinutes()).slice(-2);
-                    inner = inner + "<li><input type='radio' required " + disabled + "id = 'm-" + (i + 1) + "' name='slot' value='m-" + (i + 1) + "'><label for='m-" + (i + 1) + "'>" + label + "</label></li>";
+                    morning = document.getElementById('morning');
+                    inner = '<p>Morning</p>\n';
+                    ms = new Date(mstart);
+                    for (i = 1; i <= morning_slots; i++) {
+                        booking_detail = booking_details.filter(booking => (booking.shift == 0 && booking.slot_no == i))[0];
+                        slot_count = (booking_detail == null) ? 0 : booking_detail.slot_count;
+                        // if(i==4)
+                        // console.log("slot count: " + slot_count + " \t --- \t num_pat " + current_schedule.num_patients);
+                        disabled = (slot_count == current_schedule.num_patients) ? "disabled" : "";
+                        // console.log("disabled: " + disabled);
+                        label = ("0" + ms.getHours()).slice(-2) + ":" + ("0" + ms.getMinutes()).slice(-2) + " to ";
+                        ms.setMinutes(ms.getMinutes() + 30);
+                        label = label + ("0" + ms.getHours()).slice(-2) + ":" + ("0" + ms.getMinutes()).slice(-2);
+                        inner = inner + "<li><input type='radio' required " + disabled + "id = 'm-" + (i + 1) + "' name='slot' value='m-" + (i + 1) + "'><label for='m-" + (i + 1) + "'>" + label + "</label></li>";
+                    }
+                    morning.innerHTML = inner;
+
+                    evening = document.getElementById('evening');
+                    es = new Date(estart);
+                    inner = '<p>Evening</p>\n';
+                    for (i = 1; i <= evening_slots; i++) {
+                        booking_detail = booking_details.filter(booking => (booking.shift == 1 && booking.slot_no == i))[0];
+                        slot_count = (booking_detail == null) ? 0 : booking_detail.slot_count;
+                        disabled = (slot_count == current_schedule.num_patients) ? "disabled" : "";
+
+                        // if(i==3)
+                        // console.log("slot count: " + slot_count + " \t --- \t num_pat " + current_schedule.num_patients);
+
+                        // inner = inner + "<li> <input type='radio'" + disabled + " name='slot' value='e-" + (i + 1) + "' />" + ("0" + es.getHours()).slice(-2) + ":" + ("0" + es.getMinutes()).slice(-2) + " to ";
+                        // es.setMinutes(es.getMinutes() + 30);
+                        // inner = inner + ("0" + es.getHours()).slice(-2) + ":" + ("0" + es.getMinutes()).slice(-2) + "</li>";
+
+
+                        label = ("0" + es.getHours()).slice(-2) + ":" + ("0" + es.getMinutes()).slice(-2) + " to ";
+                        es.setMinutes(es.getMinutes() + 30);
+                        label = label + ("0" + es.getHours()).slice(-2) + ":" + ("0" + es.getMinutes()).slice(-2);
+                        inner = inner + "<li><input type='radio' required " + disabled + "id='e-" + (i + 1) + "' name='slot' value='e-" + (i + 1) + "'><label for='e-" + (i + 1) + "'>" + label + "</label></li>";
+                    }
+
+                    evening.innerHTML = inner;
+
+
                 }
-                morning.innerHTML = inner;
-
-                evening = document.getElementById('evening');
-                es = new Date(estart);
-                inner = '<p>Evening</p>\n';
-                for (i = 1; i <= evening_slots; i++) {
-                    booking_detail = booking_details.filter(booking => (booking.shift == 1 && booking.slot_no == i))[0];
-                    slot_count = (booking_detail == null) ? 0 : booking_detail.slot_count;
-                    disabled = (slot_count == current_schedule.num_patients) ? "disabled" : "";
-
-                    // if(i==3)
-                    console.log("slot count: " + slot_count + " \t --- \t num_pat " + current_schedule.num_patients);
-
-                    // inner = inner + "<li> <input type='radio'" + disabled + " name='slot' value='e-" + (i + 1) + "' />" + ("0" + es.getHours()).slice(-2) + ":" + ("0" + es.getMinutes()).slice(-2) + " to ";
-                    // es.setMinutes(es.getMinutes() + 30);
-                    // inner = inner + ("0" + es.getHours()).slice(-2) + ":" + ("0" + es.getMinutes()).slice(-2) + "</li>";
-
-
-                    label = ("0" + es.getHours()).slice(-2) + ":" + ("0" + es.getMinutes()).slice(-2) + " to ";
-                    es.setMinutes(es.getMinutes() + 30);
-                    label = label + ("0" + es.getHours()).slice(-2) + ":" + ("0" + es.getMinutes()).slice(-2);
-                    inner = inner + "<li><input type='radio' required " + disabled + "id='e-" + (i + 1) + "' name='slot' value='e-" + (i + 1) + "'><label for='e-" + (i + 1) + "'>" + label + "</label></li>";
+                else{
+                 time_msg.innerText = ' ';
+                 time_msg.innerText = 'Sorry No Slots Avalaible For Selected Date';
+                 time_msg.style.display = 'block';
                 }
-
-                evening.innerHTML = inner;
-
-
             }
+
         });
     }
 </script>

@@ -3,6 +3,7 @@ comments = document.getElementById('comments');
 offset =  document.getElementById('offset');
 doc = document.getElementById('doc_id');
 total_comments = parseInt(document.getElementById('total_comments').innerHTML);
+
 doc_id = doc.value;
 
 

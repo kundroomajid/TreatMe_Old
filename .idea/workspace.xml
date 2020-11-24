@@ -3,14 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="41d4daf9-e2bc-455a-916f-c8ed4cf2a850" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/book_appointment.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/detail-page-3.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/detail-page.php" beforeDir="false" afterPath="$PROJECT_DIR$/detail-page.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/detail-page_bk.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/js/loadmore.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/loadmore.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/make_appointment.php" beforeDir="false" afterPath="$PROJECT_DIR$/make_appointment.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old_confirm_appointment.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/register_bk.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +30,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../cloud-faker" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -67,7 +62,8 @@
       <workItem from="1587899147917" duration="1779000" />
       <workItem from="1587900967206" duration="1683000" />
       <workItem from="1587902787170" duration="1712000" />
-      <workItem from="1587904665009" duration="1003000" />
+      <workItem from="1587904665009" duration="1466000" />
+      <workItem from="1588746078798" duration="23000" />
     </task>
     <servers />
   </component>
@@ -79,17 +75,17 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="365" y="0" key="#PHP/0.0.1280.680@0.0.1280.680" timestamp="1580663704432" />
-    <state x="421" y="100" key="FileChooserDialogImpl" timestamp="1580620023610">
+    <state x="421" y="100" key="FileChooserDialogImpl" timestamp="1588746097069">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="421" y="100" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1580620023610" />
+    <state x="421" y="100" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1588746097069" />
     <state x="477" y="273" key="NewPhpFileDialog" timestamp="1580311235056">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="477" y="273" key="NewPhpFileDialog/0.0.1280.680@0.0.1280.680" timestamp="1580311235056" />
-    <state x="349" y="170" key="com.intellij.ide.util.TipDialog" timestamp="1587904674987">
+    <state x="349" y="170" key="com.intellij.ide.util.TipDialog" timestamp="1588746080786">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="349" y="170" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1587904674987" />
+    <state x="349" y="170" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1588746080786" />
   </component>
 </project>
