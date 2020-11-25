@@ -3,9 +3,16 @@
 		<div class="row">
 			<div class="col-lg-3 col-md-12">
 				<p>
-					<a href="./index.php" title=" J&K TreatMe">
-						<img src="./img/logo.png" data-retina="true" alt="TreatMe" width="70%" height="70%" />
+					<a href="iustlive.com" title=" J&K TreatMe">
+						<img src="./img/IUST_Logo.jpg" data-retina="true" alt="IUST" width="50%" height="50%" />
 					</a>
+					<br>
+					<a href="iustlive.com" title=" J&K TreatMe">
+						<span style="color:#e74e84;">Sponsored by EDC-IUST</span>
+					</a>
+					<!-- <a href="./index.php" title=" J&K TreatMe">
+						<img src="./img/logo.png" data-retina="true" alt="TreatMe" width="70%" height="70%" />
+					</a> -->
 				</p>
 			</div>
 			<div class="col-lg-3 col-md-4">
