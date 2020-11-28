@@ -149,26 +149,96 @@ function sendmail($email, $hash)
 
 function sendsms($user_number, $hash)
 {
-  //    /sending sms using api textlocal
-  $apiKey = urlencode('ambBaC64a9k-tfb5yiqYkMwB1FG8hGfUdzIOrdirfq');
-  $Textlocal = new Textlocal('treatme247@gmail.com', 'paytm36', $apiKey);
+  $message = "Your One Time Password for TreatMe is " . $hash;
 
-  $numbers = array($user_number);
-  $sender = 'TXTLCL';
-  $message = "Your One Time Password is " . $hash;
-  try {
-    $response = $Textlocal->sendSms($numbers, $message, $sender);
-    $msg = '<div class="alert alert-success alert-dismissible">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <strong>Success!</strong> Registered Sucessfully please confirm your Mobile Number and  check your Inbox.
-            </div>';
-    $_SESSION['msg'] = $msg;
-    $_SESSION['verify'] = 0;
-    return true;
-  } catch (Exception $e) {
+  $api_link = " http://sms.fmsoft.in/api/sendhttp.php?authkey=YourAuthKey&mobiles=" . $user_number . "&message=" . $message . "&sender=TREATME&route=4&response=json";
+
+  //Your authentication key
+  $authKey = "";
+
+  //Multiple mobiles numbers separated by comma
+  $mobileNumber = '91' . $user_number;
+
+  //Sender ID,While using route4 sender id should be 6 characters long.
+  $senderId = "TREATME";
+
+  //Your message to send, Add URL encoding here.
+  $message = urlencode($message);
+
+  //Define route 
+  $route = "4";
+  //Prepare you post parameters
+  $postData = array(
+    'authkey' => $authKey,
+    'mobiles' => $mobileNumber,
+    'message' => $message,
+    'sender' => $senderId,
+    'route' => $route,
+    'response' => 'json'
+  );
+
+  //API URL
+  $url = "http://sms.fmsoft.in/api/sendhttp.php";
+
+  // init the resource
+  $ch = curl_init();
+  curl_setopt_array($ch, array(
+    CURLOPT_URL => $url,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => $postData
+    //,CURLOPT_FOLLOWLOCATION => true
+  ));
+
+
+  //Ignore SSL certificate verification
+  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+
+  //get response
+  $output = curl_exec($ch);
+
+  //Print error if any
+  if (curl_errno($ch)) {
+    echo 'error:' . curl_error($ch);
+    curl_close($ch);
     return false;
   }
+
+
+  curl_close($ch);
+  $msg = '<div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Registered Sucessfully please confirm your Mobile Number and  check your Inbox.
+  </div>';
+  $_SESSION['msg'] = $msg;
+  $_SESSION['verify'] = 0;
+  return true;
 }
+
+// function sendsms($user_number, $hash)
+// {
+//   //    /sending sms using api textlocal
+//   $apiKey = urlencode('ambBaC64a9k-tfb5yiqYkMwB1FG8hGfUdzIOrdirfq');
+//   $Textlocal = new Textlocal('treatme247@gmail.com', 'paytm36', $apiKey);
+
+//   $numbers = array($user_number);
+//   $sender = 'TXTLCL';
+//   $message = "Your One Time Password is " . $hash;
+//   try {
+//     $response = $Textlocal->sendSms($numbers, $message, $sender);
+//     $msg = '<div class="alert alert-success alert-dismissible">
+//               <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+//               <strong>Success!</strong> Registered Sucessfully please confirm your Mobile Number and  check your Inbox.
+//             </div>';
+//     $_SESSION['msg'] = $msg;
+//     $_SESSION['verify'] = 0;
+//     return true;
+//   } catch (Exception $e) {
+//     return false;
+//   }
+// }
 
 function gCaptcha()
 {
@@ -180,6 +250,8 @@ function gCaptcha()
   $responseG = json_decode($responseG);
   return $responseG;
 }
+
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
