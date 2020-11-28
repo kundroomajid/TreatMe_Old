@@ -6,35 +6,34 @@ require './phpmailer/PHPMailerAutoload.php';
 include('textlocal.class.php');
 
 
+
 function check_email($con, $email_id)
 {
-    $sql = 'Select user_email from tb_user where user_email =' . $email_id;
-    $result = mysqli_query($con, $sql);
-    if ($result->num_rows >= 1) {
-        return false;
-    } else {
-        return true;
-    }
-
+  $sql = 'Select user_email from tb_user where user_email =' . $email_id;
+  $result = mysqli_query($con, $sql);
+  if ($result->num_rows >= 1) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
 function check_mobile_no($con, $mobile_no)
 {
-    $sql = 'Select user_phone from tb_user where user_phone =' . $mobile_no;
-    $result = mysqli_query($con, $sql);
-    if ($result->num_rows >= 1) {
-        return false;
-    } else {
-        return true;
-    }
-
+  $sql = 'Select user_phone from tb_user where user_phone =' . $mobile_no;
+  $result = mysqli_query($con, $sql);
+  if ($result->num_rows >= 1) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
-function sendmail($email,$hash)
+function sendmail($email, $hash)
 {
-    $to = $email; // Send email to our user
-    $subject = 'Shifa | Signup | Verification'; // Give the email a subject
-    $message = '<div style="margin:0;padding:0;width:100%!important">
+  $to = $email; // Send email to our user
+  $subject = 'Shifa | Signup | Verification'; // Give the email a subject
+  $message = '<div style="margin:0;padding:0;width:100%!important">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#DDDDDD" style="width:100%;background:#dddddd">
     <tbody>
       <tr>
@@ -94,197 +93,193 @@ function sendmail($email,$hash)
   </table>
   </div>
   </div>';
-//PHPMailer Object
-    $mail = new PHPMailer;
-//Enable SMTP debugging.
-    $mail->SMTPDebug = 0;
-//Set PHPMailer to use SMTP.
-    $mail->isSMTP();
-//Set SMTP host name
-    $mail->Host = "smtp.gmail.com";
-//Set this to true if SMTP host requires authentication to send email
-    $mail->SMTPAuth = true;
-//Provide username and password
-    $mail->Username = "treatme247@gmail.com";
-    $mail->Password = "Startup@2019";
-//If SMTP requires TLS encryption then set it
-    $mail->SMTPSecure = "tls";
-//Set TCP port to connect to
-    $mail->Port = 587;
-    $mail->SMTPOptions = array(
-        'ssl' => array(
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-            'allow_self_signed' => true
-        )
-    );
+  //PHPMailer Object
+  $mail = new PHPMailer;
+  //Enable SMTP debugging.
+  $mail->SMTPDebug = 0;
+  //Set PHPMailer to use SMTP.
+  $mail->isSMTP();
+  //Set SMTP host name
+  $mail->Host = "smtp.gmail.com";
+  //Set this to true if SMTP host requires authentication to send email
+  $mail->SMTPAuth = true;
+  //Provide username and password
+  $mail->Username = "treatme247@gmail.com";
+  $mail->Password = "Startup@2019";
+  //If SMTP requires TLS encryption then set it
+  $mail->SMTPSecure = "tls";
+  //Set TCP port to connect to
+  $mail->Port = 587;
+  $mail->SMTPOptions = array(
+    'ssl' => array(
+      'verify_peer' => false,
+      'verify_peer_name' => false,
+      'allow_self_signed' => true
+    )
+  );
 
 
-//From email address and name
-    $mail->From = "acountactivation@treatme.co.in";
-    $mail->FromName = "TreatMe.co.in";
+  //From email address and name
+  $mail->From = "acountactivation@treatme.co.in";
+  $mail->FromName = "TreatMe.co.in";
 
-//To address and name
-    $mail->addAddress($to);
-
-
-//Address to which recipient will reply
-    $mail->addReplyTo("noreply@yourdomain.com", "Reply");
+  //To address and name
+  $mail->addAddress($to);
 
 
-//Send HTML or Plain Text email
-    $mail->isHTML(true);
-
-    $mail->Subject = "Account Activation";
-    $mail->Body = $message;
-    $mail->AltBody = "";
-
-    if (!$mail->send()) {
-       echo ($mail->ErrorInfo);
-       die();
-        return false;
-
-    } else {
-        return true;
-    }
+  //Address to which recipient will reply
+  $mail->addReplyTo("noreply@yourdomain.com", "Reply");
 
 
+  //Send HTML or Plain Text email
+  $mail->isHTML(true);
+
+  $mail->Subject = "Account Activation";
+  $mail->Body = $message;
+  $mail->AltBody = "";
+
+  if (!$mail->send()) {
+    echo ($mail->ErrorInfo);
+    die();
+    return false;
+  } else {
+    return true;
+  }
 }
 
-function sendsms($user_number,$hash)
+function sendsms($user_number, $hash)
 {
-//    /sending sms using api textlocal
-    $apiKey = urlencode('ambBaC64a9k-tfb5yiqYkMwB1FG8hGfUdzIOrdirfq');
-    $Textlocal = new Textlocal('treatme247@gmail.com', 'paytm36', $apiKey);
+  //    /sending sms using api textlocal
+  $apiKey = urlencode('ambBaC64a9k-tfb5yiqYkMwB1FG8hGfUdzIOrdirfq');
+  $Textlocal = new Textlocal('treatme247@gmail.com', 'paytm36', $apiKey);
 
-    $numbers = array($user_number);
-    $sender = 'TXTLCL';
-    $message = "Your One Time Password is " . $hash;
-    try {
-        $response = $Textlocal->sendSms($numbers, $message, $sender);
-        $msg = '<div class="alert alert-success alert-dismissible">
+  $numbers = array($user_number);
+  $sender = 'TXTLCL';
+  $message = "Your One Time Password is " . $hash;
+  try {
+    $response = $Textlocal->sendSms($numbers, $message, $sender);
+    $msg = '<div class="alert alert-success alert-dismissible">
               <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
               <strong>Success!</strong> Registered Sucessfully please confirm your Mobile Number and  check your Inbox.
             </div>';
-        $_SESSION['msg'] = $msg;
-        $_SESSION['verify'] = 0;
-        return true;
-    } catch (Exception $e) {
-        return false;
-    }
-
+    $_SESSION['msg'] = $msg;
+    $_SESSION['verify'] = 0;
+    return true;
+  } catch (Exception $e) {
+    return false;
+  }
 }
 
 function gCaptcha()
 {
-    $seretkey="6Lch9KsUAAAAAB6wnc2slBlTb4bhUql96w945dNa";
-    $responserec=$_POST["g-recaptcha-response"];
-    $userip = $_SERVER["REMOTE_ADDR"];
-    $urlrec="https://www.google.com/recaptcha/api/siteverify?secret=$seretkey&response=$responserec&remoteip=$userip";
-    $responseG=file_get_contents($urlrec);
-    $responseG=json_decode($responseG);
-    return $responseG;
+  $seretkey = "6Lch9KsUAAAAAB6wnc2slBlTb4bhUql96w945dNa";
+  $responserec = $_POST["g-recaptcha-response"];
+  $userip = $_SERVER["REMOTE_ADDR"];
+  $urlrec = "https://www.google.com/recaptcha/api/siteverify?secret=$seretkey&response=$responserec&remoteip=$userip";
+  $responseG = file_get_contents($urlrec);
+  $responseG = json_decode($responseG);
+  return $responseG;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST")
-{
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if(gCaptcha()->success){
+  if (gCaptcha()->success) {
     // user_email and user_password sent from form
     $user_type = mysqli_real_escape_string($conn, $_POST['user_type']);
+    if ($user_type == 'p') {
+      $reg_location = 'reg_user.php';
+    } elseif ($user_type == 'd') {
+      $reg_location = 'reg_doc.php';
+    } elseif ($user_type == 'c') {
+      $reg_location = 'reg_clinic.php';
+    } else {
+      $reg_location = 'register.php';
+    }
     $user_email = mysqli_real_escape_string($conn, $_POST['user_email']);
     $_SESSION['email'] = $user_email;
     $user_phone = mysqli_real_escape_string($conn, $_POST['user_mobile']);
     $user_password = mysqli_real_escape_string($conn, $_POST['user_password']);
     $blob = addslashes(file_get_contents('./img/user.png', true));
     $blob = "'" . $blob . "'";
-//    check if email exists or not in our database
+    //    check if email exists or not in our database
     $email_id = "'" . $user_email . "'";
     if (!check_email($conn, $email_id)) {
-        $msg = '<div class="alert alert-danger alert-dismissible">
+      $msg = '<div class="alert alert-danger alert-dismissible">
      <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
      Someone is allready registered using this email
     </div>';
-        $_SESSION['msg'] = $msg;
-        header('Location: ./register.php');
-        exit();
+      $_SESSION['msg'] = $msg;
+      header('Location: ./' . $reg_location);
+      exit();
     }
 
     //    check if mobile number exists or not in our database
     if (!check_mobile_no($conn, $user_phone)) {
-        $msg = '<div class="alert alert-danger alert-dismissible">
+      $msg = '<div class="alert alert-danger alert-dismissible">
      <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
      Someone is allready registered using this mobile number
     </div>';
-        $_SESSION['msg'] = $msg;
-        header('Location: ./register.php');
-        exit();
+      $_SESSION['msg'] = $msg;
+      header('Location: ./' . $reg_location);
+      exit();
     }
-    
+
     if (!empty($user_password) || !empty($user_email)) {    //create connection
-        if (mysqli_connect_error()) {
-            die('Connect Error(' . mysqli_connect_errno() . ')' . mysqli_connect_error());
-        } else {
-            $hash = rand(1, 1000000);
-            $user_password = md5($user_password);
-            $user_password = "'" . $user_password . "'";
-            $user_email = "'" . $user_email . "'";
-            $user_type = "'" . $user_type . "'";
-            $INSERT = "INSERT Into tb_user (user_password,hash,user_phone,user_email,user_type,photo) values($user_password,$hash,$user_phone,$user_email,$user_type,$blob)";
-            if (!mysqli_query($conn, $INSERT)) {
-                echo 'insert error' . $conn->error;
-                $msg = '<div class="alert alert-danger alert-dismissible">
+      if (mysqli_connect_error()) {
+        die('Connect Error(' . mysqli_connect_errno() . ')' . mysqli_connect_error());
+      } else {
+        $hash = rand(1, 1000000);
+        $user_password = md5($user_password);
+        $user_password = "'" . $user_password . "'";
+        $user_email = "'" . $user_email . "'";
+        $user_type = "'" . $user_type . "'";
+        $INSERT = "INSERT Into tb_user (user_password,hash,user_phone,user_email,user_type,photo) values($user_password,$hash,$user_phone,$user_email,$user_type,$blob)";
+        if (!mysqli_query($conn, $INSERT)) {
+          echo 'insert error' . $conn->error;
+          $msg = '<div class="alert alert-danger alert-dismissible">
                 <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 Sorry Something went Wrong Please try Again
                 </div>';
-                $_SESSION['msg'] = $msg;
-                header('Location: ./register.php');
-            }
-            else {
-                if(sendsms($user_phone,$hash) || sendmail($_SESSION['email'],$hash)) {
-//                    Registered Sucessfully please confirm your mobile number
-                    echo "Message has been sent successfully";
-                    $msg = '<div class="alert alert-success alert-dismissible">
+          $_SESSION['msg'] = $msg;
+          header('Location: ./' . $reg_location);
+        } else {
+          if (sendsms($user_phone, $hash) || sendmail($_SESSION['email'], $hash)) {
+            //                    Registered Sucessfully please confirm your mobile number
+            echo "Message has been sent successfully";
+            $msg = '<div class="alert alert-success alert-dismissible">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                <strong>Success!</strong> Registered Sucessfully please confirm your Mobile No or email by entering Otp.
                             </div>';
-                    $_SESSION['msg'] = $msg;
-                    $_SESSION['verify'] = 0;
-                    $to = $_SESSION['email'];
-                    echo '<script type="text/javascript">
+            $_SESSION['msg'] = $msg;
+            $_SESSION['verify'] = 0;
+            $to = $_SESSION['email'];
+            echo '<script type="text/javascript">
                     window.location = "./verify.php?email=' . $to . '";
                     </script> ';
-                }
-                else
-                {
-                    $msg = '<div class="alert alert-danger alert-dismissible">
+          } else {
+            $msg = '<div class="alert alert-danger alert-dismissible">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                <strong>Error!</strong> Sorry Some Error Occured Please Try again.
                             </div>';
-                    $_SESSION['msg'] = $msg;
-                    $_SESSION['verify'] = 0;
-                    $to = $_SESSION['email'];
-                    echo '<script type="text/javascript">
-                    window.location = "./register.php";
-                    </script> ';
-
-                }
-
-            }
+            $_SESSION['msg'] = $msg;
+            $_SESSION['verify'] = 0;
+            $to = $_SESSION['email'];
+            header('Location: ./' . $reg_location);
+            // echo '<script type="text/javascript">
+            //         window.location = "./register.php";
+            //         </script> ';
+          }
         }
-
+      }
+    } else {
+      echo "All field are required";
+      die();
     }
-    else
-        {
-        echo "All field are required";
-        die();
-    }
-    }
-    else{
-        $msg = '<div class="alert alert-danger alert-dismissible">
+  } else {
+    $msg = '<div class="alert alert-danger alert-dismissible">
         <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         Sorry  please confirm your recaptcha!
         </div>';
-        $boolean="true";
-    }
+    $boolean = "true";
+  }
 }

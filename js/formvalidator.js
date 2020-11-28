@@ -389,7 +389,7 @@ $(function() {
     
     
 //    validate register.php
-  $("#myForm").validate({
+  $("#reg_user").validate({
     rules: {
       user_email: {
         required: true,
@@ -436,13 +436,111 @@ $(function() {
   });
     
     //register.php validation ends
+
+    //    validate register.php doc form
+  $("#reg_doc").validate({
+    rules: {
+      user_email: {
+        required: true,
+        email: true,
+      },
+      user_mobile: {
+        required: true,
+       phoneUS: true
+
+      },
+      user_password: {
+        required: true
+      },
+      password2: {
+        required: true
+      },
+      check_2: {
+        required: true
+      }
+    },
+    messages: {
+      user_email: {
+         required: '<i style="color:red">Please enter an email address.</i>',
+        email:'<i style="color:red">Enter A Valid Email Address.</i>'
+      },
+      user_mobile: {
+        required: '<i style="color:red">Please enter mobile no.</i>',
+       phoneUS: '<i style="color:red">Please enter a valid 10 digit mobile no.</i>'
+      },
+      check_2: {
+        required: '<i style="color:red">Please Accept Terms and Conditions.</i>'
+      },
+      password2:
+      {
+        required: '<i style="color:red">Please Re-enter same Password.</i>'
+        
+    },
+      user_password:
+      {
+      required: '<i style="color:red">Please Enter Password.</i>'
+        
+    }
+    }
+  });
     
+    //register.php  doc validation ends
+  
 
     
+    //    validate register.php clinic form
+  $("#reg_clinic").validate({
+    rules: {
+      user_email: {
+        required: true,
+        email: true,
+      },
+      user_mobile: {
+        required: true,
+       phoneUS: true
+
+      },
+      user_password: {
+        required: true
+      },
+      password2: {
+        required: true
+      },
+      check_2: {
+        required: true
+      }
+    },
+    messages: {
+      user_email: {
+         required: '<i style="color:red">Please enter an email address.</i>',
+        email:'<i style="color:red">Enter A Valid Email Address.</i>'
+      },
+      user_mobile: {
+        required: '<i style="color:red">Please enter mobile no.</i>',
+       phoneUS: '<i style="color:red">Please enter a valid 10 digit mobile no.</i>'
+      },
+      check_2: {
+        required: '<i style="color:red">Please Accept Terms and Conditions.</i>'
+      },
+      password2:
+      {
+        required: '<i style="color:red">Please Re-enter same Password.</i>'
+        
+    },
+      user_password:
+      {
+      required: '<i style="color:red">Please Enter Password.</i>'
+        
+    }
+    }
+  });
     
+    //register.php clinic form validation ends
     
     
     
 
 });
+
+
   
